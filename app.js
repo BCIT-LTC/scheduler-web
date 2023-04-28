@@ -40,22 +40,8 @@ app.use(passport.session());
 app.use(overrideMethod('_method'))
 
 
-app.options('*', (req, res) => {
-  // this is temporary for development
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-  res.status(200)
-  res.end()
-})
-
 app.use("/", indexRoute);
-// app.get("/*", (req, res) => {
-//   res.sendFile(
-//     path.join(__dirname, "/components", "announcements.js"),
-//     (err) => {
-//       if (err) console.log(err);
-//     }
-//   );
-// });
+
 
 
 app.listen(port, () => {
