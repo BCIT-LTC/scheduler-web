@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  app:
+    command:
+      - /bin/sh
+      - -c
+      - |
+        (cd /app/client && npm install)
+        (cd /app/client && npm run build)
+        npm install
+        npm start
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      - TZ=America/Vancouver
+      - SECRET_KEY=ahuaejsdb
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - .:/app
