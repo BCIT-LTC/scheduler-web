@@ -3,12 +3,12 @@ import './Login.css';
 import { GlobalContext } from '../../context'
 import Signup from '../signup/signup';
 
-// Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8080/login to get authenticated
+// Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8000/login to get authenticated
 export default function Login() {
   const context = useContext(GlobalContext)
   const [email, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [ showSignup, setShowSignup ] = useState(false)
+  const [showSignup, setShowSignup] = useState(false)
 
   /* Session only stays an hour. New feature could be asking user to stay
   logging in when the time is up.*/
@@ -30,7 +30,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     // Added 'e' parameter so that i can use e.preventDefault() since before I was getting page reload errors when trying to use fetch, this helps prevent it
     e.preventDefault();
-    fetch('http://localhost:8080/api/login', {
+    fetch('http://localhost:8000/api/login', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -56,42 +56,42 @@ export default function Login() {
       .catch((err) => {
         console.error('handleSubmit', err)
       })
-   }
+  }
 
-  return(
+  return (
     <>
-    <div>
-      {showSignup ? (
-        <Signup />
-      ):(
-      <div className="login-wrapper">
-          <form className="form" onSubmit={handleSubmit}>
-            <h1>SIGN IN </h1>
-            <label>
-              <p>Email</p>
-              <input type="text" onChange={e => setUserName(e.target.value)} />
-            </label>
-            <label>
-              <p>Password</p>
-              <input type="password" onChange={e => setPassword(e.target.value)} />
-            </label>
-            <div className="submit-button">
-              <button type="submit">SIGN IN</button>
-            </div>
-            <p className="mt-4">
-              New User?&nbsp;
-              <button
-                className="create-Link"
-                onClick={()=> setShowSignup(true)}
-              >
-                Sign Up
-              </button>
-            </p>
-            {/* <p>Forgot Password? <a href="/forgot">Reset</a></p> */}
-          </form>
+      <div>
+        {showSignup ? (
+          <Signup />
+        ) : (
+          <div className="login-wrapper">
+            <form className="form" onSubmit={handleSubmit}>
+              <h1>SIGN IN </h1>
+              <label>
+                <p>Email</p>
+                <input type="text" onChange={e => setUserName(e.target.value)} />
+              </label>
+              <label>
+                <p>Password</p>
+                <input type="password" onChange={e => setPassword(e.target.value)} />
+              </label>
+              <div className="submit-button">
+                <button type="submit">SIGN IN</button>
+              </div>
+              <p className="mt-4">
+                New User?&nbsp;
+                <button
+                  className="create-Link"
+                  onClick={() => setShowSignup(true)}
+                >
+                  Sign Up
+                </button>
+              </p>
+              {/* <p>Forgot Password? <a href="/forgot">Reset</a></p> */}
+            </form>
+          </div>
+        )}
       </div>
-      )}
-    </div>
     </>
 
   )

@@ -10,12 +10,12 @@ const Announcement = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [submit, setSubmit] = useState(false) // for submission window component
-  
+
   let date = new Date();
-  const [count, setCount] = useState(0);  
+  const [count, setCount] = useState(0);
   const timezone = date.getTimezoneOffset() * 60000;
   const datetime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
-  
+
   const counter = (e) => {
     setCount(e.target.value.length);
   };
@@ -31,14 +31,14 @@ const Announcement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    return await fetch("http://localhost:8080/api/add", {
+    return await fetch("http://localhost:8000/api/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ title, description, date: datetime }),
     }).then((response) => response.json(),
-    setSubmit(true)
+      setSubmit(true)
 
     );
 
@@ -54,7 +54,7 @@ const Announcement = () => {
 
     });
     // Perform the click action here
-  ;
+    ;
   } else {
     document.body.style.overflowY = "auto";
     if (submitButton) {
@@ -66,7 +66,7 @@ const Announcement = () => {
     }
   }
 
-  
+
 
   return (
     <div>
@@ -97,10 +97,10 @@ const Announcement = () => {
             />
           </label>
           <div className="submit-button">
-            
-          <button id="submit-button" type="submit" onClick={submitClick}>
-                SUBMIT
-              </button>
+
+            <button id="submit-button" type="submit" onClick={submitClick}>
+              SUBMIT
+            </button>
           </div>
         </form>
         <div>
@@ -109,9 +109,9 @@ const Announcement = () => {
 
         </div>
         <Submission trigger={submit} setTrigger={setSubmit}
-        isOpen={submit}
-        onClose={() => setSubmit(false)}
-        title="Announcement Created"
+          isOpen={submit}
+          onClose={() => setSubmit(false)}
+          title="Announcement Created"
         />
 
       </div>
