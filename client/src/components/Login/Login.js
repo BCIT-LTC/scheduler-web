@@ -27,39 +27,39 @@ export default function Login() {
   //   }
   // }, []);
 
-  const handleSubmit = (e) => {
-    // Added 'e' parameter so that i can use e.preventDefault() since before I was getting page reload errors when trying to use fetch, this helps prevent it
-    e.preventDefault();
-    fetch('http://localhost:9000/login', {
-      method: 'POST',
-      mode: "no-cors",
-      redirect: 'follow',
+  // const handleSubmit = (e) => {
+  //   // Added 'e' parameter so that i can use e.preventDefault() since before I was getting page reload errors when trying to use fetch, this helps prevent it
+  //   e.preventDefault();
+  //   fetch('http://localhost:9000/login', {
+  //     method: 'POST',
+  //     mode: "no-cors",
+  //     redirect: 'follow',
       // credentials: 'omit',
       // headers: {
       //   "Access-Control-Allow-Origin": "*"
       // },
       // body: JSON.stringify({ email: email, password: password })
-    })
-      .then(response => {
-        if (response.status === 200) {
-          return response.json()
-        } else {
-          throw new Error('error when submitting data', { cause: response })
-        }
-      })
-      .then(data => {
-        const expiration = new Date();
-        console.log('updateUserData', data.email, data.token, data.isAdmin)
-        context.updateUserData(data.email, data.token, Boolean(data.isAdmin))
-        sessionStorage.setItem('token', JSON.stringify(data.token));
-        sessionStorage.setItem('userEmail', JSON.stringify(data.email));
-        expiration.setHours(expiration.getHours() + 1);
-        localStorage.setItem('expiration', expiration.toString());
-      })
-      .catch((err) => {
-        console.error('handleSubmit', err)
-      })
-   }
+  //   })
+  //     .then(response => {
+  //       if (response.status === 200) {
+  //         return response.json()
+  //       } else {
+  //         throw new Error('error when submitting data', { cause: response })
+  //       }
+  //     })
+  //     .then(data => {
+  //       const expiration = new Date();
+  //       console.log('updateUserData', data.email, data.token, data.isAdmin)
+  //       context.updateUserData(data.email, data.token, Boolean(data.isAdmin))
+  //       sessionStorage.setItem('token', JSON.stringify(data.token));
+  //       sessionStorage.setItem('userEmail', JSON.stringify(data.email));
+  //       expiration.setHours(expiration.getHours() + 1);
+  //       localStorage.setItem('expiration', expiration.toString());
+  //     })
+  //     .catch((err) => {
+  //       console.error('handleSubmit', err)
+  //     })
+  //  }
 
   return(
     <>
@@ -68,20 +68,20 @@ export default function Login() {
         <Signup />
       ):(
       <div className="login-wrapper">
-          <form className="form" onSubmit={handleSubmit}>
-            <h1>SIGN IN </h1>
-            <label>
+          <form className="form" action="/login"  method="post">
+            <h1>SIGN IN</h1>
+            {/* <label>
               <p>Email</p>
               <input type="text" onChange={e => setUserName(e.target.value)} />
             </label>
             <label>
               <p>Password</p>
               <input type="password" onChange={e => setPassword(e.target.value)} />
-            </label>
+            </label> */}
             <div className="submit-button">
               <button type="submit">SIGN IN</button>
             </div>
-            <p className="mt-4">
+            {/* <p className="mt-4">
               New User?&nbsp;
               <button
                 className="create-Link"
@@ -89,7 +89,7 @@ export default function Login() {
               >
                 Sign Up
               </button>
-            </p>
+            </p> */}
             {/* <p>Forgot Password? <a href="/forgot">Reset</a></p> */}
           </form>
       </div>
