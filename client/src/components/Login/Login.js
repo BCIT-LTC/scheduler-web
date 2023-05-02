@@ -32,12 +32,12 @@ export default function Login() {
     e.preventDefault();
     fetch('http://localhost:9000/login', {
       method: 'POST',
-      mode: "cors",
+      mode: "no-cors",
       redirect: 'follow',
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Request-Method": "*"
-      },
+      // credentials: 'omit',
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*"
+      // },
       // body: JSON.stringify({ email: email, password: password })
     })
       .then(response => {
