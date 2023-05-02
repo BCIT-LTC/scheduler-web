@@ -11,7 +11,7 @@ const AnnouncementTable = () => {
 
   useEffect(() => {
     const interval = setInterval(() => { //fetch announcement data every 3 seconds
-      fetch("http://localhost:8000/api/announcementTable") //retrieve announcements for announcement table
+      fetch("http://localhost:8000/api/announcement") //retrieve announcements for announcement table
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
         .catch((error) => console.error(error));
@@ -22,8 +22,8 @@ const AnnouncementTable = () => {
 
   //sends table data to /delete endpoint
   const deleteAnnouncement = async (userid) => {
-    return await fetch(`http://localhost:8000/api/delete`, {
-      method: "POST",
+    return await fetch(`http://localhost:8000/api/announcement`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
@@ -33,7 +33,7 @@ const AnnouncementTable = () => {
     }).then(() => {
       setDeleteClicked({ isOpen: false, idx: -1 });
       // fetch is done again to update the table, because it won't update without getting the announcement table
-      fetch("http://localhost:8000/api/announcementTable")
+      fetch("http://localhost:8000/api/announcement")
         .then((response) => response.json())
         .then((data) => setTable(data.reverse().slice()))
         .catch((error) => console.error(error));

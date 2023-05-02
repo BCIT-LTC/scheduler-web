@@ -8,7 +8,7 @@ export function updateCalendar(forms, updateOrCreate) {
 }
 
 export function fetchCalendar(month) {
-  return fetch("http://localhost:8000/api/getMonth", {
+  return fetch("http://localhost:8000/api/month", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json'

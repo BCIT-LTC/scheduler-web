@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import "./Announcements.css";
 import AnnouncementTable from "./AnnouncementTable";
@@ -31,7 +31,7 @@ const Announcement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    return await fetch("http://localhost:8000/api/add", {
+    return await fetch("http://localhost:8000/api/announcement", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const Announcement = () => {
             <textarea
               id="description"
               type="text"
-              maxlength="200"
+              maxLength="200"
               onChange={(e) => {
                 setDescription(e.target.value);
                 counter(e);
