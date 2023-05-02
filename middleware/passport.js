@@ -1,35 +1,41 @@
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local").Strategy;
-// const userController = require("../controllers/userController");
+const passport = require('passport');
+var saml = require('passport-saml');
+var fs = require('fs');
 
-// const localLogin = new LocalStrategy(
-//   { 
-//     usernameField: "email",
-//     passwordField: "password",
-//   },
-  
-//   async (email, password, done) => {
-//     const user = await userController.getUserByEmailIdAndPassword(email, password);
-//     console.log('passport locallogin, what is user', user)
-//     return user
-//       ? done(null, user)
-//       : done(null, false, {
-//           message: "Your login details are not valid. Please try again",
-//         });
-//   }
-// );
+var samlStrategy = new saml.Strategy({
+    // config options here
+    callbackUrl: 'http://localhost:9000/login/callback',
+    entryPoint: 'http://localhost:8080/simplesaml/saml2/idp/SSOService.php',
+    issuer: 'localhost',
+    identifierFormat: null,
+    // privateKey: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),
+    // decryptionPvk: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),//optional private key that will be used to attempt to decrypt any encrypted assertions that are received
+    cert: fs.readFileSync(__dirname + '/certs/idp.crt', 'utf8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
+    validateInResponseTo: false,
+    disableRequestedAuthnContext: true
 
-// passport.serializeUser(function (user, done) {
-//   done(null, user.userid);
-// });
+}, async (profile, done) => {
+    console.log("profile info: ");
+    console.log("email:", profile.email);
+    return done(null);
+});
 
-// passport.deserializeUser(async function (id, done) {
-//   let user = await userController.getUser(id);
-//   if (user) {
-//     done(null, user);
-//   } else {
-//     done({ message: "User not found" }, null);
-//   }
-// });
+passport.use("samlStrategy", samlStrategy)
 
-// module.exports = passport.use(localLogin);
+passport.serializeUser((user, done) => {
+    console.log('-----------------------------');
+    console.log('serialize user');
+    console.log(user);
+    console.log('-----------------------------');
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    console.log('-----------------------------');
+    console.log('deserialize user');
+    console.log(parseInt(id));
+    console.log('-----------------------------');
+});
+
+
+module.exports = passport;

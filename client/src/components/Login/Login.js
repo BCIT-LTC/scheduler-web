@@ -12,30 +12,33 @@ export default function Login() {
 
   /* Session only stays an hour. New feature could be asking user to stay
   logging in when the time is up.*/
-  useEffect(() => {
-    const token = JSON.parse(sessionStorage.getItem('token'));
-    const expiration = new Date(localStorage.getItem('expiration'));
+  // useEffect(() => {
+  //   const token = JSON.parse(sessionStorage.getItem('token'));
+  //   const expiration = new Date(localStorage.getItem('expiration'));
 
-    if (token && expiration > new Date()) {
-      // todo - this is breaking user login when the page is refreshed
-      // this doesn't check if someone is admin, it assumes they are not
-      // an additional check is required, check if token is valid with server and the user is admin
-      context.updateUserData(null, token, false);
-    } else {
-      sessionStorage.removeItem('token');
-      localStorage.removeItem('expiration');
-    }
-  }, []);
+  //   if (token && expiration > new Date()) {
+  //     // todo - this is breaking user login when the page is refreshed
+  //     // this doesn't check if someone is admin, it assumes they are not
+  //     // an additional check is required, check if token is valid with server and the user is admin
+  //     context.updateUserData(null, token, false);
+  //   } else {
+  //     sessionStorage.removeItem('token');
+  //     localStorage.removeItem('expiration');
+  //   }
+  // }, []);
 
   const handleSubmit = (e) => {
     // Added 'e' parameter so that i can use e.preventDefault() since before I was getting page reload errors when trying to use fetch, this helps prevent it
     e.preventDefault();
-    fetch('http://localhost:8080/api/login', {
+    fetch('http://localhost:9000/login', {
       method: 'POST',
+      mode: "cors",
+      redirect: 'follow',
       headers: {
-        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Request-Method": "*"
       },
-      body: JSON.stringify({ email: email, password: password })
+      // body: JSON.stringify({ email: email, password: password })
     })
       .then(response => {
         if (response.status === 200) {
