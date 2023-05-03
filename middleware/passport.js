@@ -17,25 +17,27 @@ var samlStrategy = new saml.Strategy({
 }, async (profile, done) => {
     console.log("profile info: ");
     console.log("email:", profile.email);
+    console.log("firstname:", profile.firstname);
+    console.log("lastname:", profile.lastname);
     return done(null);
 });
 
 passport.use("samlStrategy", samlStrategy)
 
-passport.serializeUser((user, done) => {
-    console.log('-----------------------------');
-    console.log('serialize user');
-    console.log(user);
-    console.log('-----------------------------');
-    done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//     console.log('-----------------------------');
+//     console.log('serialize user');
+//     console.log(user);
+//     console.log('-----------------------------');
+//     done(null, user.id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-    console.log('-----------------------------');
-    console.log('deserialize user');
-    console.log(parseInt(id));
-    console.log('-----------------------------');
-});
+// passport.deserializeUser(async (id, done) => {
+//     console.log('-----------------------------');
+//     console.log('deserialize user');
+//     console.log(parseInt(id));
+//     console.log('-----------------------------');
+// });
 
 
 module.exports = passport;

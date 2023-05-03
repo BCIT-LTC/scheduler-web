@@ -22,16 +22,16 @@ router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
         console.log('/Start login callback ');
-        // next();
+        next();
     },
-    // passport.authenticate('samlStrategy'),
-    // function (req, res) {
-    //     console.log('-----------------------------');
-    //     console.log('login call back dumps');
-    //     console.log(req.user);
-    //     console.log('-----------------------------');
-    //     res.redirect('/');
-    // }
+    passport.authenticate('samlStrategy'),
+    function (req, res) {
+        console.log('-----------------------------');
+        console.log('login call back dumps');
+        console.log(req.user);
+        console.log('-----------------------------');
+        res.redirect('/');
+    }
 );
 
 module.exports = router;
