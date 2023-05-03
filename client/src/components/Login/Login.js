@@ -3,12 +3,12 @@ import './Login.css';
 import { GlobalContext } from '../../context'
 import Signup from '../signup/signup';
 
-// Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8080/login to get authenticated
+// Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8000/login to get authenticated
 export default function Login() {
   const context = useContext(GlobalContext)
   const [email, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [ showSignup, setShowSignup ] = useState(false)
+  const [showSignup, setShowSignup] = useState(false)
 
   /* Session only stays an hour. New feature could be asking user to stay
   logging in when the time is up.*/
@@ -34,11 +34,11 @@ export default function Login() {
   //     method: 'POST',
   //     mode: "no-cors",
   //     redirect: 'follow',
-      // credentials: 'omit',
-      // headers: {
-      //   "Access-Control-Allow-Origin": "*"
-      // },
-      // body: JSON.stringify({ email: email, password: password })
+  // credentials: 'omit',
+  // headers: {
+  //   "Access-Control-Allow-Origin": "*"
+  // },
+  // body: JSON.stringify({ email: email, password: password })
   //   })
   //     .then(response => {
   //       if (response.status === 200) {
@@ -61,16 +61,16 @@ export default function Login() {
   //     })
   //  }
 
-  return(
+  return (
     <>
-    <div>
-      {showSignup ? (
-        <Signup />
-      ):(
-      <div className="login-wrapper">
-          <form className="form" action="/login"  method="post">
-            <h1>SIGN IN</h1>
-            {/* <label>
+      <div>
+        {showSignup ? (
+          <Signup />
+        ) : (
+          <div className="login-wrapper">
+            <form className="form" action="/login" method="post">
+              <h1>SIGN IN</h1>
+              {/* <label>
               <p>Email</p>
               <input type="text" onChange={e => setUserName(e.target.value)} />
             </label>
@@ -78,10 +78,10 @@ export default function Login() {
               <p>Password</p>
               <input type="password" onChange={e => setPassword(e.target.value)} />
             </label> */}
-            <div className="submit-button">
-              <button type="submit">SIGN IN</button>
-            </div>
-            {/* <p className="mt-4">
+              <div className="submit-button">
+                <button type="submit">SIGN IN</button>
+              </div>
+              {/* <p className="mt-4">
               New User?&nbsp;
               <button
                 className="create-Link"
@@ -90,13 +90,13 @@ export default function Login() {
                 Sign Up
               </button>
             </p> */}
-            {/* <p>Forgot Password? <a href="/forgot">Reset</a></p> */}
-          </form>
+              {/* <p>Forgot Password? <a href="/forgot">Reset</a></p> */}
+            </form>
+          </div>
+        )
+        }
       </div>
-      )}
-    </div>
     </>
-
   )
 }
 
