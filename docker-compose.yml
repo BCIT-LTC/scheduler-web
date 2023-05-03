@@ -34,4 +34,4 @@ services:
       SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback 
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
     volumes:
-      - ./samlconfig/authsources.php:/var/www/simplesamlphp/config/authsources.php
+      - ./local_saml_config/authsources.php:/var/www/simplesamlphp/config/authsources.php

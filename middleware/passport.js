@@ -10,7 +10,7 @@ var samlStrategy = new saml.Strategy({
     identifierFormat: null,
     // privateKey: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),
     // decryptionPvk: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),//optional private key that will be used to attempt to decrypt any encrypted assertions that are received
-    cert: fs.readFileSync(__dirname + '/certs/idp.crt', 'utf8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
+    cert: fs.readFileSync('local_saml_config/certs/idp.crt', 'utf8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
     validateInResponseTo: false,
     disableRequestedAuthnContext: true
 
