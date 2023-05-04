@@ -11,6 +11,8 @@ import Home from "./containers/home";
 import { GlobalContext } from "./context";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 function App() {
   const {
@@ -18,6 +20,8 @@ function App() {
       userData: { token, isAdmin },
     },
   } = useContext(GlobalContext);
+  const context = useContext(GlobalContext)
+
 
   if (isAdmin === true) {
     sessionStorage.setItem("isAdmins", isAdmin);
@@ -28,11 +32,15 @@ function App() {
     console.log("token changed", token);
   }, [token]);
 
+  let jwt = Cookies.get('jwt');
+  if (jwt !== undefined && !token) {
+    var user = jwtDecode(jwt);
+    console.log(user);
+    context.updateUserData(user.email, jwt, user.role === 'admin');
+  }
   if (!token) {
     return <Login />;
   }
-
-
 
   window.addEventListener("beforeunload", function (e) {
     const userEmail = sessionStorage.getItem('userEmail');

@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
+        res.cookie('jwt', req.user.token, { httpOnly: false });
         console.log(`test redirect baseurl`)
         console.log(req.originalUrl)
         console.log(req.baseUrl)
@@ -26,6 +27,7 @@ router.post('/callback',
     },
     passport.authenticate('samlStrategy'),
     function (req, res) {
+        res.cookie('jwt', req.user.token, { httpOnly: false });
         console.log('-----------------------------');
         console.log('login call back dumps');
         console.log(req.user);

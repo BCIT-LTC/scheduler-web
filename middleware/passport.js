@@ -1,6 +1,8 @@
 const passport = require('passport');
 var saml = require('passport-saml');
 var fs = require('fs');
+const jwt = require("jsonwebtoken");
+
 
 var samlStrategy = new saml.Strategy({
     // config options here
@@ -19,25 +21,21 @@ var samlStrategy = new saml.Strategy({
     console.log("email:", profile.email);
     console.log("firstname:", profile.firstname);
     console.log("lastname:", profile.lastname);
-    return done(null);
+    console.log("(role):", profile.role);
+    const { email, firstname, lastname, role } = profile;
+    let jwtToken = jwt.sign({ email, firstname, lastname, role }, process.env.SECRET_KEY);
+    return done(null, { token: jwtToken });
 });
 
 passport.use("samlStrategy", samlStrategy)
 
-// passport.serializeUser((user, done) => {
-//     console.log('-----------------------------');
-//     console.log('serialize user');
-//     console.log(user);
-//     console.log('-----------------------------');
-//     done(null, user.id);
-// });
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
 
-// passport.deserializeUser(async (id, done) => {
-//     console.log('-----------------------------');
-//     console.log('deserialize user');
-//     console.log(parseInt(id));
-//     console.log('-----------------------------');
-// });
+passport.deserializeUser(async (user, done) => {
+    done(null, user);
+});
 
 
 module.exports = passport;
