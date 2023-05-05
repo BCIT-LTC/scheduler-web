@@ -21,8 +21,27 @@ var samlStrategy = new saml.Strategy({
     console.log("email:", profile.email);
     console.log("firstname:", profile.firstname);
     console.log("lastname:", profile.lastname);
-    console.log("(role):", profile.role);
-    const { email, firstname, lastname, role } = profile;
+    console.log("(type):", profile.type);
+    console.log("(program):", profile.program);
+
+    let aquired_role = null
+    if (profile.program == 'BSN') {
+        if (profile.type == 'student') {
+            aquired_role = 'student'
+        }else{
+            aquired_role = 'admin'
+        }
+    }
+    else {
+        // restrict access to non BSN accounts
+    }
+
+    let email = profile.email
+    let firstname = profile.firstname
+    let lastname = profile.lastname
+    let role = aquired_role
+
+    // const { email, firstname, lastname, role } = profile;
     let jwtToken = jwt.sign({ email, firstname, lastname, role }, process.env.SECRET_KEY);
     return done(null, { token: jwtToken });
 });
