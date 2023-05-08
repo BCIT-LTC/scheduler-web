@@ -18,17 +18,16 @@ const errorMap = {
   "No Room": "All open labs must have a room number"
 }
 
-export default function FormContainer ({ disableAddRowButton = false, initialFormState, updateOrCreate = "create", fetchOnSubmit = false }) {
-  console.log("initial form state", initialFormState)
+export default function FormContainer({ disableAddRowButton = false, initialFormState, updateOrCreate = "create", fetchOnSubmit = false }) {
   const [numberOfRows, setNumberOfRows] = useState(1)
-  const [forms, setForms] = useState([initialFormState ? {...initialFormState} : { ...defaultFormState}])
+  const [forms, setForms] = useState([initialFormState ? { ...initialFormState } : { ...defaultFormState }])
   const [formErrorState, setFormErrorState] = useState(false)
   const [errorType, setErrorType] = useState([])
 
 
   async function handleSubmit() {
     const noDatesAreTheSame = (forms.length === 1 && forms[0].date) || forms.every((f, i) => {
-      const current = forms.slice(i+1)
+      const current = forms.slice(i + 1)
       return !Boolean(current.filter((c) => c.date === f.date).length > 0)
     })
     const allRoomNumbersAreFilled = forms.every((f, i) => {
@@ -48,7 +47,7 @@ export default function FormContainer ({ disableAddRowButton = false, initialFor
       await updateCalendar(forms, updateOrCreate)
 
       //CLEAR FORMS
-      setForms([{...defaultFormState}])
+      setForms([{ ...defaultFormState }])
       setNumberOfRows(1)
       setFormErrorState(false)
       setErrorType([])
@@ -69,12 +68,12 @@ export default function FormContainer ({ disableAddRowButton = false, initialFor
     }
   }
 
-  function handleAddRow () {
-    setForms([...forms, { ...defaultFormState}])
+  function handleAddRow() {
+    setForms([...forms, { ...defaultFormState }])
     setNumberOfRows(numberOfRows + 1)
   }
 
-  function renderErrorMsg () {
+  function renderErrorMsg() {
     return errorType.map((e, index) => {
       return <div key={index}>{errorMap[e]}</div>
     })
