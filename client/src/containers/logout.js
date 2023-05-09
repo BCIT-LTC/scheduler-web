@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 export default function Logout() {
   const userEmail = sessionStorage.getItem('userEmail');
   const baseTime = new Date();
@@ -8,6 +9,7 @@ export default function Logout() {
     method: 'POST',
     headers: {
       'content-Type': 'application/json',
+      'Authorization': Cookies.get('jwt')
     },
     body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
   })

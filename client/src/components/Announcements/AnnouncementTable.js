@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Alert from './Alert'
-
+import Cookies from 'js-cookie';
 import "./Announcements.css";
 
 const AnnouncementTable = () => {
@@ -11,7 +11,11 @@ const AnnouncementTable = () => {
 
   useEffect(() => {
     const interval = setInterval(() => { //fetch announcement data every 3 seconds
-      fetch("http://localhost:8000/api/announcement") //retrieve announcements for announcement table
+      fetch("http://localhost:8000/api/announcement", {
+        headers: {
+          'Authorization': Cookies.get('jwt')
+        }
+      }) //retrieve announcements for announcement table
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
         .catch((error) => console.error(error));
@@ -26,6 +30,7 @@ const AnnouncementTable = () => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': Cookies.get('jwt')
       },
       body: JSON.stringify({
         id: userid,
@@ -33,7 +38,11 @@ const AnnouncementTable = () => {
     }).then(() => {
       setDeleteClicked({ isOpen: false, idx: -1 });
       // fetch is done again to update the table, because it won't update without getting the announcement table
-      fetch("http://localhost:8000/api/announcement")
+      fetch("http://localhost:8000/api/announcement", {
+        headers: {
+          'Authorization': Cookies.get('jwt')
+        }
+      })
         .then((response) => response.json())
         .then((data) => setTable(data.reverse().slice()))
         .catch((error) => console.error(error));

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../../App.css';
+import Cookies from 'js-cookie';
 
 const DropdownAnnouncement = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -14,6 +15,7 @@ const DropdownAnnouncement = () => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        'Authorization': Cookies.get('jwt')
       },
       body: JSON.stringify({ email: userEmail })
     })
@@ -43,7 +45,11 @@ const DropdownAnnouncement = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('http://localhost:8000/api/announcement')
+      fetch('http://localhost:8000/api/announcement', {
+        headers: {
+          'Authorization': Cookies.get('jwt')
+        }
+      })
         .then(response => response.json())
         .then(data => {
           const newAnnouncements = data.reverse().slice(0, 5);

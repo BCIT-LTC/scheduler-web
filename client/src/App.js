@@ -35,10 +35,20 @@ function App() {
   let jwt = Cookies.get('jwt');
   if (jwt !== undefined && !token) {
     var user = jwtDecode(jwt);
-    console.log(user);
-    context.updateUserData(user.email, jwt, user.role === 'admin');
+    fetch('http://localhost:8000/api/login', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+        'content-Type': 'application/json',
+      },
+    }).then((response) => {
+      context.updateUserData(user.email, jwt, response);
+      if (!token) {
+        return <Login />;
+      }
+    })
   }
-  if (!token) {
+  else if (!token) {
     return <Login />;
   }
 
@@ -52,7 +62,9 @@ function App() {
       method: 'POST',
       headers: {
         'content-Type': 'application/json',
+        'Authorization': Cookies.get('jwt')
       },
+      mode: 'cors',
       body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
     })
   })
