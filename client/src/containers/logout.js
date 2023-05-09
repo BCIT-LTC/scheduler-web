@@ -13,10 +13,7 @@ export default function Logout() {
     },
     body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
   })
-    .then(response => {
-      sessionStorage.removeItem('userEmail');
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('isAdmins');
+    .then(() => {
       window.location.href = '/login'
     })
 }

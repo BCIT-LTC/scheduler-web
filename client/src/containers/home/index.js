@@ -3,9 +3,14 @@ import { Link } from "react-router-dom";
 import "./Home.css";
 import pdf from '../../openLab-pdf/Guidelines.pdf'
 import { useState } from 'react'
+import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
+
+
 
 export default function Home() {
-    const isAdmins = sessionStorage.getItem("isAdmins");
+    const user = jwtDecode(Cookies.get('jwt'));
+    const isAdmins = user.isAdmin;
     const [showPDF, setShowPDF] = useState('');
     const handlePDF = () => {
         setShowPDF(pdf);

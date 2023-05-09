@@ -47,7 +47,7 @@ function App() {
   }
 
   window.addEventListener("beforeunload", function (e) {
-    const userEmail = sessionStorage.getItem('userEmail');
+    var user = jwtDecode(jwt);
     const baseTime = new Date();
     const timezone = baseTime.getTimezoneOffset() * 60000;
     const logoutTime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
@@ -59,7 +59,7 @@ function App() {
         'Authorization': Cookies.get('jwt')
       },
       mode: 'cors',
-      body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
+      body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
     })
   })
 
