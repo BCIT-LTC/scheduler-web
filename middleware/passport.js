@@ -2,6 +2,7 @@ const passport = require('passport');
 var saml = require('passport-saml');
 var fs = require('fs');
 const jwt = require("jsonwebtoken");
+const { response } = require('express');
 
 
 var samlStrategy = new saml.Strategy({
@@ -28,8 +29,21 @@ var samlStrategy = new saml.Strategy({
     let firstname = profile.firstname
     let lastname = profile.lastname
     let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
-
     let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.SECRET_KEY);
+
+    await fetch('http://host.docker.internal:8000/api/login', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'content-Type': 'application/json',
+        },
+        mode: 'cors',
+    }).then((response) => {
+        return response.json();
+    }).then((response) => {
+        let isAdmin = response;
+        jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.SECRET_KEY);
+    });
     return done(null, { token: jwtToken });
 });
 

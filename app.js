@@ -5,6 +5,8 @@ const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const port = 9000;
+const hostname = '0.0.0.0';
+
 // const overrideMethod = require('method-override')
 
 const app = express();
@@ -52,6 +54,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", indexRoute);
 app.use("/login", authentication);
 
-app.listen(port, () => {
+app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);
 });
