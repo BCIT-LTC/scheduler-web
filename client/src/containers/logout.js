@@ -19,6 +19,7 @@ export default function Logout() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('isAdmins');
     Cookies.remove('jwt');
-    window.location.href = '/login';
+    window.location.reload();
+    // window.location.href = '/login';
   });
 }
