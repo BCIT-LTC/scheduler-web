@@ -2,12 +2,15 @@
 
 /* Accessibility Settings */
 @media (prefers-reduced-motion: reduce) {
-    .submit-button, .login-Link {
-      transition: none;
-    }
-  }
 
-.signup-wrapper {
+    .submit-button,
+    .login-Link {
+        transition: none;
+    }
+}
+
+.locallogin-wrapper {
+    height: 100vh;
     justify-content: center;
     display: flex;
     font-family: "Roboto Flex", sans-serif;
@@ -20,7 +23,8 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-color: #ffffff; /* temp bg while the bg image loads*/
+    background-color: #ffffff;
+    /* temp bg while the bg image loads*/
 }
 
 h3 {
@@ -42,7 +46,7 @@ h5 {
     margin-left: 0.3rem;
 }
 
-.form  {
+.form {
     margin-left: 5.5rem;
     /* margin-top: 10px; */
     position: relative;
@@ -50,11 +54,11 @@ h5 {
     border: 0;
     box-sizing: border-box;
     /* padding: 20px; */
-    height: 500px;
+    height: auto;
     width: 320px;
 }
 
-.signup-wrapper input {
+.locallogin-wrapper input {
     border: 1px solid #023455;
     border-radius: 8px;
     height: 35px;
@@ -65,7 +69,7 @@ h5 {
 .submit-button {
     margin-top: 40px;
     align-content: center;
-    margin-left:0%;
+    margin-left: 0%;
 }
 
 .submit-button button {
@@ -84,9 +88,12 @@ h5 {
 
 .login-link {
     font-family: "Roboto Flex", sans-serif;
-    margin-top: 20px;
-    margin-left: 7.5rem;
     font-size: 17px;
     color: #023455;
+    font-weight: normal;
     text-decoration: none;
+}
+
+.error-message {
+    color: red;
 }

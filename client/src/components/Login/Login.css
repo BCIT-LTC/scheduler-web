@@ -2,10 +2,12 @@
 
 /* Accessibility Settings */
 @media (prefers-reduced-motion: reduce) {
-    .submit-button, .create-Link {
-      transition: none;
+
+    .submit-button,
+    .create-Link {
+        transition: none;
     }
-  }
+}
 
 .form {
     background-color: rgba(255, 255, 255, 0.760);
@@ -18,7 +20,9 @@
 
 
 .login-wrapper {
+    height: 100vh;
     display: flex;
+    justify-content: center;
     font-family: "Roboto Flex", sans-serif;
     flex-direction: column;
     align-items: center;
@@ -28,7 +32,8 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-color: #ffffff; /* temp bg while the bg image loads*/
+    background-color: #ffffff;
+    /* temp bg while the bg image loads*/
 }
 
 
