@@ -35,8 +35,7 @@ function App() {
   let jwt = Cookies.get('jwt');
   if (jwt !== undefined && !token) {
     var user = jwtDecode(jwt);
-    console.log(user);
-    context.updateUserData(user.email, jwt, user.role === 'admin');
+    context.updateUserData(user.email, jwt, user.isAdmin);
   }
   if (!token) {
     return <Login />;
@@ -52,7 +51,9 @@ function App() {
       method: 'POST',
       headers: {
         'content-Type': 'application/json',
+        'Authorization': Cookies.get('jwt')
       },
+      mode: 'cors',
       body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
     })
   })

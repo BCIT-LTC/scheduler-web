@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import './Login.css';
 import { GlobalContext } from '../../context'
 import Signup from '../signup/signup';
+import Cookies from 'js-cookie';
 
 // Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8000/login to get authenticated
 export default function Login() {

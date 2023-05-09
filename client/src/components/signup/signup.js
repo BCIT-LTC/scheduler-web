@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import "./signup.css";
 import { GlobalContext } from "../../context";
-
+import Cookies from 'js-cookie';
 
 export default function Signup() {
   const context = useContext(GlobalContext);
@@ -17,6 +17,7 @@ export default function Signup() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': Cookies.get('jwt')
       },
       body: JSON.stringify({ email: email, password: password }),
     })

@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./Announcements.css";
 import AnnouncementTable from "./AnnouncementTable";
 import Submission from './Submission';
-
+import Cookies from 'js-cookie';
 
 
 const Announcement = () => {
@@ -35,6 +35,7 @@ const Announcement = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': Cookies.get('jwt')
       },
       body: JSON.stringify({ title, description, date: datetime }),
     }).then((response) => response.json(),
