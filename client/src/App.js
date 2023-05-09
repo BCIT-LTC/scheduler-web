@@ -1,10 +1,11 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import "./App.css";
 import "react-calendar/dist/Calendar.css";
 import Login from "./components/Login/Login.js";
 import logout from "./containers/logout";
 import { Routes, Route, Link } from "react-router-dom";
 import CalendarPage from "./containers/Calendar";
+import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
 import Home from "./containers/home";
@@ -15,13 +16,13 @@ import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
 function App() {
+  const [showLocalLogin, setShowLocalLogin] = useState();
   const {
     state: {
       userData: { token, isAdmin },
     },
   } = useContext(GlobalContext);
   const context = useContext(GlobalContext)
-
 
   if (isAdmin === true) {
     sessionStorage.setItem("isAdmins", isAdmin);
@@ -38,7 +39,11 @@ function App() {
     context.updateUserData(user.email, jwt, user.isAdmin);
   }
   if (!token) {
-    return <Login />;
+    if (showLocalLogin === true) {
+      return <Locallogin setLocalLogin={setShowLocalLogin} />;
+    } else {
+      return <Login setLocalLogin={setShowLocalLogin} />;
+    }
   }
 
   window.addEventListener("beforeunload", function (e) {
