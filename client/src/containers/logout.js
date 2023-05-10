@@ -12,6 +12,7 @@ export default function Logout() {
     method: 'POST',
     headers: {
       'content-Type': 'application/json',
+      'Authorization': Cookies.get('jwt')
     },
     body: JSON.stringify({email: userEmail, logoutTime: logoutTime}),
   }).then((response) => {

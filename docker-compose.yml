@@ -16,6 +16,8 @@ services:
     environment:
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
+      - LOCAL_PASSWORD=password123
+      - LOCAL_USER=admin
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:9000 || exit 1']
       interval: 1m30s

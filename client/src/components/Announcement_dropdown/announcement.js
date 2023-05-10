@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../../App.css';
+import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 const DropdownAnnouncement = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -7,28 +9,28 @@ const DropdownAnnouncement = () => {
   const [hasNewAnnouncements, setHasNewAnnouncements] = useState(false);
   const [lastLogoutTime, setLastLogoutTime] = useState(null);
   const firstRender = useRef(true);
-  const userEmail = sessionStorage.getItem('userEmail');
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/logouttime', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: userEmail })
-    })
-      .then(result => result.json())
-      .then(data => {
-        if (data[0].logoutTime == null) {
-          setHasNewAnnouncements(true);
-          localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
-        } else {
-          const logoutTime = data[0].logoutTime;
-          setLastLogoutTime(logoutTime);
-          localStorage.setItem("lastLogoutTime", logoutTime);
-        }
-      })
-  }, [userEmail, lastLogoutTime])
+  // useEffect(() => {
+  //   var user = jwtDecode(Cookies.get('jwt'));
+  //   fetch('http://localhost:8000/api/logouttime', {
+  //     method: 'POST',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       'Authorization': Cookies.get('jwt')
+  //     },
+  //     body: JSON.stringify({ email: user.email })
+  //   })
+  //     .then(result => result.json())
+  //     .then(data => {
+  //       if (data[0].logoutTime == null) {
+  //         setHasNewAnnouncements(true);
+  //         localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
+  //       } else {
+  //         const logoutTime = data[0].logoutTime;
+  //         setLastLogoutTime(logoutTime);
+  //         localStorage.setItem("lastLogoutTime", logoutTime);
+  //       }
+  //     })
+  // }, [user.email, lastLogoutTime])
 
 
   useEffect(() => {
@@ -43,7 +45,11 @@ const DropdownAnnouncement = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('http://localhost:8000/api/announcement')
+      fetch('http://localhost:8000/api/announcement', {
+        headers: {
+          'Authorization': Cookies.get('jwt')
+        }
+      })
         .then(response => response.json())
         .then(data => {
           const newAnnouncements = data.reverse().slice(0, 5);
