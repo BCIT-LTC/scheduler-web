@@ -10,6 +10,7 @@ services:
         (cd /app/client && npm run build)
         npm install
         npm start
+        npx playwright show-report
     build: .
     ports:
       - "9000:9000"
