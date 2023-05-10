@@ -9,11 +9,11 @@ import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
 import Home from "./containers/home";
-import { GlobalContext } from "./context";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
+import AdminList from "./components/AdminList/AdminList";
 
 function App() {
   const [showLocalLogin, setShowLocalLogin] = useState();
@@ -55,7 +55,7 @@ function App() {
         <div id="navIcon">
           {
             user.isLocal !== undefined ?
-              <Link to="/"><img src="./gear.svg" className="home-logo" alt="settings" /></Link>
+              <Link to="/admins"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
               : ''
           }
           <DropdownAnnouncement />
@@ -70,6 +70,7 @@ function App() {
         <Route path="/survey" element={<SurveyPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
+        {user.isLocal && <Route path="/admins" element={<AdminList />} />}
       </Routes>
     </>
   );

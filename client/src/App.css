@@ -152,3 +152,7 @@ There is another temporary style for icon in component/Announcement/announcement
 html {
   height: 100%;
 }
+
+.filter-blue {
+  filter: invert(16%) sepia(65%) saturate(1048%) hue-rotate(171deg) brightness(95%) contrast(104%);
+}
