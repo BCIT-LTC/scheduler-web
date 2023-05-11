@@ -18,6 +18,7 @@ services:
       - SECRET_KEY=ahuaejsdb
       - LOCAL_PASSWORD=password123
       - LOCAL_USER=admin
+      - API_URL=http://host.docker.internal:8000/api/
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:9000 || exit 1']
       interval: 1m30s
