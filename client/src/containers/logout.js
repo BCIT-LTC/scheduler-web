@@ -11,10 +11,10 @@ export default function Logout() {
   fetch('http://localhost:8000/api/logout', {
     method: 'POST',
     headers: {
+      'Authorization': `Bearer ${Cookies.get('jwt')}`,
       'content-Type': 'application/json',
-      'Authorization': Cookies.get('jwt')
     },
-    body: JSON.stringify({email: userEmail, logoutTime: logoutTime}),
+    body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
   }).then((response) => {
     sessionStorage.removeItem('userEmail');
     sessionStorage.removeItem('token');

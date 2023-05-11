@@ -13,7 +13,7 @@ const AnnouncementTable = () => {
     const interval = setInterval(() => { //fetch announcement data every 3 seconds
       fetch("http://localhost:8000/api/announcement", {
         headers: {
-          'Authorization': Cookies.get('jwt')
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }
       }) //retrieve announcements for announcement table
         .then((response) => response.json())
@@ -29,8 +29,8 @@ const AnnouncementTable = () => {
     return await fetch(`http://localhost:8000/api/announcement`, {
       method: "DELETE",
       headers: {
+        'Authorization': `Bearer ${Cookies.get('jwt')}`,
         "Content-Type": "application/json",
-        'Authorization': Cookies.get('jwt')
       },
       body: JSON.stringify({
         id: userid,
@@ -40,7 +40,7 @@ const AnnouncementTable = () => {
       // fetch is done again to update the table, because it won't update without getting the announcement table
       fetch("http://localhost:8000/api/announcement", {
         headers: {
-          'Authorization': Cookies.get('jwt')
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }
       })
         .then((response) => response.json())

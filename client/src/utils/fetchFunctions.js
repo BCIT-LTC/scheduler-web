@@ -3,8 +3,8 @@ export function updateCalendar(forms, updateOrCreate) {
   return fetch(`http://localhost:8000/api/${updateOrCreate === "create" ? "calendar" : "openlab"}`, {
     method: "POST",
     headers: {
+      'Authorization': `Bearer ${Cookies.get('jwt')}`,
       'Content-Type': 'application/json',
-      'Authorization': Cookies.get('jwt')
     },
     mode: 'cors',
     body: JSON.stringify({ forms })
@@ -15,8 +15,8 @@ export function fetchCalendar(month) {
   return fetch("http://localhost:8000/api/calendar?month=" + month, {
     method: "GET",
     headers: {
+      'Authorization': `Bearer ${Cookies.get('jwt')}`,
       'Content-Type': 'application/json',
-      'Authorization': Cookies.get('jwt')
     },
     mode: 'cors',
   }).then((results) => {

@@ -47,7 +47,7 @@ const DropdownAnnouncement = () => {
     const interval = setInterval(() => {
       fetch('http://localhost:8000/api/announcement', {
         headers: {
-          'Authorization': Cookies.get('jwt')
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }
       })
         .then(response => response.json())

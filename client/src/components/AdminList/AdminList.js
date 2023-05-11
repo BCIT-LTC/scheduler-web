@@ -13,8 +13,8 @@ export default function AdminList() {
         fetch('http://localhost:8000/api/admin', {
             method: 'GET',
             headers: {
+                'Authorization': `Bearer ${Cookies.get('jwt')}`,
                 'content-Type': 'application/json',
-                'Authorization': Cookies.get('jwt')
             },
         })
             .then(response => response.json())
@@ -27,8 +27,8 @@ export default function AdminList() {
         await fetch("http://localhost:8000/api/admin", {
             method: "POST",
             headers: {
+                'Authorization': `Bearer ${Cookies.get('jwt')}`,
                 "Content-Type": "application/json",
-                'Authorization': Cookies.get('jwt')
             },
             body: JSON.stringify({ email: email, isAdmin: isAdmin }),
         }).then(async (response) => {
