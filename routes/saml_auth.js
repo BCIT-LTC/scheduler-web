@@ -54,6 +54,7 @@ router.post('/callback',
     },
     passport.authenticate('samlStrategy'),
     function (req, res) {
+        console.log(req.user.token);
         res.cookie('jwt', req.user.token, { httpOnly: false });
         console.log('-----------------------------');
         console.log('login call back dumps');
