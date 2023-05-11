@@ -2,7 +2,7 @@
 
 .App {
   text-align: center;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .App-logo {
@@ -24,7 +24,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .App-link {
@@ -70,7 +70,6 @@ nav a {
   margin-right: 10px;
 }
 
-
 /* 
 temporary style to see if announcement works. Please change the style 
 There is another temporary style for icon in component/Announcement/announcement.js file
@@ -90,11 +89,11 @@ There is another temporary style for icon in component/Announcement/announcement
   z-index: 999;
 }
 
-
 .dropdown-announcement {
   position: absolute;
-  left: -200%;
+  left: -500%;
   top: 100%;
+  width: 300px;
   transform: translate(-50%, 0);
   background-color: white;
   padding: 20px;
@@ -156,3 +155,4 @@ html {
 .filter-blue {
   filter: invert(16%) sepia(65%) saturate(1048%) hue-rotate(171deg) brightness(95%) contrast(104%);
 }
+
