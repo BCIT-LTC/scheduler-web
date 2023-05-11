@@ -1,10 +1,31 @@
+/** Express router providing saml login routes
+ * @module routers/login
+ * @requires express
+ */
+
+/**
+ * express module
+ * @const
+ */
 const express = require('express');
-const passport = require('passport');
-const jwt = require("jsonwebtoken");
+
+/**
+ * Express router to mount user related functions on.
+ * @type {object}
+ * @const
+ * @namespace loginRouter
+ */
 const router = express.Router();
+const passport = require('passport');
 require("dotenv").config();
 
-/// LOGIN ROUTES ///
+
+/**
+ * Route to get SAML login page
+ * @name get/login
+ * @function
+ * @memberof module:routers/login~loginrRouter
+ */
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
@@ -19,6 +40,12 @@ router.post('/',
         res.redirect('/');
     });
 
+/**
+ * Route to deal with login callback
+ * @name get/callback
+ * @function
+ * @memberof module:routers/login~loginRouter
+ */
 router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
@@ -35,19 +62,4 @@ router.post('/callback',
         res.redirect('/');
     }
 );
-
-// router.post('/local', function (req, res) {
-//     if (req.body.email === LOCAL_USER && req.body.password === LOCAL_PASSWORD) {
-//         let email = req.body.email;
-//         let firstname = 'admin';
-//         let lastname = 'admin';
-//         let isAdmin = true;
-//         let jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.SECRET_KEY);
-//         res.cookie('jwt', jwtToken, { httpOnly: false });
-//         res.sendStatus(200);
-//     } else {
-//         return res.sendStatus(401);
-//     }
-// });
-
 module.exports = router;

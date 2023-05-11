@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 
 var samlStrategy = new saml.Strategy({
     // config options here
-    callbackUrl: 'http://localhost:9000/login/callback',
-    entryPoint: 'http://localhost:8080/simplesaml/saml2/idp/SSOService.php',
+    callbackUrl: `${process.env.PUBLIC_URL}/login/callback`,
+    entryPoint: process.env.SAML_URL,
     issuer: 'localhost',
     identifierFormat: null,
     // privateKey: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),
@@ -30,7 +30,7 @@ var samlStrategy = new saml.Strategy({
     let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
     let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.SECRET_KEY);
 
-    await fetch('http://host.docker.internal:8000/api/login', {
+    await fetch(`${process.env.API_URL}/login`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${jwtToken}`,
