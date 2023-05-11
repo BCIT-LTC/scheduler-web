@@ -1,11 +1,10 @@
-const API_URL = process.env.API_URL;
 
 async function callAPI(path, type, req, queryParams = {}) {
     let status;
     let data;
     let response;
     try {
-        const url = new URL(API_URL + path);
+        const url = new URL(process.env.API_URL + path);
         Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 
         if (type.toLowerCase() !== 'get') {

@@ -29,7 +29,7 @@ const Announcement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    return await fetch('http://localhost:9000/announcement', {
+    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

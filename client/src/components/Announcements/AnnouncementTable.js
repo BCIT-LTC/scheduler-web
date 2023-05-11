@@ -11,7 +11,7 @@ const AnnouncementTable = () => {
 
   useEffect(() => {
     const interval = setInterval(() => { //fetch announcement data every 3 seconds
-      fetch("http://localhost:9000/announcement", {
+      fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }
@@ -26,7 +26,7 @@ const AnnouncementTable = () => {
 
   //sends table data to /delete endpoint
   const deleteAnnouncement = async (userid) => {
-    return await fetch(`http://localhost:9000/announcement`, {
+    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${Cookies.get('jwt')}`,
@@ -38,7 +38,7 @@ const AnnouncementTable = () => {
     }).then(() => {
       setDeleteClicked({ isOpen: false, idx: -1 });
       // fetch is done again to update the table, because it won't update without getting the announcement table
-      fetch("http://localhost:9000/announcement", {
+      fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }

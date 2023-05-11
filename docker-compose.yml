@@ -19,6 +19,7 @@ services:
       - LOCAL_PASSWORD=password123
       - LOCAL_USER=admin
       - API_URL=http://host.docker.internal:8000/api/
+      - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:9000 || exit 1']
       interval: 1m30s
