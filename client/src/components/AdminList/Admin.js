@@ -1,15 +1,21 @@
 import React from 'react';
+import './AdminList.css';
 
-export default function AdminList({ email, name, isAdmin, onCheck }) {
+
+export default function AdminList({ email, onRemove }) {
     function handleChange() {
-        onCheck(email)
+        onRemove(email)
     }
     return (
-        <div>
-            <label>
-                <input type="checkbox" checked={isAdmin} onChange={handleChange} />
-                {name} ({email})
-            </label>
-        </div>
+        <>
+            <tr>
+                <td>
+                    {email}
+                </td>
+                <td className='cell'>
+                    <input type="image" src="./xmark.svg" alt='remove' className='icon' onClick={() => handleChange()} />
+                </td>
+            </tr>
+        </>
     );
 }
