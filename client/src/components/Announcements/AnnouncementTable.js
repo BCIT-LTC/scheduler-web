@@ -126,6 +126,37 @@ const AnnouncementTable = () => {
                     timeZone: "America/Los_Angeles",
                   })}
                 </td>
+                
+                {/* WIP edit button */}
+                <td width="20%" style={{ position: "relative" }}>
+                  <button
+                    className="button"
+                    id="edit-button"
+                    type="submit"
+                    onClick={() => {
+                      setEditClicked({ isOpen: true, idx: index });
+                    }}
+                  >
+                    Edit
+                  </button>
+                  {editClicked.isOpen && editClicked.idx === index ? (
+                    <div style={{ position: "absolute", top: "100%", left: 0 }}>
+                      <Alert
+                        isOpen={true}
+                        popupType={"edit"}
+                        onClose={() =>
+                          setEditClicked({ isOpen: false, idx: -1 })
+                        }
+                        title="Edit Announcement"
+                        description="Make your changes to the announcement below and click 'Save' to save your changes."
+                        confirmBtnLabel="Save"
+                        onConfirm={() =>
+                          editAnnouncement(row.announcements_id)
+                        }
+                      />
+                    </div>
+                  ) : null}
+                </td>
 
                 <td width="20%" style={{ position: "relative" }}>
                   <button

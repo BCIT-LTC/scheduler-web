@@ -2,10 +2,14 @@ import React from "react";
 import "./Alert.css";
 
 function Alert(props) {
+  const showInput = props.popupType === "edit";
   return (
     <div className="alert">
       <h2 className="alert-title">{props.title}</h2>
       <p className="alert-description">{props.description}</p>
+      {showInput && (
+        <input type="text" placeholder="editing works" />
+      )}
       <div className="alert-buttons">
         <button className="alert-confirm" onClick={props.onConfirm}>
           {props.confirmBtnLabel}
