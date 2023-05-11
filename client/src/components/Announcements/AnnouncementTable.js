@@ -149,6 +149,8 @@ const AnnouncementTable = () => {
                         }
                         title="Edit Announcement"
                         description="Make your changes to the announcement below and click 'Save' to save your changes."
+                        announcementTitle={row.title}
+                        announcementDescription={row.description}
                         confirmBtnLabel="Save"
                         onConfirm={() =>
                           editAnnouncement(row.announcements_id)

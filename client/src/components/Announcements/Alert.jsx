@@ -3,12 +3,28 @@ import "./Alert.css";
 
 function Alert(props) {
   const showInput = props.popupType === "edit";
+
   return (
     <div className="alert">
       <h2 className="alert-title">{props.title}</h2>
-      <p className="alert-description">{props.description}</p>
-      {showInput && (
-        <input type="text" placeholder="editing works" />
+      {showInput ? (
+        <div>
+          <label>
+            <p>Title</p>
+            <input id="title" type="text" value={props.announcementTitle}/>
+          </label>
+          <label>
+            <p>Description</p>
+            <textarea
+              id="description"
+              type="text"
+              maxLength="200"
+              value={props.announcementDescription}
+            />
+          </label>
+        </div>
+      ) : (
+        <p className="alert-description">{props.description}</p>
       )}
       <div className="alert-buttons">
         <button className="alert-confirm" onClick={props.onConfirm}>
@@ -21,5 +37,6 @@ function Alert(props) {
     </div>
   );
 }
+
 
 export default Alert;
