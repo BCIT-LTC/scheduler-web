@@ -1,6 +1,6 @@
 const express = require("express");
 // const session = require("express-session");
-import rateLimit from 'express-rate-limit'
+const rateLimit = require('express-rate-limit')
 const cookieSession = require('cookie-session');
 const path = require("path");
 const cors = require("cors");
