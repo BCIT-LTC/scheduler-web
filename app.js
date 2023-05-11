@@ -1,5 +1,6 @@
 const express = require("express");
 // const session = require("express-session");
+import rateLimit from 'express-rate-limit'
 const cookieSession = require('cookie-session');
 const path = require("path");
 const cors = require("cors");
@@ -40,19 +41,29 @@ app.use(cookieSession({
 }
 ));
 
+const localLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+
 const passport = require("./middleware/passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
 const indexRoute = require("./routes/indexRoute");
-const authentication = require("./routes/authentication");
+const saml_auth = require("./routes/saml_auth");
+const local_auth = require("./routes/local_auth");
 // const { checkNotAuthenticated } = require("./middleware/checkAuth");
 
 app.use(express.urlencoded({ extended: true }));
 // app.use(overrideMethod('_method'))
 
 app.use("/", indexRoute);
-app.use("/login", authentication);
+app.use("/loginsaml", saml_auth);
+app.use("/loginlocal", localLoginLimiter, local_auth);
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);
