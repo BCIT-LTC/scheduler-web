@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 // import { useNavigate } from "react-router-dom";
 import './Announcements.css';
 import AnnouncementTable from './AnnouncementTable';
@@ -33,9 +33,9 @@ const Announcement = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: Cookies.get('jwt'),
+        'Authorization': `Bearer ${Cookies.get('jwt')}`,
       },
-      body: JSON.stringify({title, description, date: datetime}),
+      body: JSON.stringify({ title, description, date: datetime }),
     }).then((response) => response.json(), setSubmit(true));
   };
   const submitButton = document.getElementById('submit-button');

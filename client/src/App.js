@@ -38,8 +38,8 @@ function App() {
     fetch('http://localhost:8000/api/logout', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${Cookies.get('jwt')}`,
         'content-Type': 'application/json',
-        'Authorization': Cookies.get('jwt')
       },
       mode: 'cors',
       body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
