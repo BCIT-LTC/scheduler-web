@@ -43,8 +43,7 @@ router.post('/local', function (req, res) {
         let email = req.body.email;
         let firstname = 'admin';
         let lastname = 'admin';
-        let isAdmin = true;
-        let jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.SECRET_KEY);
+        let jwtToken = jwt.sign({ email, firstname, lastname, isAdmin: true, isLocal: true }, process.env.SECRET_KEY);
         res.cookie('jwt', jwtToken, { httpOnly: false });
         res.sendStatus(200);
     } else {
