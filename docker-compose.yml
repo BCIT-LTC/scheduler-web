@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   app:
@@ -12,14 +12,14 @@ services:
         npm start
     build: .
     ports:
-      - "9000:9000"
+      - '9000:9000'
     environment:
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
       - LOCAL_PASSWORD=password123
       - LOCAL_USER=admin
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
+      test: ['CMD-SHELL', 'curl -f http://localhost:9000 || exit 1']
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -30,10 +30,10 @@ services:
   idp:
     image: kenchan0130/simplesamlphp
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       SIMPLESAMLPHP_SP_ENTITY_ID: localhost
-      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback 
+      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
     volumes:
       - ./local_saml_config/authsources.php:/var/www/simplesamlphp/config/authsources.php

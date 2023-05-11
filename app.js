@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 // const session = require("express-session");
 const rateLimit = require('express-rate-limit')
 const cookieSession = require('cookie-session');
-const path = require("path");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const path = require('path');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const port = 9000;
 const hostname = '0.0.0.0';
 
@@ -12,7 +12,7 @@ const hostname = '0.0.0.0';
 
 const app = express();
 app.use(cors());
-app.use(express.static('build'))
+app.use(express.static('build'));
 app.use(express.static('client/build'));
 app.use(bodyParser.json());
 
@@ -29,17 +29,18 @@ app.use(bodyParser.json());
 //   })
 // );
 
-app.use(cookieSession({
-  secret: 'cookies are gud 4 health',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}
-));
+app.use(
+  cookieSession({
+    secret: 'cookies are gud 4 health',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
 const localLoginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
