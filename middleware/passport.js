@@ -2,7 +2,6 @@ const passport = require('passport');
 var saml = require('passport-saml');
 var fs = require('fs');
 const jwt = require("jsonwebtoken");
-const { response } = require('express');
 
 
 var samlStrategy = new saml.Strategy({

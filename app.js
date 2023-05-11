@@ -61,9 +61,9 @@ const local_auth = require("./routes/local_auth");
 app.use(express.urlencoded({ extended: true }));
 // app.use(overrideMethod('_method'))
 
-app.use("/", indexRoute);
-app.use("/loginsaml", saml_auth);
+app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
+app.use("/", indexRoute);
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);

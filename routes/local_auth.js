@@ -7,7 +7,6 @@ require("dotenv").config();
 const LOCAL_PASSWORD = process.env.LOCAL_PASSWORD;
 const LOCAL_USER = process.env.LOCAL_USER;
 
-
 router.post('/', function (req, res) {
     if (req.body.email === LOCAL_USER && req.body.password === LOCAL_PASSWORD) {
         let email = req.body.email;
