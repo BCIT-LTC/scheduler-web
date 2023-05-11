@@ -17,6 +17,8 @@ export default function Locallogin({ setLocalLogin }) {
     }).then((response) => {
       if (response.status === 200) {
         window.location.href = '/';
+      } else if (response.status === 429) {
+        setCredentialError("Too many requests");
       } else {
         setCredentialError("Incorrect username or password");
       }
