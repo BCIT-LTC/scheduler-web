@@ -29,7 +29,7 @@ const Announcement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    return await fetch('http://localhost:8000/api/announcement', {
+    return await fetch('http://localhost:9000/announcement', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

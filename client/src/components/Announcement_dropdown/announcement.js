@@ -45,7 +45,7 @@ const DropdownAnnouncement = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('http://localhost:8000/api/announcement', {
+      fetch('http://localhost:9000/announcement', {
         headers: {
           'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }

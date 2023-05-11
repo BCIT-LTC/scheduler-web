@@ -8,19 +8,19 @@ export default function Logout() {
     .slice(0, 19)
     .replace('T', ' ');
 
-  fetch('http://localhost:8000/api/logout', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${Cookies.get('jwt')}`,
-      'content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
-  }).then((response) => {
-    sessionStorage.removeItem('userEmail');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('isAdmins');
-    Cookies.remove('jwt');
-    window.location.href = '/';
-    // window.location.reload();
-  });
+  // fetch('http://localhost:8000/api/logout', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Authorization': `Bearer ${Cookies.get('jwt')}`,
+  //     'content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ email: userEmail, logoutTime: logoutTime }),
+  // }).then((response) => {
+  //   sessionStorage.removeItem('userEmail');
+  //   sessionStorage.removeItem('token');
+  //   sessionStorage.removeItem('isAdmins');
+  //   Cookies.remove('jwt');
+  //   window.location.href = '/';
+  //   // window.location.reload();
+  // });
 }

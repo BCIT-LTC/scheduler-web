@@ -10,7 +10,7 @@ export default function AdminList() {
 
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/admin', {
+        fetch('http://localhost:9000/admin', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${Cookies.get('jwt')}`,
@@ -24,7 +24,7 @@ export default function AdminList() {
 
     async function editAdmin(email, isAdmin) {
         let errors = "";
-        await fetch("http://localhost:8000/api/admin", {
+        await fetch("http://localhost:9000/admin", {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${Cookies.get('jwt')}`,
