@@ -1,15 +1,15 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import './Home.css';
-import pdf from '../../openLab-pdf/Guidelines.pdf';
-import {useState} from 'react';
-import jwtDecode from 'jwt-decode';
-import Cookies from 'js-cookie';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Home.css";
+import pdf from "../../openLab-pdf/Guidelines.pdf";
+import { useState } from "react";
+import jwtDecode from "jwt-decode";
+import Cookies from "js-cookie";
 
 export default function Home() {
-  const user = jwtDecode(Cookies.get('jwt'));
+  const user = jwtDecode(Cookies.get("jwt"));
   const isAdmins = user.isAdmin;
-  const [showPDF, setShowPDF] = useState('');
+  const [showPDF, setShowPDF] = useState("");
   const handlePDF = () => {
     setShowPDF(pdf);
   };
@@ -30,7 +30,7 @@ export default function Home() {
         )}
         <Link className="button" to="/survey">
           <img src="./survey-icon.png" alt="" />
-          Survey
+          Open Lab General Feedback Survey
         </Link>
         <a
           className="button"
