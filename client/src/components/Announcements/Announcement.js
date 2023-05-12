@@ -9,6 +9,7 @@ const Announcement = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [submit, setSubmit] = useState(false); // for submission window component
+  const [emptyField, setEmptyField] = useState("");
 
   let date = new Date();
   const [count, setCount] = useState(0);
@@ -24,22 +25,28 @@ const Announcement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("jwt")}`,
-      },
-      body: JSON.stringify({ title, description, date: datetime }),
-    }).then(
-      (response) => response.json(),
-      setSubmit(true),
-      (document.getElementById("title").value = ""),
-      (document.getElementById("description").value = ""),
-      setTitle(""),
-      setDescription(""),
-      setCount(0)
-    );
+    if (title === "" || description === "") {
+      setEmptyField("Please fill in all fields");
+      return;
+    } else {
+      return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
+        },
+        body: JSON.stringify({ title, description, date: datetime }),
+      }).then(
+        (response) => response.json(),
+        setSubmit(true),
+        (document.getElementById("title").value = ""),
+        (document.getElementById("description").value = ""),
+        setEmptyField(""),
+        setTitle(""),
+        setDescription(""),
+        setCount(0)
+      );
+    }
   };
   const submitButton = document.getElementById("submit-button");
   const buttons = document.querySelectorAll(".button"); //refers to button class from AnnouncementTable
@@ -91,6 +98,7 @@ const Announcement = () => {
                 counter(e);
               }}
             />
+            <div className="error-message">{emptyField}</div>
           </label>
           <div className="submit-button">
             <button id="submit-button" type="submit">
