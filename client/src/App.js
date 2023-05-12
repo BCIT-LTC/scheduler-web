@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import Login from "./components/Login/Login.js";
 import logout from "./containers/logout";
 import { Routes, Route, Link } from "react-router-dom";
-import CalendarPage from "./containers/Calendar";
+import CalendarPage from "./containers/CalendarPage";
 import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
