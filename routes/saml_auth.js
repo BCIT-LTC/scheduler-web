@@ -1,10 +1,31 @@
+/** Express router providing saml login routes
+ * @module routers/login
+ * @requires express
+ */
+
+/**
+ * express module
+ * @const
+ */
 const express = require('express');
-const passport = require('passport');
 
-
+/**
+ * Express router to mount user related functions on.
+ * @type {object}
+ * @const
+ * @namespace loginRouter
+ */
 const router = express.Router();
+const passport = require('passport');
+require("dotenv").config();
 
-/// LOGIN ROUTES ///
+
+/**
+ * Route to get SAML login page
+ * @name get/login
+ * @function
+ * @memberof module:routers/login~loginrRouter
+ */
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
@@ -19,6 +40,12 @@ router.post('/',
         res.redirect('/');
     });
 
+/**
+ * Route to deal with login callback
+ * @name get/callback
+ * @function
+ * @memberof module:routers/login~loginRouter
+ */
 router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
@@ -27,6 +54,7 @@ router.post('/callback',
     },
     passport.authenticate('samlStrategy'),
     function (req, res) {
+        console.log(req.user.token);
         res.cookie('jwt', req.user.token, { httpOnly: false });
         console.log('-----------------------------');
         console.log('login call back dumps');
@@ -35,5 +63,4 @@ router.post('/callback',
         res.redirect('/');
     }
 );
-
 module.exports = router;
