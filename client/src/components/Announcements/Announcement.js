@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
-import './Announcements.css';
-import AnnouncementTable from './AnnouncementTable';
-import Submission from './Submission';
-import Cookies from 'js-cookie';
+import "./Announcements.css";
+import AnnouncementTable from "./AnnouncementTable";
+import Submission from "./Submission";
+import Cookies from "js-cookie";
 
 const Announcement = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [submit, setSubmit] = useState(false); // for submission window component
 
   let date = new Date();
@@ -16,42 +16,53 @@ const Announcement = () => {
   const datetime = new Date(Date.now() - timezone)
     .toISOString()
     .slice(0, 19)
-    .replace('T', ' ');
+    .replace("T", " ");
 
   const counter = (e) => {
     setCount(e.target.value.length);
   };
 
   function submitClick() {
-    document.getElementById('title').value = '';
-    document.getElementById('description').value = '';
+    // document.getElementById("title").value = "";
+    // document.getElementById("description").value = "";
+    // setTitle("");
+    // setDescription("");
+    // setCount(0);
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Cookies.get('jwt')}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
       body: JSON.stringify({ title, description, date: datetime }),
-    }).then((response) => response.json(), setSubmit(true));
+    }).then(
+      (response) => response.json(),
+      setSubmit(true),
+      (document.getElementById("title").value = ""),
+      (document.getElementById("description").value = ""),
+      setTitle(""),
+      setDescription(""),
+      setCount(0)
+    );
   };
-  const submitButton = document.getElementById('submit-button');
-  const buttons = document.querySelectorAll('.button'); //refers to button class from AnnouncementTable
+  const submitButton = document.getElementById("submit-button");
+  const buttons = document.querySelectorAll(".button"); //refers to button class from AnnouncementTable
 
   if (submit) {
-    document.body.style.overflowY = 'hidden';
-    submitButton.setAttribute('disabled', true);
+    document.body.style.overflowY = "hidden";
+    submitButton.setAttribute("disabled", true);
     buttons.forEach((button) => {
       button.disabled = true;
     });
     // Perform the click action here
   } else {
-    document.body.style.overflowY = 'auto';
+    document.body.style.overflowY = "auto";
     if (submitButton) {
-      submitButton.removeAttribute('disabled');
+      submitButton.removeAttribute("disabled");
       buttons.forEach((button) => {
         button.disabled = false;
       });
@@ -78,7 +89,7 @@ const Announcement = () => {
           </label>
           <label>
             <p>Description</p>
-            <p className="coun  t">{`${count}/200 Characters`}</p>
+            <p className="count">{`${count}/200 Characters`}</p>
             <textarea
               id="description"
               type="text"
