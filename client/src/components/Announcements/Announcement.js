@@ -22,14 +22,6 @@ const Announcement = () => {
     setCount(e.target.value.length);
   };
 
-  function submitClick() {
-    // document.getElementById("title").value = "";
-    // document.getElementById("description").value = "";
-    // setTitle("");
-    // setDescription("");
-    // setCount(0);
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
@@ -101,7 +93,7 @@ const Announcement = () => {
             />
           </label>
           <div className="submit-button">
-            <button id="submit-button" type="submit" onClick={submitClick}>
+            <button id="submit-button" type="submit">
               SUBMIT
             </button>
           </div>
