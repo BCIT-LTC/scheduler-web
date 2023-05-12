@@ -55,7 +55,7 @@ const AnnouncementTable = () => {
       .catch((error) => console.error(error));
   };
 
-  const editAnnouncement = async (userid) => {
+  const editAnnouncement = async (userid, updatedTitle, updatedDescription) => {
     return await fetch(`http://localhost:8000/api/announcement`, {
       method: "PUT",
       headers: {
@@ -64,6 +64,8 @@ const AnnouncementTable = () => {
       },
       body: JSON.stringify({
         id: userid,
+        title: updatedTitle,
+        description: updatedDescription,
       }),
     })
       .then(() => {
@@ -152,8 +154,8 @@ const AnnouncementTable = () => {
                         announcementTitle={row.title}
                         announcementDescription={row.description}
                         confirmBtnLabel="Save"
-                        onConfirm={() =>
-                          editAnnouncement(row.announcements_id)
+                        onConfirm={(updatedTitle, updatedDescription) =>
+                          editAnnouncement(row.announcements_id, updatedTitle, updatedDescription)
                         }
                       />
                     </div>
