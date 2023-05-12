@@ -15,7 +15,9 @@ export default function CalendarDay ({ date, data }) {
   return (
     <div className="calendar-day">
       { data ? (
-          <div className="lab">
+        <div className="lab">
+          {data}
+          
           </div>
         )
       : (
