@@ -13,11 +13,12 @@ const AnnouncementTable = () => {
   // idx stores the row of the announcement that the delete button belongs to
 
   useEffect(() => {
-    const interval = setInterval(() => { //fetch announcement data every 3 seconds
+    const interval = setInterval(() => {
+      //fetch announcement data every 3 seconds
       fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
-          'Authorization': `Bearer ${Cookies.get('jwt')}`,
-        }
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
+        },
       }) //retrieve announcements for announcement table
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
@@ -32,7 +33,7 @@ const AnnouncementTable = () => {
     return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${Cookies.get('jwt')}`,
+        Authorization: `Bearer ${Cookies.get("jwt")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -43,10 +44,10 @@ const AnnouncementTable = () => {
       // fetch is done again to update the table, because it won't update without getting the announcement table
       fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
-          'Authorization': `Bearer ${Cookies.get('jwt')}`,
-        }
-      })
-      .catch((error) => console.error(error));
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
+        },
+      }).catch((error) => console.error(error));
+    });
   };
 
   const editAnnouncement = async (userid, updatedTitle, updatedDescription) => {
@@ -122,7 +123,7 @@ const AnnouncementTable = () => {
                     timeZone: "America/Los_Angeles",
                   })}
                 </td>
-                
+
                 {/* WIP edit button */}
                 <td width="20%" style={{ position: "relative" }}>
                   <button
@@ -149,7 +150,11 @@ const AnnouncementTable = () => {
                         announcementDescription={row.description}
                         confirmBtnLabel="Save"
                         onConfirm={(updatedTitle, updatedDescription) =>
-                          editAnnouncement(row.announcements_id, updatedTitle, updatedDescription)
+                          editAnnouncement(
+                            row.announcements_id,
+                            updatedTitle,
+                            updatedDescription
+                          )
                         }
                       />
                     </div>
