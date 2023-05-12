@@ -15,9 +15,8 @@
   position: relative;
 }
 
-
 .data-form__inputs--error::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -26,4 +25,23 @@
   border: 5px solid red;
   z-index: -1;
   pointer-events: none;
+}
+
+.calendarForm {
+  background-color: hsla(0, 0%, 100%, 0.76);
+  display: flex;
+  height: 400px;
+  justify-content: center;
+  margin-top: 15px;
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+}
+
+.calendarInput,
+.calendarLabel {
+  margin: auto;
+  width: 225px;
+  display: flex;
+  padding: 4px;
 }
