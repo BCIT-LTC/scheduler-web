@@ -124,3 +124,7 @@ tr:nth-child(even) {
   font-weight: 900;
   letter-spacing: 1px;
 }
+
+.error-message {
+  color: red;
+}
