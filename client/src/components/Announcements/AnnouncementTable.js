@@ -51,11 +51,11 @@ const AnnouncementTable = () => {
   };
 
   const editAnnouncement = async (userid, updatedTitle, updatedDescription) => {
-    return await fetch(`http://localhost:8000/api/announcement`, {
+    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("jwt"),
+        Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
       body: JSON.stringify({
         id: userid,
@@ -66,9 +66,9 @@ const AnnouncementTable = () => {
       .then(() => {
         setEditClicked({ isOpen: false, idx: -1 });
         // fetch is done again to update the table, because it won't update without getting the announcement table
-        fetch("http://localhost:8000/api/announcement", {
+        fetch(`${process.env.PUBLIC_URL}/announcement`, {
           headers: {
-            Authorization: Cookies.get("jwt"),
+            Authorization: `Bearer ${Cookies.get("jwt")}`,
           },
         })
           .then((response) => response.json())

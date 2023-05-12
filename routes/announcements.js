@@ -7,7 +7,7 @@
  * express module
  * @const
  */
-const express = require('express');
+const express = require("express");
 
 /**
  * Express router to mount user related functions on.
@@ -27,8 +27,8 @@ const callAPI = require("../helpers/API_caller");
  * @return {Object} array of all annoucements
  */
 router.get("/announcement", async (req, res) => {
-    let response = await callAPI("announcement", "GET", req);
-    res.status(response.status).json(response.data);
+  let response = await callAPI("announcement", "GET", req);
+  res.status(response.status).json(response.data);
 });
 
 /**
@@ -44,8 +44,8 @@ router.get("/announcement", async (req, res) => {
  * @throws {Object} - Returns an error object if there was an issue adding the announcement
  */
 router.post("/announcement", async (req, res) => {
-    let response = await callAPI("announcement", "POST", req);
-    res.status(response.status).json(response.data);
+  let response = await callAPI("announcement", "POST", req);
+  res.status(response.status).json(response.data);
 });
 
 /**
@@ -59,9 +59,25 @@ router.post("/announcement", async (req, res) => {
  * @throws {Object} - Returns an error object if there was an issue adding the announcement
  */
 router.delete("/announcement", async (req, res) => {
-    let response = await callAPI("announcement", "DELETE", req);
-    res.status(response.status).json(response.data);
+  let response = await callAPI("announcement", "DELETE", req);
+  res.status(response.status).json(response.data);
 });
 
+/**
+ * Route to edit announcement
+ * @name put/annoucement
+ * @function
+ * @memberof module:routers/announcement~announcementRouter
+ * @inner
+ * @param {string} req.body.id - The id of the announcement
+ * @param {string} req.body.title - The title of the announcement
+ * @param {string} req.body.description - The description of the announcement
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Returns an error object if there was an issue adding the announcement
+ */
+router.put("/announcement", async (req, res) => {
+  let response = await callAPI("announcement", "PUT", req);
+  res.status(response.status).json(response.data);
+});
 
 module.exports = router;
