@@ -13,12 +13,11 @@ const AnnouncementTable = () => {
   // idx stores the row of the announcement that the delete button belongs to
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      //fetch announcement data every 3 seconds
-      fetch("http://localhost:8000/api/announcement", {
+    const interval = setInterval(() => { //fetch announcement data every 3 seconds
+      fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
-          Authorization: Cookies.get("jwt"),
-        },
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
+        }
       }) //retrieve announcements for announcement table
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
@@ -30,27 +29,22 @@ const AnnouncementTable = () => {
 
   //sends table data to /delete endpoint
   const deleteAnnouncement = async (userid) => {
-    return await fetch(`http://localhost:8000/api/announcement`, {
+    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: "DELETE",
       headers: {
+        'Authorization': `Bearer ${Cookies.get('jwt')}`,
         "Content-Type": "application/json",
-        Authorization: Cookies.get("jwt"),
       },
       body: JSON.stringify({
         id: userid,
       }),
-    })
-      .then(() => {
-        setDeleteClicked({ isOpen: false, idx: -1 });
-        // fetch is done again to update the table, because it won't update without getting the announcement table
-        fetch("http://localhost:8000/api/announcement", {
-          headers: {
-            Authorization: Cookies.get("jwt"),
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => setTable(data.reverse().slice()))
-          .catch((error) => console.error(error));
+    }).then(() => {
+      setDeleteClicked({ isOpen: false, idx: -1 });
+      // fetch is done again to update the table, because it won't update without getting the announcement table
+      fetch(`${process.env.PUBLIC_URL}/announcement`, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
+        }
       })
       .catch((error) => console.error(error));
   };

@@ -1,12 +1,31 @@
-const express = require('express');
-const passport = require('passport');
-const jwt = require("jsonwebtoken");
-const router = express.Router();
-require("dotenv").config();
-const LOCAL_PASSWORD = process.env.LOCAL_PASSWORD;
-const LOCAL_USER = process.env.LOCAL_USER;
+/** Express router providing saml login routes
+ * @module routers/login
+ * @requires express
+ */
 
-/// LOGIN ROUTES ///
+/**
+ * express module
+ * @const
+ */
+const express = require('express');
+
+/**
+ * Express router to mount user related functions on.
+ * @type {object}
+ * @const
+ * @namespace loginRouter
+ */
+const router = express.Router();
+const passport = require('passport');
+require("dotenv").config();
+
+
+/**
+ * Route to get SAML login page
+ * @name get/login
+ * @function
+ * @memberof module:routers/login~loginrRouter
+ */
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
@@ -21,6 +40,12 @@ router.post('/',
         res.redirect('/');
     });
 
+/**
+ * Route to deal with login callback
+ * @name get/callback
+ * @function
+ * @memberof module:routers/login~loginRouter
+ */
 router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
@@ -29,6 +54,7 @@ router.post('/callback',
     },
     passport.authenticate('samlStrategy'),
     function (req, res) {
+        console.log(req.user.token);
         res.cookie('jwt', req.user.token, { httpOnly: false });
         console.log('-----------------------------');
         console.log('login call back dumps');
@@ -37,19 +63,4 @@ router.post('/callback',
         res.redirect('/');
     }
 );
-
-router.post('/local', function (req, res) {
-    if (req.body.email === LOCAL_USER && req.body.password === LOCAL_PASSWORD) {
-        let email = req.body.email;
-        let firstname = 'admin';
-        let lastname = 'admin';
-        let isAdmin = true;
-        let jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.SECRET_KEY);
-        res.cookie('jwt', jwtToken, { httpOnly: false });
-        res.sendStatus(200);
-    } else {
-        return res.sendStatus(401);
-    }
-});
-
 module.exports = router;

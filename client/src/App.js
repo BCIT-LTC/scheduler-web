@@ -9,36 +9,19 @@ import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
 import Home from "./containers/home";
-import { GlobalContext } from "./context";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
+import AdminList from "./components/AdminList/AdminList";
 
 function App() {
   const [showLocalLogin, setShowLocalLogin] = useState();
-  const {
-    state: {
-      userData: { token, isAdmin },
-    },
-  } = useContext(GlobalContext);
-  const context = useContext(GlobalContext)
-
-  if (isAdmin === true) {
-    sessionStorage.setItem("isAdmins", isAdmin);
-  }
-  const isAdmins = sessionStorage.getItem("isAdmins");
-
-  useEffect(() => {
-    console.log("token changed", token);
-  }, [token]);
-
   let jwt = Cookies.get('jwt');
-  if (jwt !== undefined && !token) {
-    var user = jwtDecode(jwt);
-    context.updateUserData(user.email, jwt, user.isAdmin);
-  }
-  if (!token) {
+  let user = null;
+  if (jwt !== undefined) {
+    user = jwtDecode(jwt);
+  } else {
     if (showLocalLogin === true) {
       return <Locallogin setLocalLogin={setShowLocalLogin} />;
     } else {
@@ -46,23 +29,22 @@ function App() {
     }
   }
 
-  window.addEventListener("beforeunload", function (e) {
-    var user = jwtDecode(jwt);
-    const baseTime = new Date();
-    const timezone = baseTime.getTimezoneOffset() * 60000;
-    const logoutTime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
+  // window.addEventListener("beforeunload", function (e) {
+  //   var user = jwtDecode(jwt);
+  //   const baseTime = new Date();
+  //   const timezone = baseTime.getTimezoneOffset() * 60000;
+  //   const logoutTime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
 
-    fetch('http://localhost:8000/api/logout', {
-      method: 'POST',
-      headers: {
-        'content-Type': 'application/json',
-        'Authorization': Cookies.get('jwt')
-      },
-      mode: 'cors',
-      body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
-    })
-  })
-
+  //   fetch('http://localhost:8000/api/logout', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Authorization': `Bearer ${Cookies.get('jwt')}`,
+  //       'content-Type': 'application/json',
+  //     },
+  //     mode: 'cors',
+  //     body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
+  //   })
+  // })
   return (
     <>
       <nav className="navbar">
@@ -71,18 +53,24 @@ function App() {
           <button onClick={logout} className="logout-button">Logout</button>
         </div>
         <div id="navIcon">
+          {
+            user.isLocal !== undefined ?
+              <Link to="/admins"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
+              : ''
+          }
           <DropdownAnnouncement />
-          <Link to="/"><img src="./home_image-128.png" className="home-logo" /></Link>
+          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
         </div>
 
       </nav>
       <Routes>
-        {token && <Route path="/login" element={<Home />} />}
+        {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/survey" element={<SurveyPage />} />
-        {isAdmins && <Route path="/update" element={<DataForm />} />}
-        {isAdmins && <Route path="/announcements" element={<Announcement />} />}
+        {user.isAdmin && <Route path="/update" element={<DataForm />} />}
+        {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
+        {user.isLocal && <Route path="/admins" element={<AdminList />} />}
       </Routes>
     </>
   );

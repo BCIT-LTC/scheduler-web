@@ -45,9 +45,9 @@ const DropdownAnnouncement = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('http://localhost:8000/api/announcement', {
+      fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
-          'Authorization': Cookies.get('jwt')
+          'Authorization': `Bearer ${Cookies.get('jwt')}`,
         }
       })
         .then(response => response.json())

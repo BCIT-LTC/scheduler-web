@@ -4,13 +4,13 @@ import PopUp from '../components/PopUp';
 import CalendarDay from '../components/CalendarDay';
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { GlobalContext } from '../context';
-import { fetchCalendar  } from '../utils/fetchFunctions';
+import { fetchCalendar } from '../utils/fetchFunctions';
 
 
 export default function CalendarPage() {
   const Context = useContext(GlobalContext);
   const [month, setMonth] = useState(new Date())
-  const [ filteredSheetData, setFilteredSheetData ] = useState([])
+  const [filteredSheetData, setFilteredSheetData] = useState([])
   const matchedDates = useRef({})
 
   async function fetchData() {
@@ -32,17 +32,8 @@ export default function CalendarPage() {
     fetchData()
   }, [month])
 
-  // useEffect(() => {
-  //   if (dummyData.length > 0) {
-  //     setFilteredSheetData(dummyData.filter((openLab) => {
-  //       return new Date(openLab.date).getUTCMonth() === month.getMonth()
-  //     }))
-  //   }
-  //   // eslint-disable-next-line
-  // }, [dummyData, month])
-
-  function handleActiveStartDateChange ({activeStartDate}) {
-      console.log("properties.activestartdate", activeStartDate.getMonth())
+  function handleActiveStartDateChange({ activeStartDate }) {
+    console.log("properties.activestartdate", activeStartDate.getMonth())
     setMonth(activeStartDate)
   }
 
