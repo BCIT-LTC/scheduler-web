@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 export function updateCalendar(forms, updateOrCreate) {
     return fetch(
-        `${process.env.PUBLIC_URL}/${
+        `${process.env.PUBLIC_URL} / ${
             updateOrCreate === "create" ? "calendar" : "openlab"
         } `,
         {
