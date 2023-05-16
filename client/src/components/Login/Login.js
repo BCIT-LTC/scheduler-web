@@ -10,7 +10,7 @@ export default function Login({ setLocalLogin }) {
   }
   return (
     <>
-      <div>
+      <div> 
         <div className="login-wrapper">
           <form className="form" action="/login" method="post">
             <h1>Sign in with BCIT</h1>

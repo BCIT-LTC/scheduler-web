@@ -9,5 +9,6 @@ set -e
 
 # Return to parent shell to run app
 >&2 echo "Starting app..."
+
 exec "$@"
 

@@ -92,11 +92,8 @@ tr:nth-child(even) {
   font-weight: 500;
   font-size: medium;
   border-radius: 4px;
-  height: 30px;
   background-color: #023455;
   color: white;
-  padding: 0 20px;
-  width: 40%;
 }
 
 #edit-button:hover {
@@ -112,15 +109,16 @@ tr:nth-child(even) {
   font-weight: 500;
   font-size: medium;
   border-radius: 4px;
-  height: 40px;
   background-color: #8b0000;
   color: white;
-  /* padding: 0 20px; */
-  width: 50%;
 }
 
 #delete-button:hover {
   background-color: #a30000;
   font-weight: 900;
   letter-spacing: 1px;
+}
+
+.error-message {
+  color: red;
 }

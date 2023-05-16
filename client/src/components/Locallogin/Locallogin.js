@@ -13,6 +13,7 @@ export default function Locallogin({ setLocalLogin }) {
       headers: {
         "Content-Type": "application/json",
       },
+      mode: 'cors',
       body: JSON.stringify({ email: email, password: password }),
     }).then((response) => {
       if (response.status === 200) {

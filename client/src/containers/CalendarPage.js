@@ -57,7 +57,7 @@ export default function CalendarPage() {
         }}
         tileContent={({ date, view }) => {
           let matchingDay
-          //console.log("date, month", date, month)
+          // console.log("date, month", date, month)
           if (filteredSheetData && filteredSheetData.length > 0) {
             matchingDay = filteredSheetData.find((openLab) => {
               return date.getDate() === new Date(openLab.date).getUTCDate()
@@ -70,8 +70,9 @@ export default function CalendarPage() {
                 [date.toISOString()]: matchingDay
               }
             }
-
+            console.log("matching day", matchingDay)
           }
+          console.log("matching day", matchingDay)
           return <CalendarDay date={date} data={matchingDay} />
         }}
       />

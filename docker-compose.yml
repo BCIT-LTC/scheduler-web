@@ -1,7 +1,13 @@
 version: '3.9'
 
+networks:
+  test-web-network:
+    driver: bridge
+
 services:
   app:
+    networks:
+      - test-web-network
     command:
       - /bin/sh
       - -c
@@ -30,6 +36,8 @@ services:
       - .:/app
 
   idp:
+    networks:
+      - test-web-network
     image: kenchan0130/simplesamlphp
     ports:
       - '8080:8080'
@@ -39,3 +47,17 @@ services:
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
     volumes:
       - ./local_saml_config/authsources.php:/var/www/simplesamlphp/config/authsources.php
+  test:
+    networks:
+      - test-web-network
+    # TODO: the url prefix after http is dependent on the name of the container for the frotend
+    environment:
+      - URL_FRONTEND=http://scheduler-web-app-1:9000
+    build:
+      dockerfile: Dockerfile.playwright
+      args: 
+        - TEST_USER=root
+    # restart: on-failure
+    depends_on:
+      app:
+        condition: service_healthy
