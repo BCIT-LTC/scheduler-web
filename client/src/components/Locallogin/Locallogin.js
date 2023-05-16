@@ -8,7 +8,7 @@ export default function Locallogin({ setLocalLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch("http://localhost:9000/loginlocal", {
+    await fetch(`${process.env.PUBLIC_URL}/loginlocal`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
