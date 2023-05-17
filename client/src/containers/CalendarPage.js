@@ -15,7 +15,6 @@ export default function CalendarPage() {
 
   async function fetchData() {
     const response = await fetchCalendar(month.getMonth() + 1)
-    console.log("what is response", response)
     setFilteredSheetData(response.results)
     matchedDates.current = {}
   }
@@ -28,12 +27,10 @@ export default function CalendarPage() {
   }, [])
 
   useEffect(() => {
-    console.log("month changed")
     fetchData()
   }, [month])
 
   function handleActiveStartDateChange({ activeStartDate }) {
-    console.log("properties.activestartdate", activeStartDate.getMonth())
     setMonth(activeStartDate)
   }
 
@@ -43,9 +40,7 @@ export default function CalendarPage() {
         onActiveStartDateChange={handleActiveStartDateChange}
         value={month}
         onClickDay={(date, event) => {
-
           const selectedDay = matchedDates.current[date.toISOString()]
-          console.log("selected dayyy", selectedDay)
           if (selectedDay) {
             Context.setSelectedDay(selectedDay)
           }
@@ -55,24 +50,20 @@ export default function CalendarPage() {
         tileDisabled={({ activeStartDate, date, view }) => {
           return date.getDay() === 0 || date.getDay() === 6
         }}
+        tileClassName="tile"
         tileContent={({ date, view }) => {
           let matchingDay
-          // console.log("date, month", date, month)
           if (filteredSheetData && filteredSheetData.length > 0) {
             matchingDay = filteredSheetData.find((openLab) => {
               return date.getDate() === new Date(openLab.date).getUTCDate()
             })
             if (matchingDay) {
-              console.log("matching day", matchingDay)
-              // store matched dates for the month in an object to make looking up a clicked day faster
               matchedDates.current = {
                 ...matchedDates.current,
                 [date.toISOString()]: matchingDay
               }
             }
-            console.log("matching day", matchingDay)
           }
-          console.log("matching day", matchingDay)
           return <CalendarDay date={date} data={matchingDay} />
         }}
       />

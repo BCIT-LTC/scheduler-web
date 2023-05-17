@@ -39,6 +39,9 @@ export default function PopUp() {
                         <div>
                             Room Number: {context.state.selectedDay["room"]}
                         </div>
+                        <div>
+                            Stat: {(context.state.selectedDay["stat"] === 1) ? "Yes" : "No"}
+                        </div>
                     </div>
                 ) : (
                     <div> No Open Lab </div>

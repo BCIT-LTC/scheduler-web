@@ -9,17 +9,14 @@ export default function FormRow({
 }) {
   function handleUpdateForm(field, value) {
     const newForms = [...forms];
-    newForms[formNumber] = {...newForms[formNumber], [field]: value};
+    newForms[formNumber] = { ...newForms[formNumber], [field]: value };
     setForms(newForms);
   }
-  console.log('forms, form number', forms, formNumber, forms[formNumber]?.date);
-
   return (
     <div className="calendarForm">
       <form
-        className={`calendarInputs data-form ${
-          errorState ? 'data-form--error' : 'calendarInputs'
-        }`}
+        className={`calendarInputs data-form ${errorState ? 'data-form--error' : 'calendarInputs'
+          }`}
       >
         <div className="data-form__inputs">
           <div
@@ -78,8 +75,8 @@ export default function FormRow({
             <input className="calendarInput"
               name="stat"
               type="checkbox"
-              value={forms[formNumber]?.stat}
-              onChange={(e) => handleUpdateForm('stat', e.target.value)}
+              checked={forms[formNumber]?.stat === 1}
+              onChange={(e) => handleUpdateForm('stat', (e.target.checked) ? 1 : 0)}
             />
           </div>
           <div
