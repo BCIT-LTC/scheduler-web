@@ -49,8 +49,7 @@ function App() {
     <>
       <nav className="navbar">
         <div className="nav-left">
-          <img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" />
-          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
+          <Link to="/"><img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" /></Link>
         </div>
         <div id="navIcon">
           <DropdownAnnouncement className="nav-icon" />
@@ -59,7 +58,7 @@ function App() {
               <Link to="/admins" className="nav-icon"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
               : ''
           }
-          <button onClick={logout} className="logout-button nav-icon">Logout</button>
+          <input type="image" src="./logout.svg" className="nav-icon logout-button filter-blue" alt="settings" onClick={logout} />
         </div>
 
       </nav>
