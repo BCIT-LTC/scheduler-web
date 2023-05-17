@@ -61,7 +61,7 @@ router.post("/calendar", async function (req, res) {
  * @throws {Object} - Returns an error object if there was an issue adding the announcement
  */
 router.post("/openlab", async function (req, res) {
-    let response = await callAPI("openlab", "POST", req);
+    let response = await callAPI("calendar", "POST", req);
     res.status(response.status).json(response.data);
 });
 
