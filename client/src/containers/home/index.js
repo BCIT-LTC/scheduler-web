@@ -10,7 +10,7 @@ import InfoIcon from './icons/info-icon.png';
 
 export default function Home() {
   const user = jwtDecode(Cookies.get('jwt'));
-  const isAdmins = user.isAdmin;
+  const isAdmin = user.isAdmin;
   const [showPDF, setShowPDF] = useState('');
   const [showContactModal, setShowContactModal] = useState(false);
 
@@ -30,7 +30,7 @@ export default function Home() {
           <img src="./calendar-icon.png" alt="" />
           Calendar
         </Link>
-        {isAdmins && (
+        {isAdmin && (
           <Link className="button" to="/update">
             <img src="./update-icon.png" alt="" />
             Update Calendar
@@ -59,7 +59,7 @@ export default function Home() {
           <img src="./guidelines-icon.png" alt="" />
           Open Lab Guidelines
         </a>
-        {isAdmins && (
+        {isAdmin && (
           <Link className="button" to="/announcements">
             <img src="./announcements-icon.png" alt="" />
             Create Announcements
@@ -71,7 +71,10 @@ export default function Home() {
         </button>
       </div>
       {showContactModal && (
-        <ContactModal onClose={() => setShowContactModal(false)} />
+        <ContactModal
+          onClose={() => setShowContactModal(false)}
+          isAdmin={isAdmin}
+        />
       )}
     </>
   );
