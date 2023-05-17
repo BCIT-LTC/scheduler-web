@@ -1,6 +1,6 @@
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
 import FormRow from '../components/FormRow';
-import {updateCalendar, fetchCalendar} from '../utils/fetchFunctions';
+import { updateCalendar, fetchCalendar } from '../utils/fetchFunctions';
 import './form-container.css';
 
 export const defaultFormState = {
@@ -10,6 +10,8 @@ export const defaultFormState = {
   facilitator: '',
   stat: 0,
   room: '',
+  start_date: new Date(),
+  end_date: new Date()
 };
 
 const errorMap = {
@@ -26,18 +28,17 @@ export default function FormContainer({
 }) {
   const [numberOfRows, setNumberOfRows] = useState(1);
   const [forms, setForms] = useState([
-    initialFormState ? {...initialFormState} : {...defaultFormState},
+    initialFormState ? { ...initialFormState } : { ...defaultFormState },
   ]);
   const [formErrorState, setFormErrorState] = useState(false);
   const [errorType, setErrorType] = useState([]);
-
   async function handleSubmit() {
-    const noDatesAreTheSame =
-      (forms.length === 1 && forms[0].date) ||
-      forms.every((f, i) => {
-        const current = forms.slice(i + 1);
-        return !Boolean(current.filter((c) => c.date === f.date).length > 0);
-      });
+    // const noDatesAreTheSame =
+    //   (forms.length === 1 && forms[0].date) ||
+    //   forms.every((f, i) => {
+    //     const current = forms.slice(i + 1);
+    //     return !Boolean(current.filter((c) => c.date === f.date).length > 0);
+    //   });
     const allRoomNumbersAreFilled = forms.every((f, i) => {
       return Boolean(f.room);
     });
@@ -45,7 +46,7 @@ export default function FormContainer({
       return Boolean(f.facilitator);
     });
     if (
-      noDatesAreTheSame &&
+      // noDatesAreTheSame &&
       allRoomNumbersAreFilled &&
       allRowsHaveFacilitator
     ) {
@@ -54,10 +55,29 @@ export default function FormContainer({
       }
       // temporary fix
       if (!('stat' in forms[0])) forms[0].stat = 0;
-      await updateCalendar(forms, updateOrCreate);
+      let newForms = [];
+      forms.forEach(form => {
+        if (form.end_date === undefined || form.end_date === form.start_date) {
+          form.date = form.start_date;
+          delete form.start_date;
+          delete form.end_date;
+          newForms.push(JSON.parse(JSON.stringify(form)))
+        } else {
+          var currentDate = new Date(form.start_date);
+          let end = new Date(form.end_date);
+          delete form.start_date;
+          delete form.end_date;
+          while (currentDate <= end) {
+            form.date = currentDate;
+            newForms.push(JSON.parse(JSON.stringify(form)));
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+      });
+      await updateCalendar(newForms, updateOrCreate);
 
       //CLEAR FORMS
-      setForms([{...defaultFormState}]);
+      setForms([{ ...defaultFormState }]);
       setNumberOfRows(1);
       setFormErrorState(false);
       setErrorType([]);
@@ -71,7 +91,7 @@ export default function FormContainer({
       // }
     } else {
       const newErrorType = [];
-      if (!noDatesAreTheSame) newErrorType.push('Same Date');
+      // if (!noDatesAreTheSame) newErrorType.push('Same Date');
       if (!allRoomNumbersAreFilled) newErrorType.push('No Room');
       if (!allRowsHaveFacilitator) newErrorType.push('No Facilitator');
       setFormErrorState(true);
@@ -80,7 +100,7 @@ export default function FormContainer({
   }
 
   function handleAddRow() {
-    setForms([...forms, {...defaultFormState}]);
+    setForms([...forms, { ...defaultFormState }]);
     setNumberOfRows(numberOfRows + 1);
   }
 

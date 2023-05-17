@@ -67,7 +67,11 @@
   pointer-events: none;
 } */
 
-nav a {
+/* nav a {
+  margin-right: 10px;
+} */
+
+.nav-icon {
   margin-right: 10px;
 }
 
@@ -119,12 +123,12 @@ There is another temporary style for icon in component/Announcement/announcement
 #navIcon {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 
 .home-logo {
-  width: 30px;
-  height: 30px;
+  width: auto;
+  height: 25px;
   margin-left: 10px;
 }
 
@@ -140,13 +144,14 @@ There is another temporary style for icon in component/Announcement/announcement
 }
 
 .logout-button {
-  height: 25px;
+  height: 28px;
   border: none;
   font-family: inherit;
   font-size: inherit;
   background: none;
   cursor: pointer;
   font-weight: 700;
+  color: #003354;
 }
 
 html {

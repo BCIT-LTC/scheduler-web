@@ -1,4 +1,7 @@
 import './formrow.css';
+import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function FormRow({
   formNumber,
@@ -7,11 +10,23 @@ export default function FormRow({
   errorState = false,
   errorType,
 }) {
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
   function handleUpdateForm(field, value) {
     const newForms = [...forms];
     newForms[formNumber] = { ...newForms[formNumber], [field]: value };
     setForms(newForms);
   }
+  const onChange = (dates) => {
+    if (dates.length !== 2) return;
+    const [start, end] = dates; // Destructure the array to get the start and end date
+    const newForms = [...forms];
+    newForms[formNumber] = { ...newForms[formNumber], start_date: start, end_date: end };
+    setForms(newForms);
+    setStartDate(start);
+    setEndDate(end);
+  };
   return (
     <div className="calendarForm">
       <form
@@ -26,16 +41,24 @@ export default function FormRow({
             }
           >
             <label className="calendarLabel" htmlFor="date">Date: </label>
-            <input className="calendarInput"
-              name="date"
-              type="date"
-              value={
-                forms[formNumber]?.date
-                  ? new Date(forms[formNumber].date).toISOString().split('T')[0]
-                  : undefined
-              }
-              onChange={(e) => handleUpdateForm('date', e.target.value)}
-            />
+            {(forms[formNumber]?.date) ?
+              <input className="calendarInput"
+                name="date"
+                type="date"
+                value={new Date(forms[formNumber].date).toISOString().split('T')[0]}
+                onChange={(e) => handleUpdateForm('date', e.target.value)}
+              />
+              :
+              <div>
+                <DatePicker
+                  selectsRange
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={onChange}
+                />
+              </div>
+
+            }
           </div>
           <div>
             <label className="calendarLabel" htmlFor="start-time">Start Time: </label>
