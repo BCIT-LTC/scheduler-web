@@ -3,6 +3,7 @@
 .App {
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
+  height: 100%;
 }
 
 .App-logo {
@@ -156,3 +157,10 @@ html {
   filter: invert(16%) sepia(65%) saturate(1048%) hue-rotate(171deg) brightness(95%) contrast(104%);
 }
 
+div#root {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
