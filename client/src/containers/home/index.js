@@ -5,13 +5,20 @@ import pdf from '../../openLab-pdf/Guidelines.pdf';
 import {useState} from 'react';
 import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
+import ContactModal from '../../components/ContactUs/ContactModal';
 
 export default function Home() {
   const user = jwtDecode(Cookies.get('jwt'));
   const isAdmins = user.isAdmin;
   const [showPDF, setShowPDF] = useState('');
+  const [showContactModal, setShowContactModal] = useState(false);
+
   const handlePDF = () => {
     setShowPDF(pdf);
+  };
+
+  const handleContactUsClick = () => {
+    setShowContactModal(true);
   };
 
   return (
@@ -41,7 +48,6 @@ export default function Home() {
           <img src="./casestudies-icon.png" alt="" />
           Case Studies
         </a>
-        {/* <button className="button" onClick={handlePDF}>Open Lab Guidelines</button> */}
         <a
           className="button"
           target="_blank"
@@ -58,11 +64,14 @@ export default function Home() {
             Create Announcements
           </Link>
         )}
-        <a className="button" target="_blank" href="/" rel="noreferrer">
-          <img src="./info-icon.png" alt="" />
+        <button className="button" onClick={handleContactUsClick}>
+          <img src="../icons/info-icon.png" alt="" />
           Contact Us
-        </a>
+        </button>
       </div>
+      {showContactModal && (
+        <ContactModal onClose={() => setShowContactModal(false)} />
+      )}
     </>
   );
 }
