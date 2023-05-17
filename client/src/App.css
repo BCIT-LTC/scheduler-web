@@ -67,7 +67,11 @@
   pointer-events: none;
 } */
 
-nav a {
+/* nav a {
+  margin-right: 10px;
+} */
+
+.nav-icon {
   margin-right: 10px;
 }
 
@@ -119,7 +123,7 @@ There is another temporary style for icon in component/Announcement/announcement
 #navIcon {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 
 .home-logo {

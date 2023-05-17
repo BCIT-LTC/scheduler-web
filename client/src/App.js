@@ -50,16 +50,16 @@ function App() {
       <nav className="navbar">
         <div className="nav-left">
           <img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" />
-          <button onClick={logout} className="logout-button">Logout</button>
+          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
         </div>
         <div id="navIcon">
+          <DropdownAnnouncement className="nav-icon" />
           {
             user.isLocal !== undefined ?
-              <Link to="/admins"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
+              <Link to="/admins" className="nav-icon"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
               : ''
           }
-          <DropdownAnnouncement />
-          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
+          <button onClick={logout} className="logout-button nav-icon">Logout</button>
         </div>
 
       </nav>
