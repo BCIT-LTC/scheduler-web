@@ -6,6 +6,7 @@ import {useState} from 'react';
 import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import ContactModal from '../../components/ContactUs/ContactModal';
+import InfoIcon from './icons/info-icon.png';
 
 export default function Home() {
   const user = jwtDecode(Cookies.get('jwt'));
@@ -65,7 +66,7 @@ export default function Home() {
           </Link>
         )}
         <button className="button" onClick={handleContactUsClick}>
-          <img src="../icons/info-icon.png" alt="" />
+          <img src={InfoIcon} alt="" />
           Contact Us
         </button>
       </div>
