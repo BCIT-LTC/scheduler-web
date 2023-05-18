@@ -3,7 +3,8 @@ import React, {
   useEffect,
   useRef
 } from "react";
-
+import Cookies from "js-cookie";
+import './PDFUpload.css';
 
 const PDFUpload = () => {
 
@@ -16,15 +17,19 @@ const PDFUpload = () => {
   };
 
   const handleSubmission = (e) => {
+    console.log(e);
     e.preventDefault();
     const formData = new FormData();
-
+    const fileData = document.getElementById("pdf").files[0];
+    setSelectedFile(fileData);
     formData.append('pdfFile', selectedFile);
-
     fetch(
-        process.env.PUBLIC_URL  + '/labGuidelines', {
+      // TODO: directly calling the api for development purposes
+      'http://localhost:8000/api/labGuidelines', {
+        // process.env.PUBLIC_URL  + '/labGuidelines', {
           method: 'POST',
           body: formData,
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
         }
       )
       .then((response) => response.json())
@@ -37,18 +42,28 @@ const PDFUpload = () => {
   };
 
   return (
-    <div>
-      <form onSubmit = {
+    <div className="locallogin-wrapper">
+      <form 
+      className = "form"
+      onSubmit = {
         handleSubmission
       }
       method = "post"
-      enctype = "multipart/form-data" >
-      <input
-        type="file"
-        accept=".pdf"
-        name="pdfFile"
-        onChange = {changeHandler}
-      /> {
+        encType="multipart/form-data" >
+        <div className="pdf-selector">
+          <label for="pdf" className="custom-file-upload">
+            Choose File
+          </label>
+          <input
+            type="file"
+            id="pdf"
+            accept=".pdf"
+            name="pdfFile"
+            onChange={changeHandler}
+            style={ {display:"none"} }
+          />
+        </div>
+        {
         isFilePicked ? (
           <div>
         <p> Filename: {
@@ -70,11 +85,9 @@ const PDFUpload = () => {
       ) : ( <p> Select a file to show details </p>
       )
     } <div>
-          <button
-            type="submit"
-            >
-            Submit
-          </button>
+          <div className="submit-button">
+            <button type="submit">Submit</button>
+          </div>
         </div >
         </form>
       </div>
