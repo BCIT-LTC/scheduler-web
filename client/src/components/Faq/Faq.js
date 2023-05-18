@@ -1,86 +1,115 @@
 import { useState } from "react";
+import FaqTable from "./FaqTable";
+import Submission from "../Submission";
 import Cookies from "js-cookie";
 
 const Faq = () => {
-  const [questionAnswerPairs, setQuestionAnswerPairs] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [editingPairIndex, setEditingPairIndex] = useState(null);
-  const [newQuestion, setNewQuestion] = useState("");
-  const [newAnswer, setNewAnswer] = useState("");
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [submit, setSubmit] = useState(false); // for submission window component
+  const [emptyField, setEmptyField] = useState("");
+  const [count, setCount] = useState(0);
 
-  const handleAddPairClick = () => {
-    setEditingPairIndex(null);
-    setShowPopup(true);
+  const counter = (e) => {
+    setCount(e.target.value.length);
   };
 
-  const handleEditPairClick = (pairIndex) => {
-    setEditingPairIndex(pairIndex);
-    setNewQuestion(questionAnswerPairs[pairIndex].question);
-    setNewAnswer(questionAnswerPairs[pairIndex].answer);
-    setShowPopup(true);
-  };
-
-  const handleCancelClick = () => {
-    setShowPopup(false);
-  };
-
-  const handleQuestionChange = (event) => {
-    setNewQuestion(event.target.value);
-  };
-
-  const handleAnswerChange = (event) => {
-    setNewAnswer(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (editingPairIndex === null) {
-      setQuestionAnswerPairs([
-        ...questionAnswerPairs,
-        { question: newQuestion, answer: newAnswer }
-      ]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (question === "" || answer === "") {
+      setEmptyField("Please fill in all fields");
+      return;
     } else {
-      const newPairs = [...questionAnswerPairs];
-      newPairs[editingPairIndex] = { question: newQuestion, answer: newAnswer };
-      setQuestionAnswerPairs(newPairs);
+      return await fetch(`${process.env.PUBLIC_URL}/faq`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
+        },
+        body: JSON.stringify({ question, answer }),
+      }).then(
+        (response) => response.json(),
+        setSubmit(true),
+        (document.getElementById("question").value = ""),
+        (document.getElementById("answer").value = ""),
+        setEmptyField(""),
+        setQuestion(""),
+        setAnswer(""),
+        setCount(0)
+      );
     }
-    setShowPopup(false);
   };
+  const submitButton = document.getElementById("submit-button");
+  const buttons = document.querySelectorAll(".button"); //refers to button class from FaqTable
+
+  if (submit) {
+    document.body.style.overflowY = "hidden";
+    submitButton.setAttribute("disabled", true);
+    buttons.forEach((button) => {
+      button.disabled = true;
+    });
+    // Perform the click action here
+  } else {
+    document.body.style.overflowY = "auto";
+    if (submitButton) {
+      submitButton.removeAttribute("disabled");
+      buttons.forEach((button) => {
+        button.disabled = false;
+      });
+    }
+  }
 
   return (
-    <>
-      <h1>Frequently Asked Questions</h1>
-      <ul>
-        {faqPairs.map((pair, index) => (
-          <li key={index}>
-            <h3>{pair.question}</h3>
-            <p>{pair.answer}</p>
-            {userRole === 'admin' && (
-              <button onClick={() => handleEditPairClick(index)}>Edit</button>
-            )}
-          </li>
-        ))}
-      </ul>
-      {userRole === 'admin' && (
-        <button onClick={handleAddPairClick}>Add</button>
-      )}
-      {showPopup && (
-        <div className="popup">
-          <form onSubmit={handleSubmit}>
-            <label>
-              Question:
-              <input type="text" value={newQuestion} onChange={handleQuestionChange} />
-            </label>
-            <label>
-              Answer:
-              <textarea value={newAnswer} onChange={handleAnswerChange} />
-            </label>
-            <button type="button" onClick={handleCancelClick}>Cancel</button>
-            <button type="submit">Submit</button>
-          </form>
+    <div>
+      <div className="faq-wrapper">
+        <form
+          className="form"
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
+          <h2>Create FAQ Item</h2>
+          <label>
+            <p>Question</p>
+            <input
+              id="question"
+              type="text"
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </label>
+          <label>
+            <p>Answer</p>
+            <p className="count">{`${count}/200 Characters`}</p>
+            <textarea
+              id="answer"
+              type="text"
+              maxLength="200"
+              onChange={(e) => {
+                setAnswer(e.target.value);
+                counter(e);
+              }}
+            />
+            <div className="error-message">{emptyField}</div>
+          </label>
+          <div className="submit-button">
+            <button id="submit-button" type="submit">
+              SUBMIT
+            </button>
+          </div>
+        </form>
+        <div>
+          <h3>Frequently Asked Questions</h3>
+          <FaqTable />
         </div>
-      )}
-    </>
+        <Submission
+          trigger={submit}
+          setTrigger={setSubmit}
+          isOpen={submit}
+          onClose={() => setSubmit(false)}
+          title="Faq Created"
+        />
+      </div>
+    </div>
   );
 };
 

@@ -1,19 +1,19 @@
-const express = require('express');
+const express = require("express");
 // const session = require("express-session");
-const rateLimit = require('express-rate-limit')
-const cookieSession = require('cookie-session');
-const path = require('path');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+const rateLimit = require("express-rate-limit");
+const cookieSession = require("cookie-session");
+const path = require("path");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const port = 9000;
-const hostname = '0.0.0.0';
+const hostname = "0.0.0.0";
 
 // const overrideMethod = require('method-override')
 
 const app = express();
 app.use(cors());
-app.use(express.static('build'));
-app.use(express.static('client/build'));
+app.use(express.static("build"));
+app.use(express.static("client/build"));
 app.use(bodyParser.json());
 
 // app.use(
@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 
 app.use(
   cookieSession({
-    secret: 'cookies are gud 4 health',
+    secret: "cookies are gud 4 health",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -47,8 +47,7 @@ const localLoginLimiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-})
-
+});
 
 const passport = require("./middleware/passport");
 app.use(passport.initialize());
@@ -60,6 +59,7 @@ const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
 const login = require("./routes/auth");
 const calendar = require("./routes/calendar");
+const faq = require("./routes/faq");
 // const { checkNotAuthenticated } = require("./middleware/checkAuth");
 
 app.use(express.urlencoded({ extended: true }));
@@ -67,7 +67,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
-app.use("/", indexRoute, announcements, login, calendar);
+app.use("/", indexRoute, announcements, login, calendar, faq);
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);

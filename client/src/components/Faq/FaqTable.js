@@ -1,25 +1,24 @@
 import { useState, useEffect } from "react";
 import Alert from "../Alert";
 import Cookies from "js-cookie";
-import "./Announcements.css";
 
-const AnnouncementTable = () => {
+const FaqTable = () => {
   const [table, setTable] = useState([]);
   const [deleteClicked, setDeleteClicked] = useState({
     isOpen: false,
     idx: -1,
   }); // when the user clicks on a button, deleteClicked is updated
   const [editClicked, setEditClicked] = useState({ isOpen: false, idx: -1 }); // when the user clicks on a button, editClicked is updated
-  // idx stores the row of the announcement that the delete button belongs to
+  // idx stores the row of the faq that the delete button belongs to
 
   useEffect(() => {
     const interval = setInterval(() => {
-      //fetch announcement data every 3 seconds
-      fetch(`${process.env.PUBLIC_URL}/announcement`, {
+      //fetch faq data every 3 seconds
+      fetch(`${process.env.PUBLIC_URL}/faq`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("jwt")}`,
         },
-      }) //retrieve announcements for announcement table
+      }) //retrieve faqs for faq table
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
         .catch((error) => console.error(error));
@@ -29,8 +28,8 @@ const AnnouncementTable = () => {
   }, []);
 
   //sends table data to /delete endpoint
-  const deleteAnnouncement = async (userid) => {
-    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
+  const deleteFaq = async (userid) => {
+    return await fetch(`${process.env.PUBLIC_URL}/faq`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${Cookies.get("jwt")}`,
@@ -41,8 +40,8 @@ const AnnouncementTable = () => {
       }),
     }).then(() => {
       setDeleteClicked({ isOpen: false, idx: -1 });
-      // fetch is done again to update the table, because it won't update without getting the announcement table
-      fetch(`${process.env.PUBLIC_URL}/announcement`, {
+      // fetch is done again to update the table, because it won't update without getting the faq table
+      fetch(`${process.env.PUBLIC_URL}/faq`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("jwt")}`,
         },
@@ -50,8 +49,8 @@ const AnnouncementTable = () => {
     });
   };
 
-  const editAnnouncement = async (userid, updatedTitle, updatedDescription) => {
-    return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
+  const editFaq = async (userid, updatedQuestion, updatedAnswer) => {
+    return await fetch(`${process.env.PUBLIC_URL}/faq`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -59,14 +58,14 @@ const AnnouncementTable = () => {
       },
       body: JSON.stringify({
         id: userid,
-        title: updatedTitle,
-        description: updatedDescription,
+        question: updatedQuestion,
+        answer: updatedAnswer,
       }),
     })
       .then(() => {
         setEditClicked({ isOpen: false, idx: -1 });
-        // fetch is done again to update the table, because it won't update without getting the announcement table
-        fetch(`${process.env.PUBLIC_URL}/announcement`, {
+        // fetch is done again to update the table, because it won't update without getting the faq table
+        fetch(`${process.env.PUBLIC_URL}/faq`, {
           headers: {
             Authorization: `Bearer ${Cookies.get("jwt")}`,
           },
@@ -89,7 +88,7 @@ const AnnouncementTable = () => {
     }
   }
 
-  // the map function is used below to iterate through each announcement in the database and append it to a row, with the title, description, date, and delete button
+  // the map function is used below to iterate through each faq in the database and append it to a row, with the question, answer, and delete button
 
   //the position for the delete button is set to relative so that it does not dissapear when the Alert component appears
 
@@ -99,32 +98,18 @@ const AnnouncementTable = () => {
         <table>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Date</th>
+              <th>Question</th>
+              <th>Answer</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {table.map((row, index) => (
-              <tr key={row.announcements_id} className="table-item">
-                <td>{row.title}</td>
-                <td className="text-overflow">{row.description}</td>
-                <td>
-                  {" "}
-                  {new Date(row.date).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    hour12: true,
-                    timeZone: "America/Los_Angeles",
-                  })}
-                </td>
+              <tr key={row.faqs_id} className="table-item">
+                <td>{row.question}</td>
+                <td className="text-overflow">{row.answer}</td>
 
-                {/* WIP edit button */}
                 <td width="20%" style={{ position: "relative" }}>
                   <button
                     className="button"
@@ -144,17 +129,13 @@ const AnnouncementTable = () => {
                         onClose={() =>
                           setEditClicked({ isOpen: false, idx: -1 })
                         }
-                        title="Edit Announcement"
-                        description="Make your changes to the announcement below and click 'Save' to save your changes."
-                        announcementTitle={row.title}
-                        announcementDescription={row.description}
+                        title="Edit Faq"
+                        description="Make your changes to the faq below and click 'Save' to save your changes."
+                        faqQuestion={row.question}
+                        faqAnswer={row.answer}
                         confirmBtnLabel="Save"
-                        onConfirm={(updatedTitle, updatedDescription) =>
-                          editAnnouncement(
-                            row.announcements_id,
-                            updatedTitle,
-                            updatedDescription
-                          )
+                        onConfirm={(updatedQuestion, updatedAnswer) =>
+                          editFaq(row.faqs_id, updatedQuestion, updatedAnswer)
                         }
                       />
                     </div>
@@ -179,12 +160,10 @@ const AnnouncementTable = () => {
                         onClose={() =>
                           setDeleteClicked({ isOpen: false, idx: -1 })
                         }
-                        title="Delete Announcement"
+                        title="Delete Faq"
                         description="Are you sure you want to delete this?"
                         confirmBtnLabel="Delete"
-                        onConfirm={() =>
-                          deleteAnnouncement(row.announcements_id)
-                        }
+                        onConfirm={() => deleteFaq(row.faqs_id)}
                       />
                     </div>
                   ) : null}
@@ -198,4 +177,4 @@ const AnnouncementTable = () => {
   );
 };
 
-export default AnnouncementTable;
+export default FaqTable;

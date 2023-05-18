@@ -2,7 +2,7 @@ import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import "./Announcements.css";
 import AnnouncementTable from "./AnnouncementTable";
-import Submission from "./Submission";
+import Submission from "../Submission";
 import Cookies from "js-cookie";
 
 const Announcement = () => {
