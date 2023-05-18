@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Alert from "../Alert";
 import Cookies from "js-cookie";
+import "./Faq.css";
 
 const FaqTable = () => {
   const [table, setTable] = useState([]);

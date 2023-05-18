@@ -2,6 +2,7 @@ import { useState } from "react";
 import FaqTable from "./FaqTable";
 import Submission from "../Submission";
 import Cookies from "js-cookie";
+import "./Faq.css";
 
 const Faq = () => {
   const [question, setQuestion] = useState("");
