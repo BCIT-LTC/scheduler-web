@@ -28,6 +28,10 @@ export default function Home() {
             Schedule Open Lab
           </Link>
         )}
+        <Link className="button" to="/openlabsignin">
+          <img src="./survey-icon.png" alt="" />
+          Open Lab Sign In
+        </Link>
         <Link className="button" to="/survey">
           <img src="./survey-icon.png" alt="" />
           Open Lab General Feedback Survey

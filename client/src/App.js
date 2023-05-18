@@ -8,6 +8,7 @@ import CalendarPage from "./containers/CalendarPage";
 import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
+import OpenLabSignIn from "./containers/OpenLabSignIn";
 import Home from "./containers/home";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
@@ -66,6 +67,7 @@ function App() {
         {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
         <Route path="/openlabs" element={<CalendarPage />} />
+        <Route path="/openlabsignin" element={<OpenLabSignIn />} />
         <Route path="/survey" element={<SurveyPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
