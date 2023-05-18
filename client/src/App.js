@@ -14,6 +14,7 @@ import Announcement from "./components/Announcements/Announcement";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import AdminList from "./components/AdminList/AdminList";
+import LabGuidelinesPage from "./containers/LabGuidelinesPage";
 
 function App() {
   const [showLocalLogin, setShowLocalLogin] = useState();
@@ -68,6 +69,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/survey" element={<SurveyPage />} />
+        < Route path = "/guidelines" element = {<LabGuidelinesPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}

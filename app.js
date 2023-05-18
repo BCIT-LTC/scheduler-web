@@ -60,6 +60,7 @@ const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
 const login = require("./routes/auth");
 const calendar = require("./routes/calendar");
+const lab_guidelines = require("./routes/lab_guidelines");
 // const { checkNotAuthenticated } = require("./middleware/checkAuth");
 
 app.use(express.urlencoded({ extended: true }));
@@ -67,7 +68,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
-app.use("/", indexRoute, announcements, login, calendar);
+app.use("/", indexRoute, announcements, login, calendar, lab_guidelines);
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);
