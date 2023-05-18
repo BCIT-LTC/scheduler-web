@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Alert from "../Alert";
 import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
 import "./Faq.css";
 
 const FaqTable = () => {
@@ -11,6 +12,9 @@ const FaqTable = () => {
   }); // when the user clicks on a button, deleteClicked is updated
   const [editClicked, setEditClicked] = useState({ isOpen: false, idx: -1 }); // when the user clicks on a button, editClicked is updated
   // idx stores the row of the faq that the delete button belongs to
+
+  const user = jwtDecode(Cookies.get("jwt"));
+  const isAdmins = user.isAdmin;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -96,83 +100,107 @@ const FaqTable = () => {
   return (
     <div>
       <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Question</th>
-              <th>Answer</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {table.map((row, index) => (
-              <tr key={row.faqs_id} className="table-item">
-                <td>{row.question}</td>
-                <td className="text-overflow">{row.answer}</td>
-
-                <td width="20%" style={{ position: "relative" }}>
-                  <button
-                    className="button"
-                    id="edit-button"
-                    type="submit"
-                    onClick={() => {
-                      setEditClicked({ isOpen: true, idx: index });
-                    }}
-                  >
-                    Edit
-                  </button>
-                  {editClicked.isOpen && editClicked.idx === index ? (
-                    <div style={{ position: "absolute", top: "100%", left: 0 }}>
-                      <Alert
-                        isOpen={true}
-                        popupType={"edit"}
-                        onClose={() =>
-                          setEditClicked({ isOpen: false, idx: -1 })
-                        }
-                        title="Edit Faq"
-                        description="Make your changes to the faq below and click 'Save' to save your changes."
-                        faqQuestion={row.question}
-                        faqAnswer={row.answer}
-                        confirmBtnLabel="Save"
-                        onConfirm={(updatedQuestion, updatedAnswer) =>
-                          editFaq(row.faqs_id, updatedQuestion, updatedAnswer)
-                        }
-                      />
-                    </div>
-                  ) : null}
-                </td>
-
-                <td width="20%" style={{ position: "relative" }}>
-                  <button
-                    className="button"
-                    id="delete-button"
-                    type="submit"
-                    onClick={() => {
-                      setDeleteClicked({ isOpen: true, idx: index });
-                    }}
-                  >
-                    Delete
-                  </button>
-                  {deleteClicked.isOpen && deleteClicked.idx === index ? (
-                    <div style={{ position: "absolute", top: "100%", left: 0 }}>
-                      <Alert
-                        isOpen={true}
-                        onClose={() =>
-                          setDeleteClicked({ isOpen: false, idx: -1 })
-                        }
-                        title="Delete Faq"
-                        description="Are you sure you want to delete this?"
-                        confirmBtnLabel="Delete"
-                        onConfirm={() => deleteFaq(row.faqs_id)}
-                      />
-                    </div>
-                  ) : null}
-                </td>
+        {isAdmins && (
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Edit</th>
+                <th>Delete</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {table.map((row, index) => (
+                <tr key={row.faqs_id} className="table-item">
+                  <td>{row.question}</td>
+                  <td className="text-overflow">{row.answer}</td>
+
+                  <td width="20%" style={{ position: "relative" }}>
+                    <button
+                      className="button"
+                      id="edit-button"
+                      type="submit"
+                      onClick={() => {
+                        setEditClicked({ isOpen: true, idx: index });
+                      }}
+                    >
+                      Edit
+                    </button>
+                    {editClicked.isOpen && editClicked.idx === index ? (
+                      <div
+                        style={{ position: "absolute", top: "100%", left: 0 }}
+                      >
+                        <Alert
+                          isOpen={true}
+                          popupType={"edit"}
+                          onClose={() =>
+                            setEditClicked({ isOpen: false, idx: -1 })
+                          }
+                          title="Edit Faq"
+                          description="Make your changes to the faq below and click 'Save' to save your changes."
+                          faqQuestion={row.question}
+                          faqAnswer={row.answer}
+                          confirmBtnLabel="Save"
+                          onConfirm={(updatedQuestion, updatedAnswer) =>
+                            editFaq(row.faqs_id, updatedQuestion, updatedAnswer)
+                          }
+                        />
+                      </div>
+                    ) : null}
+                  </td>
+
+                  <td width="20%" style={{ position: "relative" }}>
+                    <button
+                      className="button"
+                      id="delete-button"
+                      type="submit"
+                      onClick={() => {
+                        setDeleteClicked({ isOpen: true, idx: index });
+                      }}
+                    >
+                      Delete
+                    </button>
+                    {deleteClicked.isOpen && deleteClicked.idx === index ? (
+                      <div
+                        style={{ position: "absolute", top: "100%", left: 0 }}
+                      >
+                        <Alert
+                          isOpen={true}
+                          onClose={() =>
+                            setDeleteClicked({ isOpen: false, idx: -1 })
+                          }
+                          title="Delete Faq"
+                          description="Are you sure you want to delete this?"
+                          confirmBtnLabel="Delete"
+                          onConfirm={() => deleteFaq(row.faqs_id)}
+                        />
+                      </div>
+                    ) : null}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {!isAdmins && (
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {table.map((row, index) => (
+                <tr key={row.faqs_id} className="table-item">
+                  <td>{row.question}</td>
+                  <td className="text-overflow">{row.answer}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

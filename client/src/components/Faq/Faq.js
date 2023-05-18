@@ -2,6 +2,7 @@ import { useState } from "react";
 import FaqTable from "./FaqTable";
 import Submission from "../Submission";
 import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
 import "./Faq.css";
 
 const Faq = () => {
@@ -10,6 +11,8 @@ const Faq = () => {
   const [submit, setSubmit] = useState(false); // for submission window component
   const [emptyField, setEmptyField] = useState("");
   const [count, setCount] = useState(0);
+  const user = jwtDecode(Cookies.get("jwt"));
+  const isAdmins = user.isAdmin;
 
   const counter = (e) => {
     setCount(e.target.value.length);
@@ -63,41 +66,43 @@ const Faq = () => {
   return (
     <div>
       <div className="faq-wrapper">
-        <form
-          className="form"
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          <h2>Create FAQ Item</h2>
-          <label>
-            <p>Question</p>
-            <input
-              id="question"
-              type="text"
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-          </label>
-          <label>
-            <p>Answer</p>
-            <p className="count">{`${count}/200 Characters`}</p>
-            <textarea
-              id="answer"
-              type="text"
-              maxLength="200"
-              onChange={(e) => {
-                setAnswer(e.target.value);
-                counter(e);
-              }}
-            />
-            <div className="error-message">{emptyField}</div>
-          </label>
-          <div className="submit-button">
-            <button id="submit-button" type="submit">
-              SUBMIT
-            </button>
-          </div>
-        </form>
+        {isAdmins && (
+          <form
+            className="form"
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            <h2>Create FAQ Item</h2>
+            <label>
+              <p>Question</p>
+              <input
+                id="question"
+                type="text"
+                onChange={(e) => setQuestion(e.target.value)}
+              />
+            </label>
+            <label>
+              <p>Answer</p>
+              <p className="count">{`${count}/200 Characters`}</p>
+              <textarea
+                id="answer"
+                type="text"
+                maxLength="200"
+                onChange={(e) => {
+                  setAnswer(e.target.value);
+                  counter(e);
+                }}
+              />
+              <div className="error-message">{emptyField}</div>
+            </label>
+            <div className="submit-button">
+              <button id="submit-button" type="submit">
+                SUBMIT
+              </button>
+            </div>
+          </form>
+        )}
         <div>
           <h3>Frequently Asked Questions</h3>
           <FaqTable />
