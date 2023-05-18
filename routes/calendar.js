@@ -7,7 +7,7 @@
  * express module
  * @const
  */
-const express = require('express');
+const express = require("express");
 
 /**
  * Express router to mount user related functions on.
@@ -29,7 +29,10 @@ const callAPI = require("../helpers/API_caller");
  * @return {Object} data of month requested
  */
 router.get("/calendar", async function (req, res) {
-    let response = await callAPI("calendar", "GET", req, { month: req.query.month });
+    let response = await callAPI("calendar", "GET", req, {
+        month: req.query.month,
+        year: req.query.year
+    });
     res.status(response.status).json(response.data);
 });
 
@@ -48,7 +51,6 @@ router.post("/calendar", async function (req, res) {
     res.status(response.status).json(response.data);
 });
 
-
 /**
  * Route to update calendar event
  * @name post/openlab
@@ -59,9 +61,9 @@ router.post("/calendar", async function (req, res) {
  * @returns {Object} - The edited events
  * @throws {Object} - Returns an error object if there was an issue adding the announcement
  */
-router.post('/openlab', async function (req, res) {
+router.post("/openlab", async function (req, res) {
     let response = await callAPI("calendar", "POST", req);
     res.status(response.status).json(response.data);
-})
+});
 
 module.exports = router;
