@@ -59,7 +59,7 @@ export default function Home() {
           </Link>
         )}
         <Link className="button" to="/faq">
-          <img src="./announcements-icon.png" alt="" />
+          <img src="./faq.png" alt="" />
           Frequently Asked Questions
         </Link>
       </div>
