@@ -1,8 +1,7 @@
 import Cookies from "js-cookie";
-export function updateCalendar(forms, updateOrCreate) {
-    return fetch(
-        `${process.env.PUBLIC_URL}/${
-            updateOrCreate === "create" ? "calendar" : "openlab"
+export async function updateCalendar(forms, updateOrCreate) {
+    return await fetch(
+        `${process.env.PUBLIC_URL}/${updateOrCreate === "create" ? "calendar" : "openlab"
         } `,
         {
             method: "POST",
@@ -16,8 +15,8 @@ export function updateCalendar(forms, updateOrCreate) {
     );
 }
 
-export function fetchCalendar(month) {
-    return fetch(`${process.env.PUBLIC_URL}/calendar?month=` + month, {
+export function fetchCalendar(month, year) {
+    return fetch(`${process.env.PUBLIC_URL}/calendar?month=` + month + '&year=' + year, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${Cookies.get("jwt")} `,

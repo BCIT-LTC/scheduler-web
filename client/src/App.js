@@ -65,7 +65,7 @@ function App() {
       <Routes>
         {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/openlabs" element={<CalendarPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}

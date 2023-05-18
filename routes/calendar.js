@@ -31,6 +31,7 @@ const callAPI = require("../helpers/API_caller");
 router.get("/calendar", async function (req, res) {
     let response = await callAPI("calendar", "GET", req, {
         month: req.query.month,
+        year: req.query.year
     });
     res.status(response.status).json(response.data);
 });

@@ -18,14 +18,14 @@ export default function Home() {
     <>
       <h2 className="heading">BCIT BSN Program</h2>
       <div className="buttons">
-        <Link className="button" to="/calendar">
+        <Link className="button" to="/openlabs">
           <img src="./calendar-icon.png" alt="" />
           Calendar
         </Link>
         {isAdmins && (
           <Link className="button" to="/update">
             <img src="./update-icon.png" alt="" />
-            Update Calendar
+            Schedule Open Lab
           </Link>
         )}
         <Link className="button" to="/survey">

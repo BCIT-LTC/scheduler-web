@@ -45,6 +45,7 @@ export default function FormRow({
               <input className="calendarInput"
                 name="date"
                 type="date"
+                readOnly
                 value={new Date(forms[formNumber].date).toISOString().split('T')[0]}
                 onChange={(e) => handleUpdateForm('date', e.target.value)}
               />
@@ -61,21 +62,21 @@ export default function FormRow({
             }
           </div>
           <div>
-            <label className="calendarLabel" htmlFor="start-time">Start Time: </label>
+            <label className="calendarLabel" htmlFor="start_time">Start Time: </label>
             <input className="calendarInput"
-              name="start-time"
+              name="start_time"
               type="time"
-              value={forms[formNumber]?.['start-time']}
-              onChange={(e) => handleUpdateForm('start-time', e.target.value)}
+              value={forms[formNumber]?.['start_time']}
+              onChange={(e) => handleUpdateForm('start_time', e.target.value)}
             />
           </div>
           <div>
-            <label className="calendarLabel" htmlFor="end-time">End Time: </label>
+            <label className="calendarLabel" htmlFor="end_time">End Time: </label>
             <input className="calendarInput"
-              name="end-time"
+              name="end_time"
               type="time"
-              value={forms[formNumber]?.['end-time']}
-              onChange={(e) => handleUpdateForm('end-time', e.target.value)}
+              value={forms[formNumber]?.['end_time']}
+              onChange={(e) => handleUpdateForm('end_time', e.target.value)}
             />
           </div>
           <div
