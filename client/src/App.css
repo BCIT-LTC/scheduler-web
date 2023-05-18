@@ -154,6 +154,10 @@ There is another temporary style for icon in component/Announcement/announcement
   color: #003354;
 }
 
+.lab-section {
+  margin-bottom: 10px;
+}
+
 html {
   height: 100%;
 }

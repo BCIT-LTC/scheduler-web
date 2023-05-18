@@ -25,51 +25,62 @@ export default function PopUp() {
         return (
             <div className="popup">
                 {Object.keys(context.state.selectedDay).length > 0 ? (
-                    <div>
-                        <div>
-                            Facilitator: {context.state.selectedDay.facilitator}
+                    context.state.selectedDay.map((d) => (
+                        <div className="lab-section">
+                            <div>
+                                Facilitator: {d.facilitator}
+                            </div>
+                            <div>
+                                Start-time:{" "}
+                                {d["start_time"]}
+                            </div>
+                            <div>
+                                End-time: {d["end_time"]}
+                            </div>
+                            <div>
+                                Room Number: {d["room"]}
+                            </div>
+                            <div>
+                                Stat: {(d["stat"] === 1) ? "Yes" : "No"}
+                            </div>
                         </div>
-                        <div>
-                            Start-time:{" "}
-                            {context.state.selectedDay["start_time"]}
-                        </div>
-                        <div>
-                            End-time: {context.state.selectedDay["end_time"]}
-                        </div>
-                        <div>
-                            Room Number: {context.state.selectedDay["room"]}
-                        </div>
-                        <div>
-                            Stat: {(context.state.selectedDay["stat"] === 1) ? "Yes" : "No"}
-                        </div>
-                    </div>
+                    ))
                 ) : (
                     <div> No Open Lab </div>
-                )}
+                )
+                }
                 <button className="button" onClick={handleClose}>
                     close
                 </button>
-                {user.isAdmin && !editFormVisible && (
-                    <button
-                        className="button"
-                        onClick={() => setEditFormVisible(true)}
-                    >
-                        Edit
-                    </button>
-                )}
-                {editFormVisible && (
-                    <FormContainer
-                        disableAddRowButton={true}
-                        initialFormState={context.state.selectedDay}
-                        updateOrCreate={
-                            Object.keys(context.state.selectedDay).length > 0
-                                ? "update"
-                                : "create"
-                        }
-                        fetchOnSubmit={true}
-                    />
-                )}
-            </div>
+                {
+                    user.isAdmin && !editFormVisible && (
+                        <button
+                            className="button"
+                            onClick={() => setEditFormVisible(true)}
+                        >
+                            Edit
+                        </button>
+                    )
+                }
+                {
+                    editFormVisible && (
+                        Object.keys(context.state.selectedDay).length > 0 ? (
+                            <FormContainer
+                                disableAddRowButton={true}
+                                initialFormState={context.state.selectedDay}
+                                updateOrCreate={"update"}
+                                fetchOnSubmit={true}
+                            />
+                        ) : (
+                            <FormContainer
+                                disableAddRowButton={true}
+                                updateOrCreate={"create"}
+                                fetchOnSubmit={true}
+                            />
+                        )
+                    )
+                }
+            </div >
         );
     }
     return <></>;
