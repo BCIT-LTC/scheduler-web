@@ -34,24 +34,23 @@ function App() {
     <>
       <nav className="navbar">
         <div className="nav-left">
-          <img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" />
-          <button onClick={logout} className="logout-button">Logout</button>
+          <Link to="/"><img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" /></Link>
         </div>
         <div id="navIcon">
+          <DropdownAnnouncement className="nav-icon" />
           {
             user.isLocal !== undefined ?
-              <Link to="/admins"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
+              <Link to="/admins" className="nav-icon"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
               : ''
           }
-          <DropdownAnnouncement />
-          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
+          <input type="image" src="./logout.svg" className="nav-icon logout-button filter-blue" alt="settings" onClick={logout} />
         </div>
 
       </nav>
       <Routes>
         {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/openlabs" element={<CalendarPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         < Route path="/guidelines" element={<LabGuidelinesPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}

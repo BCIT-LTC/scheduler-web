@@ -31,6 +31,7 @@ const callAPI = require("../helpers/API_caller");
 router.get("/calendar", async function (req, res) {
     let response = await callAPI("calendar", "GET", req, {
         month: req.query.month,
+        year: req.query.year
     });
     res.status(response.status).json(response.data);
 });
@@ -61,7 +62,7 @@ router.post("/calendar", async function (req, res) {
  * @throws {Object} - Returns an error object if there was an issue adding the announcement
  */
 router.post("/openlab", async function (req, res) {
-    let response = await callAPI("openlab", "POST", req);
+    let response = await callAPI("calendar", "POST", req);
     res.status(response.status).json(response.data);
 });
 

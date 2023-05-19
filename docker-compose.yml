@@ -55,7 +55,7 @@ services:
       - URL_FRONTEND=http://scheduler-web-app-1:9000
     build:
       dockerfile: Dockerfile.playwright
-      args: 
+      args:
         - TEST_USER=root
     restart: on-failure
     depends_on:

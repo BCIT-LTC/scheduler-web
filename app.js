@@ -69,7 +69,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
-app.use("/", indexRoute, announcements, login, calendar, lab_guidelines);
+app.use("/", announcements, login, calendar, lab_guidelines);
+app.use("/", indexRoute);
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);
