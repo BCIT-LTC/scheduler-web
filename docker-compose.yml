@@ -58,6 +58,6 @@ services:
       args:
         - TEST_USER=root
     restart: on-failure
-    depends_on:
-      app:
-        condition: service_healthy
+    # depends_on:
+    #   app:
+    #     condition: service_healthy
