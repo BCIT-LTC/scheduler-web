@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Alert from "./Alert";
+import Alert from "../Alert";
 import Cookies from "js-cookie";
 import "./Announcements.css";
 

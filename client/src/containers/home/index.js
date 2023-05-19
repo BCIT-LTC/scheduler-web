@@ -62,6 +62,10 @@ export default function Home() {
             Create Announcements
           </Link>
         )}
+        <Link className="button" to="/faq">
+          <img src="./faq.png" alt="" />
+          Frequently Asked Questions
+        </Link>
       </div>
     </>
   );

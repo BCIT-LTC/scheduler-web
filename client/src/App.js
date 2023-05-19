@@ -12,6 +12,7 @@ import OpenLabSignIn from "./containers/OpenLabSignIn";
 import Home from "./containers/home";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
+import Faq from "./components/Faq/Faq";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import AdminList from "./components/AdminList/AdminList";
@@ -69,6 +70,7 @@ function App() {
         <Route path="/openlabs" element={<CalendarPage />} />
         <Route path="/openlabsignin" element={<OpenLabSignIn />} />
         <Route path="/survey" element={<SurveyPage />} />
+        <Route path="/faq" element={<Faq />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}
