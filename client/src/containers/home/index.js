@@ -1,17 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Home.css";
-import pdf from "../../openLab-pdf/Guidelines.pdf";
-import { useState } from "react";
-import jwtDecode from "jwt-decode";
-import Cookies from "js-cookie";
+import React from 'react';
+import {Link} from 'react-router-dom';
+import './Home.css';
+import pdf from '../../openLab-pdf/Guidelines.pdf';
+import {useState} from 'react';
+import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
+import ContactModal from '../../components/ContactUs/ContactModal';
+import InfoIcon from './icons/info-icon.png';
 
 export default function Home() {
-  const user = jwtDecode(Cookies.get("jwt"));
-  const isAdmins = user.isAdmin;
-  const [showPDF, setShowPDF] = useState("");
+  const user = jwtDecode(Cookies.get('jwt'));
+  const isAdmin = user.isAdmin;
+  const [showPDF, setShowPDF] = useState('');
+  const [showContactModal, setShowContactModal] = useState(false);
+
   const handlePDF = () => {
     setShowPDF(pdf);
+  };
+
+  const handleContactUsClick = () => {
+    setShowContactModal(true);
   };
 
   return (
@@ -26,7 +34,7 @@ export default function Home() {
           <img src="./calendar-icon.png" alt="" />
           Calendar
         </Link>
-        {isAdmins && (
+        {isAdmin && (
           <Link className="button" to="/update">
             <img src="./update-icon.png" alt="" />
             Schedule Open Lab
@@ -45,6 +53,17 @@ export default function Home() {
           <img src="./casestudies-icon.png" alt="" />
           Case Studies
         </a>
+        <a
+          className="button"
+          target="_blank"
+          href={showPDF}
+          onClick={handlePDF}
+          rel="noreferrer"
+        >
+          <img src="./guidelines-icon.png" alt="" />
+          Open Lab Guidelines
+        </a>
+        {isAdmin && (
         <Link Link className="button"
           to="/guidelines" >
           < img src="./guidelines-icon.png"
@@ -57,11 +76,21 @@ export default function Home() {
             Create Announcements
           </Link>
         )}
+        <button className="button" onClick={handleContactUsClick}>
+          <img src={InfoIcon} alt="" />
+          Contact Us
+        </button>
         <Link className="button" to="/faq">
           <img src="./faq.png" alt="" />
           Frequently Asked Questions
         </Link>
       </div>
+      {showContactModal && (
+        <ContactModal
+          onClose={() => setShowContactModal(false)}
+          isAdmin={isAdmin}
+        />
+      )}
     </>
   );
 }

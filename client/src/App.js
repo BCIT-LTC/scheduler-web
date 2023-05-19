@@ -1,10 +1,10 @@
-import { useEffect, useContext, useState } from "react";
-import "./App.css";
-import "react-calendar/dist/Calendar.css";
-import Login from "./components/Login/Login.js";
-import logout from "./containers/logout";
-import { Routes, Route, Link } from "react-router-dom";
-import CalendarPage from "./containers/CalendarPage";
+import {useEffect, useContext, useState} from 'react';
+import './App.css';
+import 'react-calendar/dist/Calendar.css';
+import Login from './components/Login/Login.js';
+import logout from './containers/logout';
+import {Routes, Route, Link} from 'react-router-dom';
+import CalendarPage from './containers/CalendarPage';
 import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
@@ -49,7 +49,6 @@ function App() {
           }
           <input type="image" src="./logout.svg" className="nav-icon logout-button filter-blue" alt="settings" onClick={logout} />
         </div>
-
       </nav>
       <Routes>
         {jwt && <Route path="/login" element={<Home />} />}
@@ -61,7 +60,9 @@ function App() {
         <Route path="/faq" element={<Faq />} />
 
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
-        {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
+        {user.isAdmin && (
+          <Route path="/announcements" element={<Announcement />} />
+        )}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}
       </Routes>
     </>
