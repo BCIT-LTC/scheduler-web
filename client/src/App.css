@@ -156,3 +156,11 @@ html {
   filter: invert(16%) sepia(65%) saturate(1048%) hue-rotate(171deg) brightness(95%) contrast(104%);
 }
 
+.pdf-doc {
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-upload {
+  margin: 20px;
+}

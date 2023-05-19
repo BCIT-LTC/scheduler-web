@@ -30,22 +30,6 @@ function App() {
     }
   }
 
-  // window.addEventListener("beforeunload", function (e) {
-  //   var user = jwtDecode(jwt);
-  //   const baseTime = new Date();
-  //   const timezone = baseTime.getTimezoneOffset() * 60000;
-  //   const logoutTime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
-
-  //   fetch('http://localhost:8000/api/logout', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Authorization': `Bearer ${Cookies.get('jwt')}`,
-  //       'content-Type': 'application/json',
-  //     },
-  //     mode: 'cors',
-  //     body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
-  //   })
-  // })
   return (
     <>
       <nav className="navbar">
@@ -69,7 +53,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/survey" element={<SurveyPage />} />
-        < Route path = "/guidelines" element = {<LabGuidelinesPage />} />
+        < Route path="/guidelines" element={<LabGuidelinesPage />} />
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}

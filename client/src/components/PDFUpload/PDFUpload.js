@@ -24,17 +24,20 @@ const PDFUpload = () => {
     setSelectedFile(fileData);
     formData.append('pdfFile', selectedFile);
     fetch(
-      // TODO: directly calling the api for development purposes
-      'http://localhost:8000/api/labGuidelines', {
-        // process.env.PUBLIC_URL  + '/labGuidelines', {
-          method: 'POST',
-          body: formData,
-          Authorization: `Bearer ${Cookies.get("jwt")}`,
-        }
-      )
+      `${process.env.PUBLIC_URL}/labGuidelines`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("jwt")} `,
+        'content-length': `${selectedFile.size}`,
+      },
+      mode: "cors",
+      body: formData,
+    }
+    )
       .then((response) => response.json())
       .then((result) => {
         console.log('Success:', result);
+        window.location.reload();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -42,13 +45,13 @@ const PDFUpload = () => {
   };
 
   return (
-    <div className="locallogin-wrapper">
-      <form 
-      className = "form"
-      onSubmit = {
-        handleSubmission
-      }
-      method = "post"
+    <div className="pdf-upload">
+      <form
+        className="form"
+        onSubmit={
+          handleSubmission
+        }
+        method="post"
         encType="multipart/form-data" >
         <div className="pdf-selector">
           <label for="pdf" className="custom-file-upload">
@@ -60,38 +63,32 @@ const PDFUpload = () => {
             accept=".pdf"
             name="pdfFile"
             onChange={changeHandler}
-            style={ {display:"none"} }
+            style={{ display: "none" }}
           />
         </div>
         {
-        isFilePicked ? (
-          <div>
-        <p> Filename: {
-          selectedFile.name
-          } </p>
-          <p> Filetype: {
-          selectedFile.type
-          } </p>
-          <p> Size in bytes: {
-          selectedFile.size
-            } </p>
-            <p>
-        lastModifiedDate: {
-          ' '
-        } {
-          selectedFile.lastModifiedDate.toLocaleDateString()
+          isFilePicked ? (
+            <div>
+              <p> Filename: {
+                selectedFile.name
+              } </p>
+              <p> Filetype: {
+                selectedFile.type
+              } </p>
+              <p> Size in bytes: {
+                selectedFile.size
               } </p>
             </div >
-      ) : ( <p> Select a file to show details </p>
-      )
-    } <div>
+          ) : (<p> Select a file to show details </p>
+          )
+        } <div>
           <div className="submit-button">
             <button type="submit">Submit</button>
           </div>
         </div >
-        </form>
-      </div>
-)
+      </form>
+    </div>
+  )
 }
 
 export default PDFUpload;
