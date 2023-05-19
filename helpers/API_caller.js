@@ -28,6 +28,7 @@ async function callAPI(path, type, req, queryParams = {}) {
         data = await response.json();
         status = response.status;
     } catch (error) {
+        console.log(error);
         status = 500;
         data = { error: error.message };
     }

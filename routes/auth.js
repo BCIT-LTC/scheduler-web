@@ -32,6 +32,26 @@ router.get("/login", async (req, res) => {
 });
 
 /**
+ * Delete cookies
+ * @name get/logout
+ * @function
+ * @memberof module:routers/users~usersRouter
+ * @inner
+ * @return {} 200 if true
+ */
+router.post("/logout", async (req, res) => {
+    // Unset the cookies by setting their expiration date in the past
+    res.clearCookie('jwt');
+    res.clearCookie('PHPSESSIDIDP');
+    res.clearCookie('SimpleSAMLAuthTokenIdp');
+    res.clearCookie('session');
+    res.clearCookie('session.sig');
+
+    // Send a response to indicate the cookies have been unset
+    res.sendStatus(200);
+});
+
+/**
  * Route to make sure the API db is storing the user
  * @name get/admin
  * @function
