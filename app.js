@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 // const session = require("express-session");
 const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
@@ -59,15 +59,18 @@ const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
 const login = require("./routes/auth");
 const calendar = require("./routes/calendar");
+const lab_guidelines = require("./routes/lab_guidelines");
 const faq = require("./routes/faq");
-// const { checkNotAuthenticated } = require("./middleware/checkAuth");
 
+// const { checkNotAuthenticated } = require("./middleware/checkAuth");
 app.use(express.urlencoded({ extended: true }));
 // app.use(overrideMethod('_method'))
 
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
-app.use("/", indexRoute, announcements, login, calendar, faq);
+
+app.use("/", indexRoute, announcements, login, calendar, faq, lab_guidelines);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);

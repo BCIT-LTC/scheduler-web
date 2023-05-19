@@ -46,7 +46,7 @@ export default function Home() {
           Case Studies
         </a>
         {/* <button className="button" onClick={handlePDF}>Open Lab Guidelines</button> */}
-        <a
+        {/* <a
           className="button"
           target="_blank"
           href={showPDF}
@@ -55,7 +55,13 @@ export default function Home() {
         >
           <img src="./guidelines-icon.png" alt="" />
           Open Lab Guidelines
-        </a>
+        </a> */}
+        <Link Link className = "button"
+          to="/guidelines" >
+          < img src = "./guidelines-icon.png"
+            alt="" />
+          Open Lab Guidelines
+        </Link>
         {isAdmins && (
           <Link className="button" to="/announcements">
             <img src="./announcements-icon.png" alt="" />

@@ -57,7 +57,7 @@ services:
       dockerfile: Dockerfile.playwright
       args:
         - TEST_USER=root
-    # restart: on-failure
-    # depends_on:
-    #   app:
-    #     condition: service_healthy
+    restart: on-failure
+    depends_on:
+      app:
+        condition: service_healthy
