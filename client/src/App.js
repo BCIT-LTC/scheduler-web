@@ -8,9 +8,11 @@ import CalendarPage from "./containers/CalendarPage";
 import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
+import OpenLabSignIn from "./containers/OpenLabSignIn";
 import Home from "./containers/home";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
+import Faq from "./components/Faq/Faq";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import AdminList from "./components/AdminList/AdminList";
@@ -51,8 +53,11 @@ function App() {
         {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
         <Route path="/openlabs" element={<CalendarPage />} />
+        <Route path="/openlabsignin" element={<OpenLabSignIn />} />
         <Route path="/survey" element={<SurveyPage />} />
         < Route path="/guidelines" element={<LabGuidelinesPage />} />
+        <Route path="/faq" element={<Faq />} />
+        
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}
