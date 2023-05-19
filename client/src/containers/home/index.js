@@ -18,6 +18,10 @@ export default function Home() {
     <>
       <h2 className="heading">BCIT BSN Program</h2>
       <div className="buttons">
+        <Link className="button" to="/openlabsignin">
+          <img src="./survey-icon.png" alt="" />
+          Open Lab Sign In
+        </Link>
         <Link className="button" to="/openlabs">
           <img src="./calendar-icon.png" alt="" />
           Calendar
@@ -28,10 +32,6 @@ export default function Home() {
             Schedule Open Lab
           </Link>
         )}
-        <Link className="button" to="/openlabsignin">
-          <img src="./survey-icon.png" alt="" />
-          Open Lab Sign In
-        </Link>
         <Link className="button" to="/survey">
           <img src="./survey-icon.png" alt="" />
           Open Lab General Feedback Survey
@@ -45,20 +45,9 @@ export default function Home() {
           <img src="./casestudies-icon.png" alt="" />
           Case Studies
         </a>
-        {/* <button className="button" onClick={handlePDF}>Open Lab Guidelines</button> */}
-        {/* <a
-          className="button"
-          target="_blank"
-          href={showPDF}
-          onClick={handlePDF}
-          rel="noreferrer"
-        >
-          <img src="./guidelines-icon.png" alt="" />
-          Open Lab Guidelines
-        </a> */}
-        <Link Link className = "button"
+        <Link Link className="button"
           to="/guidelines" >
-          < img src = "./guidelines-icon.png"
+          < img src="./guidelines-icon.png"
             alt="" />
           Open Lab Guidelines
         </Link>

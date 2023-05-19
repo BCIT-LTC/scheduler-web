@@ -129,7 +129,6 @@ There is another temporary style for icon in component/Announcement/announcement
 .home-logo {
   width: auto;
   height: 25px;
-  margin-left: 10px;
 }
 
 .bcit-logo {
@@ -169,6 +168,8 @@ html {
 .pdf-doc {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pdf-upload {

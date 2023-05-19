@@ -50,7 +50,7 @@ export default function PopUp() {
                 )
                 }
                 <button className="button" onClick={handleClose}>
-                    close
+                    Close
                 </button>
                 {
                     user.isAdmin && !editFormVisible && (

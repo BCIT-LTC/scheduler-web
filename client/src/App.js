@@ -39,7 +39,9 @@ function App() {
           <Link to="/"><img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" /></Link>
         </div>
         <div id="navIcon">
-          <DropdownAnnouncement className="nav-icon" />
+          <div className="nav-icon">
+            <DropdownAnnouncement />
+          </div>
           {
             user.isLocal !== undefined ?
               <Link to="/admins" className="nav-icon"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
@@ -57,7 +59,7 @@ function App() {
         <Route path="/survey" element={<SurveyPage />} />
         < Route path="/guidelines" element={<LabGuidelinesPage />} />
         <Route path="/faq" element={<Faq />} />
-        
+
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}
