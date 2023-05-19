@@ -11,12 +11,7 @@ import InfoIcon from './icons/info-icon.png';
 export default function Home() {
   const user = jwtDecode(Cookies.get('jwt'));
   const isAdmin = user.isAdmin;
-  const [showPDF, setShowPDF] = useState('');
   const [showContactModal, setShowContactModal] = useState(false);
-
-  const handlePDF = () => {
-    setShowPDF(pdf);
-  };
 
   const handleContactUsClick = () => {
     setShowContactModal(true);
@@ -53,24 +48,11 @@ export default function Home() {
           <img src="./casestudies-icon.png" alt="" />
           Case Studies
         </a>
-        <a
-          className="button"
-          target="_blank"
-          href={showPDF}
-          onClick={handlePDF}
-          rel="noreferrer"
-        >
+        <Link Link className="button" to="/guidelines">
           <img src="./guidelines-icon.png" alt="" />
           Open Lab Guidelines
-        </a>
-        {isAdmin && (
-        <Link Link className="button"
-          to="/guidelines" >
-          < img src="./guidelines-icon.png"
-            alt="" />
-          Open Lab Guidelines
         </Link>
-        {isAdmins && (
+        {isAdmin && (
           <Link className="button" to="/announcements">
             <img src="./announcements-icon.png" alt="" />
             Create Announcements
