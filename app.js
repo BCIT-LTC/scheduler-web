@@ -7,6 +7,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const port = 9000;
 const hostname = "0.0.0.0";
+const cookieParser = require('cookie-parser');
 
 // const overrideMethod = require('method-override')
 
@@ -15,7 +16,7 @@ app.use(cors());
 app.use(express.static("build"));
 app.use(express.static("client/build"));
 app.use(bodyParser.json());
-
+app.use(cookieParser());
 // app.use(
 //   session({
 //     secret: "secret_value",
@@ -35,7 +36,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     },
