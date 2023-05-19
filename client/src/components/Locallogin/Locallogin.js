@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
-import "./Locallogin.css";
+import React, {useState, useContext} from 'react';
+import './Locallogin.css';
 
-export default function Locallogin({ setLocalLogin }) {
+export default function Locallogin({setLocalLogin}) {
   const [email, setUserName] = useState();
   const [password, setPassword] = useState();
   const [credentialError, setCredentialError] = useState('');
@@ -9,19 +9,19 @@ export default function Locallogin({ setLocalLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await fetch(`${process.env.PUBLIC_URL}/loginlocal`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       mode: 'cors',
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({email: email, password: password}),
     }).then((response) => {
       if (response.status === 200) {
         window.location.href = '/';
       } else if (response.status === 429) {
-        setCredentialError("Too many requests");
+        setCredentialError('Too many requests');
       } else {
-        setCredentialError("Incorrect username or password");
+        setCredentialError('Incorrect username or password');
       }
     });
   };
@@ -29,7 +29,7 @@ export default function Locallogin({ setLocalLogin }) {
   const handleLinkClick = (event) => {
     event.preventDefault();
     setLocalLogin(false);
-  }
+  };
 
   return (
     <>
@@ -38,19 +38,25 @@ export default function Locallogin({ setLocalLogin }) {
           <h1>Login</h1>
           <label>
             <p>Username</p>
-            <input type="text" onChange={e => setUserName(e.target.value)} />
+            <input type="text" onChange={(e) => setUserName(e.target.value)} />
           </label>
           <label>
             <p>Password</p>
-            <input type="password" onChange={e => setPassword(e.target.value)} />
+            <input
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
-          <div className="error-message">
-            {credentialError}
-          </div>
+          <div className="error-message">{credentialError}</div>
           <div className="submit-button">
             <button type="submit">SIGN IN</button>
           </div>
-          <p className="mt-4 login-link">No local account?{" "}<a href='/' onClick={handleLinkClick}>Login with BCIT</a> </p>
+          <p className="mt-4 login-link">
+            No local account?{' '}
+            <a href="/" onClick={handleLinkClick}>
+              Login with BCIT
+            </a>{' '}
+          </p>
         </form>
       </div>
     </>
