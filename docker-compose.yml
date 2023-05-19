@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 networks:
   test-web-network:
@@ -18,7 +18,7 @@ services:
         npm start
     build: .
     ports:
-      - '9000:9000'
+      - "9000:9000"
     environment:
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
@@ -27,7 +27,7 @@ services:
       - API_URL=http://host.docker.internal:8000/api/
       - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
     healthcheck:
-      test: ['CMD-SHELL', 'curl -f http://localhost:9000 || exit 1']
+      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -40,7 +40,7 @@ services:
       - test-web-network
     image: kenchan0130/simplesamlphp
     ports:
-      - '8080:8080'
+      - "8080:8080"
     environment:
       SIMPLESAMLPHP_SP_ENTITY_ID: localhost
       SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback
@@ -58,6 +58,6 @@ services:
       args:
         - TEST_USER=root
     # restart: on-failure
-    depends_on:
-      app:
-        condition: service_healthy
+    # depends_on:
+    #   app:
+    #     condition: service_healthy
