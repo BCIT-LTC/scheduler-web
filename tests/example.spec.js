@@ -8,9 +8,9 @@ test('has title', async ({ page }) => {
   await page.goto(process.env.URL_FRONTEND + '/');
   // check which port is tested on
   console.log(page.url());
-  
+
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle("React App");
+  await expect(page).toHaveTitle("BSN Open Lab");
 });
 
 test('get started link', async ({ page }) => {
