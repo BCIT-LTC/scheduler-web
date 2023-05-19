@@ -10,7 +10,10 @@
   background-color: #023455;
   padding-top: 10%;
   color: white;
+  overflow: scroll;
   z-index: 100;
+  box-sizing: border-box;
+  padding-bottom: 10%;
   font-size: large;
 }
 
@@ -18,10 +21,11 @@
   padding: 5px;
   border-radius: 8px;
   font-family: "Roboto Condensed", sans-serif;
-  background-color: #023455;
+  background-color: #747474;
   color: #ffffff;
   border: 1px solid #ffffff90;
   transition-duration: 0.4s;
+  margin-top: 15px;
 }
 
 .button:hover {

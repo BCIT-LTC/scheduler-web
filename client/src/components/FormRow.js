@@ -1,4 +1,7 @@
 import './formrow.css';
+import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function FormRow({
   formNumber,
@@ -7,19 +10,28 @@ export default function FormRow({
   errorState = false,
   errorType,
 }) {
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
   function handleUpdateForm(field, value) {
     const newForms = [...forms];
-    newForms[formNumber] = {...newForms[formNumber], [field]: value};
+    newForms[formNumber] = { ...newForms[formNumber], [field]: value };
     setForms(newForms);
   }
-  console.log('forms, form number', forms, formNumber, forms[formNumber]?.date);
-
+  const onChange = (dates) => {
+    if (dates.length !== 2) return;
+    const [start, end] = dates; // Destructure the array to get the start and end date
+    const newForms = [...forms];
+    newForms[formNumber] = { ...newForms[formNumber], start_date: start, end_date: end };
+    setForms(newForms);
+    setStartDate(start);
+    setEndDate(end);
+  };
   return (
     <div className="calendarForm">
       <form
-        className={`calendarInputs data-form ${
-          errorState ? 'data-form--error' : 'calendarInputs'
-        }`}
+        className={`calendarInputs data-form ${errorState ? 'data-form--error' : 'calendarInputs'
+          }`}
       >
         <div className="data-form__inputs">
           <div
@@ -29,33 +41,42 @@ export default function FormRow({
             }
           >
             <label className="calendarLabel" htmlFor="date">Date: </label>
+            {(forms[formNumber]?.date) ?
+              <input className="calendarInput"
+                name="date"
+                type="date"
+                readOnly
+                value={new Date(forms[formNumber].date).toISOString().split('T')[0]}
+                onChange={(e) => handleUpdateForm('date', e.target.value)}
+              />
+              :
+              <div>
+                <DatePicker
+                  selectsRange
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={onChange}
+                />
+              </div>
+
+            }
+          </div>
+          <div>
+            <label className="calendarLabel" htmlFor="start_time">Start Time: </label>
             <input className="calendarInput"
-              name="date"
-              type="date"
-              value={
-                forms[formNumber]?.date
-                  ? new Date(forms[formNumber].date).toISOString().split('T')[0]
-                  : undefined
-              }
-              onChange={(e) => handleUpdateForm('date', e.target.value)}
+              name="start_time"
+              type="time"
+              value={forms[formNumber]?.['start_time']}
+              onChange={(e) => handleUpdateForm('start_time', e.target.value)}
             />
           </div>
           <div>
-            <label className="calendarLabel" htmlFor="start-time">Start Time: </label>
+            <label className="calendarLabel" htmlFor="end_time">End Time: </label>
             <input className="calendarInput"
-              name="start-time"
+              name="end_time"
               type="time"
-              value={forms[formNumber]?.['start-time']}
-              onChange={(e) => handleUpdateForm('start-time', e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="calendarLabel" htmlFor="end-time">End Time: </label>
-            <input className="calendarInput"
-              name="end-time"
-              type="time"
-              value={forms[formNumber]?.['end-time']}
-              onChange={(e) => handleUpdateForm('end-time', e.target.value)}
+              value={forms[formNumber]?.['end_time']}
+              onChange={(e) => handleUpdateForm('end_time', e.target.value)}
             />
           </div>
           <div
@@ -78,8 +99,8 @@ export default function FormRow({
             <input className="calendarInput"
               name="stat"
               type="checkbox"
-              value={forms[formNumber]?.stat}
-              onChange={(e) => handleUpdateForm('stat', e.target.value)}
+              checked={forms[formNumber]?.stat === 1}
+              onChange={(e) => handleUpdateForm('stat', (e.target.checked) ? 1 : 0)}
             />
           </div>
           <div

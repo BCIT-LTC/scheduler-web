@@ -3,6 +3,7 @@
 .App {
   text-align: center;
   font-family: 'Roboto Condensed', sans-serif;
+  height: 100%;
 }
 
 .App-logo {
@@ -66,7 +67,11 @@
   pointer-events: none;
 } */
 
-nav a {
+/* nav a {
+  margin-right: 10px;
+} */
+
+.nav-icon {
   margin-right: 10px;
 }
 
@@ -118,13 +123,12 @@ There is another temporary style for icon in component/Announcement/announcement
 #navIcon {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 
 .home-logo {
-  width: 30px;
-  height: 30px;
-  margin-left: 10px;
+  width: auto;
+  height: 25px;
 }
 
 .bcit-logo {
@@ -139,13 +143,18 @@ There is another temporary style for icon in component/Announcement/announcement
 }
 
 .logout-button {
-  height: 25px;
+  height: 28px;
   border: none;
   font-family: inherit;
   font-size: inherit;
   background: none;
   cursor: pointer;
   font-weight: 700;
+  color: #003354;
+}
+
+.lab-section {
+  margin-bottom: 10px;
 }
 
 html {
@@ -156,3 +165,21 @@ html {
   filter: invert(16%) sepia(65%) saturate(1048%) hue-rotate(171deg) brightness(95%) contrast(104%);
 }
 
+.pdf-doc {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pdf-upload {
+  margin: 20px;
+}
+
+div #root {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}

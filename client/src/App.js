@@ -8,12 +8,15 @@ import CalendarPage from "./containers/CalendarPage";
 import Locallogin from './components/Locallogin/Locallogin';
 import DataForm from "./containers/DataForm";
 import SurveyPage from "./containers/SurveyPage";
+import OpenLabSignIn from "./containers/OpenLabSignIn";
 import Home from "./containers/home";
 import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
 import Announcement from "./components/Announcements/Announcement";
+import Faq from "./components/Faq/Faq";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import AdminList from "./components/AdminList/AdminList";
+import LabGuidelinesPage from "./containers/LabGuidelinesPage";
 
 function App() {
   const [showLocalLogin, setShowLocalLogin] = useState();
@@ -29,45 +32,34 @@ function App() {
     }
   }
 
-  // window.addEventListener("beforeunload", function (e) {
-  //   var user = jwtDecode(jwt);
-  //   const baseTime = new Date();
-  //   const timezone = baseTime.getTimezoneOffset() * 60000;
-  //   const logoutTime = new Date(Date.now() - timezone).toISOString().slice(0, 19).replace("T", " ");
-
-  //   fetch('http://localhost:8000/api/logout', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Authorization': `Bearer ${Cookies.get('jwt')}`,
-  //       'content-Type': 'application/json',
-  //     },
-  //     mode: 'cors',
-  //     body: JSON.stringify({ email: user.email, logoutTime: logoutTime }),
-  //   })
-  // })
   return (
     <>
       <nav className="navbar">
         <div className="nav-left">
-          <img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" />
-          <button onClick={logout} className="logout-button">Logout</button>
+          <Link to="/"><img src="bcit_logo.png" className="bcit-logo" alt="BCIT logo" /></Link>
         </div>
         <div id="navIcon">
+          <div className="nav-icon">
+            <DropdownAnnouncement />
+          </div>
           {
             user.isLocal !== undefined ?
-              <Link to="/admins"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
+              <Link to="/admins" className="nav-icon"><img src="./gear.svg" className="home-logo filter-blue" alt="settings" /></Link>
               : ''
           }
-          <DropdownAnnouncement />
-          <Link to="/"><img src="./home_image-128.png" className="home-logo" alt="home" /></Link>
+          <input type="image" src="./logout.svg" className="nav-icon logout-button filter-blue" alt="settings" onClick={logout} />
         </div>
 
       </nav>
       <Routes>
         {jwt && <Route path="/login" element={<Home />} />}
         <Route index element={<Home />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/openlabs" element={<CalendarPage />} />
+        <Route path="/openlabsignin" element={<OpenLabSignIn />} />
         <Route path="/survey" element={<SurveyPage />} />
+        < Route path="/guidelines" element={<LabGuidelinesPage />} />
+        <Route path="/faq" element={<Faq />} />
+
         {user.isAdmin && <Route path="/update" element={<DataForm />} />}
         {user.isAdmin && <Route path="/announcements" element={<Announcement />} />}
         {user.isLocal && <Route path="/admins" element={<AdminList />} />}

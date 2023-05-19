@@ -6,7 +6,6 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { GlobalContext } from '../context';
 import { fetchCalendar } from '../utils/fetchFunctions';
 
-
 export default function CalendarPage() {
   const Context = useContext(GlobalContext);
   const [month, setMonth] = useState(new Date())
@@ -14,8 +13,7 @@ export default function CalendarPage() {
   const matchedDates = useRef({})
 
   async function fetchData() {
-    const response = await fetchCalendar(month.getMonth() + 1)
-    console.log("what is response", response)
+    const response = await fetchCalendar(month.getMonth() + 1, month.getFullYear())
     setFilteredSheetData(response.results)
     matchedDates.current = {}
   }
@@ -28,12 +26,10 @@ export default function CalendarPage() {
   }, [])
 
   useEffect(() => {
-    console.log("month changed")
     fetchData()
   }, [month])
 
   function handleActiveStartDateChange({ activeStartDate }) {
-    console.log("properties.activestartdate", activeStartDate.getMonth())
     setMonth(activeStartDate)
   }
 
@@ -43,37 +39,39 @@ export default function CalendarPage() {
         onActiveStartDateChange={handleActiveStartDateChange}
         value={month}
         onClickDay={(date, event) => {
-
-          const selectedDay = matchedDates.current[date.toISOString()]
-          console.log("selected dayyy", selectedDay)
-          if (selectedDay) {
-            Context.setSelectedDay(selectedDay)
+          let matchingDays = []
+          if (filteredSheetData && filteredSheetData.length > 0) {
+            matchingDays = filteredSheetData.filter((openLab) => {
+              return date.getDate() === new Date(openLab.date).getUTCDate()
+            })
+            if (matchingDays.length > 0) {
+              matchedDates.current = {
+                ...matchedDates.current,
+                [date.toISOString()]: matchingDays
+              }
+            }
+          }
+          if (matchingDays) {
+            Context.setSelectedDay(matchingDays)
           }
           Context.setPopup(!Context.state.popupOpen)
         }}
         showNeighboringMonth={false}
-        tileDisabled={({ activeStartDate, date, view }) => {
-          return date.getDay() === 0 || date.getDay() === 6
-        }}
+        tileClassName="tile"
         tileContent={({ date, view }) => {
-          let matchingDay
-          // console.log("date, month", date, month)
+          let matchingDays = []
           if (filteredSheetData && filteredSheetData.length > 0) {
-            matchingDay = filteredSheetData.find((openLab) => {
+            matchingDays = filteredSheetData.filter((openLab) => {
               return date.getDate() === new Date(openLab.date).getUTCDate()
             })
-            if (matchingDay) {
-              console.log("matching day", matchingDay)
-              // store matched dates for the month in an object to make looking up a clicked day faster
+            if (matchingDays.length > 0) {
               matchedDates.current = {
                 ...matchedDates.current,
-                [date.toISOString()]: matchingDay
+                [date.toISOString()]: matchingDays
               }
             }
-            console.log("matching day", matchingDay)
           }
-          console.log("matching day", matchingDay)
-          return <CalendarDay date={date} data={matchingDay} />
+          return <CalendarDay date={date} data={matchingDays} />
         }}
       />
       <PopUp />
