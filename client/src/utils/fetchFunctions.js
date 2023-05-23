@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 /**
     Sends a POST request to update or create a calendar entry. 
@@ -8,20 +8,20 @@ import Cookies from "js-cookie";
     @returns {Promise} - A promise that resolves to the fetch response.
 */
 export async function updateCalendar(forms, updateOrCreate) {
-    return await fetch(
-        `${process.env.PUBLIC_URL}/${
-            updateOrCreate === "create" ? "calendar" : "openlab"
-        } `,
-        {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${Cookies.get("jwt")} `,
-                "Content-Type": "application/json",
-            },
-            mode: "cors",
-            body: JSON.stringify({ forms }),
-        }
-    );
+  return await fetch(
+    `${process.env.PUBLIC_URL}/${
+      updateOrCreate === 'create' ? 'calendar' : 'openlab'
+    } `,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${Cookies.get('jwt')} `,
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      body: JSON.stringify({forms}),
+    }
+  );
 }
 
 /**
@@ -31,19 +31,19 @@ export async function updateCalendar(forms, updateOrCreate) {
     @returns {Promise} - A promise that resolves to the fetched calendar data.
 */
 export function fetchCalendar(month, year) {
-    return fetch(
-        `${process.env.PUBLIC_URL}/calendar?month=` + month + "&year=" + year,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${Cookies.get("jwt")} `,
-                "Content-Type": "application/json",
-            },
-            mode: "cors",
-        }
-    ).then((results) => {
-        if (results.status === 200) {
-            return results.json();
-        }
-    });
+  return fetch(
+    `${process.env.PUBLIC_URL}/calendar?month=` + month + '&year=' + year,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${Cookies.get('jwt')} `,
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+    }
+  ).then((results) => {
+    if (results.status === 200) {
+      return results.json();
+    }
+  });
 }
