@@ -8,6 +8,7 @@ export default function Locallogin({setLocalLogin}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Submit the login form
     await fetch(`${process.env.PUBLIC_URL}/loginlocal`, {
       method: 'POST',
       headers: {
@@ -17,10 +18,13 @@ export default function Locallogin({setLocalLogin}) {
       body: JSON.stringify({email: email, password: password}),
     }).then((response) => {
       if (response.status === 200) {
+        // Redirect to homepage if login is successful
         window.location.href = '/';
       } else if (response.status === 429) {
+        // Handle too many requests error
         setCredentialError('Too many requests');
       } else {
+        // Handle incorrect username or password error
         setCredentialError('Incorrect username or password');
       }
     });
@@ -28,6 +32,7 @@ export default function Locallogin({setLocalLogin}) {
 
   const handleLinkClick = (event) => {
     event.preventDefault();
+    // Set `LocalLogin` state to `false` to switch to other login method
     setLocalLogin(false);
   };
 

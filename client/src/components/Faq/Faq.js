@@ -1,62 +1,65 @@
-import { useState } from "react";
-import FaqTable from "./FaqTable";
-import Submission from "../Submission";
-import Cookies from "js-cookie";
-import jwtDecode from "jwt-decode";
-import "./Faq.css";
+import {useState} from 'react';
+import FaqTable from './FaqTable';
+import Submission from '../Submission';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
+import './Faq.css';
 
 const Faq = () => {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  // State variables
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
   const [submit, setSubmit] = useState(false); // for submission window component
-  const [emptyField, setEmptyField] = useState("");
+  const [emptyField, setEmptyField] = useState('');
   const [count, setCount] = useState(0);
-  const user = jwtDecode(Cookies.get("jwt"));
+  // Get user information from JWT token
+  const user = jwtDecode(Cookies.get('jwt'));
   const isAdmins = user.isAdmin;
-
+  // Counter function to track character count
   const counter = (e) => {
     setCount(e.target.value.length);
   };
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (question === "" || answer === "") {
-      setEmptyField("Please fill in all fields");
+    if (question === '' || answer === '') {
+      setEmptyField('Please fill in all fields');
       return;
     } else {
       return await fetch(`${process.env.PUBLIC_URL}/faq`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("jwt")}`,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('jwt')}`,
         },
-        body: JSON.stringify({ question, answer }),
+        body: JSON.stringify({question, answer}),
       }).then(
         (response) => response.json(),
         setSubmit(true),
-        (document.getElementById("question").value = ""),
-        (document.getElementById("answer").value = ""),
-        setEmptyField(""),
-        setQuestion(""),
-        setAnswer(""),
+        (document.getElementById('question').value = ''),
+        (document.getElementById('answer').value = ''),
+        setEmptyField(''),
+        setQuestion(''),
+        setAnswer(''),
         setCount(0)
       );
     }
   };
-  const submitButton = document.getElementById("submit-button");
-  const buttons = document.querySelectorAll(".button"); //refers to button class from FaqTable
+  // Disable submit button and buttons in the table after submission
+  const submitButton = document.getElementById('submit-button');
+  const buttons = document.querySelectorAll('.button'); //refers to button class from FaqTable
 
   if (submit) {
-    document.body.style.overflowY = "hidden";
-    submitButton.setAttribute("disabled", true);
+    document.body.style.overflowY = 'hidden';
+    submitButton.setAttribute('disabled', true);
     buttons.forEach((button) => {
       button.disabled = true;
     });
     // Perform the click action here
   } else {
-    document.body.style.overflowY = "auto";
+    document.body.style.overflowY = 'auto';
     if (submitButton) {
-      submitButton.removeAttribute("disabled");
+      submitButton.removeAttribute('disabled');
       buttons.forEach((button) => {
         button.disabled = false;
       });

@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import Alert from "../Alert";
-import Cookies from "js-cookie";
-import jwtDecode from "jwt-decode";
-import "./Faq.css";
+import {useState, useEffect} from 'react';
+import Alert from '../Alert';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
+import './Faq.css';
 
 const FaqTable = () => {
+  // State variables
   const [table, setTable] = useState([]);
   const [deleteClicked, setDeleteClicked] = useState({
     isOpen: false,
     idx: -1,
   }); // when the user clicks on a button, deleteClicked is updated
-  const [editClicked, setEditClicked] = useState({ isOpen: false, idx: -1 }); // when the user clicks on a button, editClicked is updated
+  const [editClicked, setEditClicked] = useState({isOpen: false, idx: -1}); // when the user clicks on a button, editClicked is updated
   // idx stores the row of the faq that the delete button belongs to
-
-  const user = jwtDecode(Cookies.get("jwt"));
+  const user = jwtDecode(Cookies.get('jwt'));
   const isAdmins = user.isAdmin;
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const FaqTable = () => {
       //fetch faq data every 3 seconds
       fetch(`${process.env.PUBLIC_URL}/faq`, {
         headers: {
-          Authorization: `Bearer ${Cookies.get("jwt")}`,
+          Authorization: `Bearer ${Cookies.get('jwt')}`,
         },
       }) //retrieve faqs for faq table
         .then((response) => response.json())
@@ -32,34 +32,35 @@ const FaqTable = () => {
     return () => clearInterval(interval); //stop the interval
   }, []);
 
-  //sends table data to /delete endpoint
+  // Send DELETE request to delete a faq
   const deleteFaq = async (userid) => {
     return await fetch(`${process.env.PUBLIC_URL}/faq`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${Cookies.get("jwt")}`,
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id: userid,
       }),
     }).then(() => {
-      setDeleteClicked({ isOpen: false, idx: -1 });
+      setDeleteClicked({isOpen: false, idx: -1});
       // fetch is done again to update the table, because it won't update without getting the faq table
       fetch(`${process.env.PUBLIC_URL}/faq`, {
         headers: {
-          Authorization: `Bearer ${Cookies.get("jwt")}`,
+          Authorization: `Bearer ${Cookies.get('jwt')}`,
         },
       }).catch((error) => console.error(error));
     });
   };
 
   const editFaq = async (userid, updatedQuestion, updatedAnswer) => {
+    // Send PUT request to update a faq
     return await fetch(`${process.env.PUBLIC_URL}/faq`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("jwt")}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
       body: JSON.stringify({
         id: userid,
@@ -68,11 +69,11 @@ const FaqTable = () => {
       }),
     })
       .then(() => {
-        setEditClicked({ isOpen: false, idx: -1 });
+        setEditClicked({isOpen: false, idx: -1});
         // fetch is done again to update the table, because it won't update without getting the faq table
         fetch(`${process.env.PUBLIC_URL}/faq`, {
           headers: {
-            Authorization: `Bearer ${Cookies.get("jwt")}`,
+            Authorization: `Bearer ${Cookies.get('jwt')}`,
           },
         })
           .then((response) => response.json())
@@ -82,14 +83,14 @@ const FaqTable = () => {
       .catch((error) => console.error(error));
   };
 
-  const submitButton = document.getElementById("submit-button");
+  const submitButton = document.getElementById('submit-button');
   if (deleteClicked.isOpen) {
-    document.body.classList.add("active-modal");
-    submitButton.style.pointerEvents = "none";
+    document.body.classList.add('active-modal');
+    submitButton.style.pointerEvents = 'none';
   } else {
-    document.body.classList.remove("active-modal");
+    document.body.classList.remove('active-modal');
     if (submitButton) {
-      submitButton.style.pointerEvents = "auto";
+      submitButton.style.pointerEvents = 'auto';
     }
   }
 
@@ -116,26 +117,24 @@ const FaqTable = () => {
                   <td>{row.question}</td>
                   <td className="text-overflow">{row.answer}</td>
 
-                  <td width="20%" style={{ position: "relative" }}>
+                  <td width="20%" style={{position: 'relative'}}>
                     <button
                       className="button"
                       id="edit-button"
                       type="submit"
                       onClick={() => {
-                        setEditClicked({ isOpen: true, idx: index });
+                        setEditClicked({isOpen: true, idx: index});
                       }}
                     >
                       Edit
                     </button>
                     {editClicked.isOpen && editClicked.idx === index ? (
-                      <div
-                        style={{ position: "absolute", top: "100%", left: 0 }}
-                      >
+                      <div style={{position: 'absolute', top: '100%', left: 0}}>
                         <Alert
                           isOpen={true}
-                          popupType={"edit"}
+                          popupType={'edit'}
                           onClose={() =>
-                            setEditClicked({ isOpen: false, idx: -1 })
+                            setEditClicked({isOpen: false, idx: -1})
                           }
                           title="Edit Faq"
                           description="Make your changes to the faq below and click 'Save' to save your changes."
@@ -150,25 +149,23 @@ const FaqTable = () => {
                     ) : null}
                   </td>
 
-                  <td width="20%" style={{ position: "relative" }}>
+                  <td width="20%" style={{position: 'relative'}}>
                     <button
                       className="button"
                       id="delete-button"
                       type="submit"
                       onClick={() => {
-                        setDeleteClicked({ isOpen: true, idx: index });
+                        setDeleteClicked({isOpen: true, idx: index});
                       }}
                     >
                       Delete
                     </button>
                     {deleteClicked.isOpen && deleteClicked.idx === index ? (
-                      <div
-                        style={{ position: "absolute", top: "100%", left: 0 }}
-                      >
+                      <div style={{position: 'absolute', top: '100%', left: 0}}>
                         <Alert
                           isOpen={true}
                           onClose={() =>
-                            setDeleteClicked({ isOpen: false, idx: -1 })
+                            setDeleteClicked({isOpen: false, idx: -1})
                           }
                           title="Delete Faq"
                           description="Are you sure you want to delete this?"
