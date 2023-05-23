@@ -1,5 +1,8 @@
 import { Outlet, Link } from "react-router-dom";
 
+/**
+ * represents the navigation menu 
+ */
 const Layout = () => {
   return (
     <>

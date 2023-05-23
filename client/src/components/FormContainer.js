@@ -2,7 +2,9 @@ import { useState } from 'react';
 import FormRow from '../components/FormRow';
 import { updateCalendar } from '../utils/fetchFunctions';
 import './form-container.css';
-
+/**
+ * a set of default values for calendar related forms
+ */
 export const defaultFormState = {
   date: '',
   'start_time': '',
@@ -14,12 +16,18 @@ export const defaultFormState = {
   end_date: new Date(),
 };
 
+/**
+ * set of error messages for calendar
+ */
 const errorMap = {
   'Same Date': 'You have two open labs scheduled for the same day',
   'No Facilitator': 'All open labs must have a facilitator',
   'No Room': 'All open labs must have a room number',
 };
 
+/**
+ * wrapper around calendar form
+ */
 export default function FormContainer({
   disableAddRowButton = false,
   initialFormState = [],
@@ -34,6 +42,10 @@ export default function FormContainer({
   );
   const [formErrorState, setFormErrorState] = useState(false);
   const [errorType, setErrorType] = useState([]);
+
+  /**
+   * onSubmit handler for update calendar form
+   */
   async function handleSubmit() {
     const allRoomNumbersAreFilled = forms.every((f, i) => {
       return Boolean(f.room);
@@ -45,13 +57,7 @@ export default function FormContainer({
       allRoomNumbersAreFilled &&
       allRowsHaveFacilitator
     ) {
-      // if (updateOrCreate === 'update') {
-      //   forms[0].calendar_id = initialFormState.calendar_id;
-      // }
-      // temporary fix
-      // if (!('stat' in forms[0])) forms[0].stat = 0;
       if (disableAddRowButton) {
-        // forms[0].date = initialFormState.date;
         await updateCalendar(forms, updateOrCreate)
         document.location.reload(true);
         return;
@@ -98,11 +104,17 @@ export default function FormContainer({
     }
   }
 
+  /**
+   * add another calendar update form
+   */
   function handleAddRow() {
     setForms([...forms, { ...defaultFormState }]);
     setNumberOfRows(numberOfRows + 1);
   }
 
+  /**
+   * render appropriate error message
+   */
   function renderErrorMsg() {
     return errorType.map((e, index) => {
       return <div key={index}>{errorMap[e]}</div>;

@@ -1,6 +1,9 @@
 import React from "react";
 import "./Alert.css";
 
+/**
+ * represents message after submission on announcement and faq page
+ */
 function Submission(props) {
   return (props.trigger) ? (
     <div className="alert">

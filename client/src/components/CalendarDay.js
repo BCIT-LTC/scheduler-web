@@ -1,5 +1,7 @@
 import "./calendar-day.css"
-
+/**
+ * represents each day in the calendar
+ */
 export default function CalendarDay({ date, data }) {
   return (
     <div className="calendar-day">

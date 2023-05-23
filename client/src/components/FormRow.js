@@ -3,6 +3,9 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
+/**
+ * represents each form in FormContainer
+ */
 export default function FormRow({
   formNumber,
   forms,
@@ -13,11 +16,18 @@ export default function FormRow({
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
+  /**
+   * keep track of change in each form input
+   */
   function handleUpdateForm(field, value) {
     const newForms = [...forms];
     newForms[formNumber] = { ...newForms[formNumber], [field]: value };
     setForms(newForms);
   }
+
+  /**
+   * onChange handler for the date picker library
+   */
   const onChange = (dates) => {
     if (dates.length !== 2) return;
     const [start, end] = dates; // Destructure the array to get the start and end date
@@ -45,8 +55,7 @@ export default function FormRow({
               <input className="calendarInput"
                 name="date"
                 type="date"
-                readOnly
-                value={new Date(forms[formNumber].date).toISOString().split('T')[0]}
+                readOnlyeach form input={new Date(forms[formNumber].date).toISOString().split('T')[0]}
                 onChange={(e) => handleUpdateForm('date', e.target.value)}
               />
               :

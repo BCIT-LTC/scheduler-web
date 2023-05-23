@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import "./Alert.css";
 
+/**
+ * represents edit announemnt form
+ */
 function Alert(props) {
   const [title, setTitle] = useState(props.announcementTitle);
   const [description, setDescription] = useState(props.announcementDescription);
 
+  /**
+   * onChange handler for title
+   */
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
   };
 
+  /**
+   * onChange handler for description
+   */
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
 
+  /**
+   * onConfirm handler to submit updated announcemnt item
+   */
   const handleConfirm = () => {
     props.onConfirm(title, description);
   };

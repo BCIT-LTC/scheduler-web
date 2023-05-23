@@ -5,6 +5,9 @@ import FormContainer from "./FormContainer";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
+/**
+ * represents calender popup for each date
+ */
 export default function PopUp() {
     let jwt = Cookies.get("jwt");
     let user = null;
@@ -15,12 +18,18 @@ export default function PopUp() {
 
     const [editFormVisible, setEditFormVisible] = useState(false);
 
+  /**
+   * closes the popup
+   */
     function handleClose() {
         setEditFormVisible(false);
         context.setPopup(false);
         context.setSelectedDay({});
     }
-
+    
+    /**
+     * opens the popup only when a date is clicked
+     */
     if (context.state.popupOpen) {
         return (
             <div className="popup">
