@@ -1,15 +1,15 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import './Home.css';
-import pdf from '../../openLab-pdf/Guidelines.pdf';
-import {useState} from 'react';
-import jwtDecode from 'jwt-decode';
-import Cookies from 'js-cookie';
-import ContactModal from '../../components/ContactUs/ContactModal';
-import InfoIcon from './icons/info-icon.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Home.css";
+import pdf from "../../openLab-pdf/Guidelines.pdf";
+import { useState } from "react";
+import jwtDecode from "jwt-decode";
+import Cookies from "js-cookie";
+import ContactModal from "../../components/ContactUs/ContactModal";
+import InfoIcon from "./icons/info-icon.png";
 
 export default function Home() {
-  const user = jwtDecode(Cookies.get('jwt'));
+  const user = jwtDecode(Cookies.get("jwt"));
   const isAdmin = user.isAdmin;
   const [showContactModal, setShowContactModal] = useState(false);
 
@@ -52,12 +52,10 @@ export default function Home() {
           <img src="./guidelines-icon.png" alt="" />
           Open Lab Guidelines
         </Link>
-        {isAdmin && (
-          <Link className="button" to="/announcements">
-            <img src="./announcements-icon.png" alt="" />
-            Create Announcements
-          </Link>
-        )}
+        <Link className="button" to="/announcements">
+          <img src="./announcements-icon.png" alt="" />
+          Announcements
+        </Link>
         <button className="button" onClick={handleContactUsClick}>
           <img src={InfoIcon} alt="" />
           Contact Us
