@@ -19,20 +19,25 @@ const AnnouncementTable = () => {
   const isAdmins = user.isAdmin;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      //fetch announcement data every 3 seconds
+    const fetchData = () => {
       fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("jwt")}`,
         },
-      }) //retrieve announcements for announcement table
+      })
         .then((response) => response.json())
-        .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
+        .then((data) => setTable(data.reverse()))
         .catch((error) => console.error(error));
-    }, 3000); //set interval
+    };
 
-    return () => clearInterval(interval); //stop the interval
+    // Initial fetch
+    fetchData();
+
+    const interval = setInterval(fetchData, 3000);
+
+    return () => clearInterval(interval);
   }, []);
+
 
   //sends table data to /delete endpoint
   const deleteAnnouncement = async (userid) => {

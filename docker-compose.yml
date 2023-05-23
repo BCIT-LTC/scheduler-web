@@ -26,6 +26,7 @@ services:
       - LOCAL_USER=admin
       - API_URL=http://host.docker.internal:8000/api/
       - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+      - LOGOUT_URL=/simplesaml/saml2/idp/SingleLogoutService.php
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
       interval: 1m30s
@@ -42,9 +43,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SIMPLESAMLPHP_SP_ENTITY_ID: localhost
+      SIMPLESAMLPHP_SP_ENTITY_ID: web-bsn-openlab.apps.okd4.infoteach.ca
       SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback
-      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
+      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/
     volumes:
       - ./local_saml_config/authsources.php:/var/www/simplesamlphp/config/authsources.php
   # test:

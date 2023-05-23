@@ -17,7 +17,7 @@ const FaqTable = () => {
   const isAdmins = user.isAdmin;
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const fetchData = () => {
       //fetch faq data every 3 seconds
       fetch(`${process.env.PUBLIC_URL}/faq`, {
         headers: {
@@ -27,9 +27,15 @@ const FaqTable = () => {
         .then((response) => response.json())
         .then((data) => setTable(data.reverse())) //reverse the elements so the most recent appear first
         .catch((error) => console.error(error));
-    }, 3000); //set interval
+    };
 
-    return () => clearInterval(interval); //stop the interval
+    // Initial fetch
+    fetchData();
+
+    const interval = setInterval(fetchData, 3000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
   //sends table data to /delete endpoint

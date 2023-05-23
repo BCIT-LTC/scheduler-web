@@ -44,35 +44,31 @@ const DropdownAnnouncement = () => {
 
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(`${process.env.PUBLIC_URL}/announcement`, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('jwt')}`,
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          const newAnnouncements = data.reverse().slice(0, 5);
-          const lastLogoutTime = localStorage.getItem("lastLogoutTime");
+    fetch(`${process.env.PUBLIC_URL}/announcement`, {
+      headers: {
+        'Authorization': `Bearer ${Cookies.get('jwt')}`,
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        const newAnnouncements = data.reverse().slice(0, 5);
+        const lastLogoutTime = localStorage.getItem("lastLogoutTime");
 
-          if (lastLogoutTime) {
-            const logoutTime = new Date(lastLogoutTime).getTime();
-            const latestAnnouncementTime = new Date(newAnnouncements[0]?.date).getTime();
+        if (lastLogoutTime) {
+          const logoutTime = new Date(lastLogoutTime).getTime();
+          const latestAnnouncementTime = new Date(newAnnouncements[0]?.date).getTime();
 
-            if (latestAnnouncementTime > logoutTime) {
-              setHasNewAnnouncements(true);
-              localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
-            }
-          }
-          if (newAnnouncements.some(a => a.announcements_id > announcements[0]?.announcements_id)) {
+          if (latestAnnouncementTime > logoutTime) {
             setHasNewAnnouncements(true);
             localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
           }
-          setAnnouncements(newAnnouncements);
-        });
-    }, 3000);
-
-    return () => clearInterval(interval);
+        }
+        if (newAnnouncements.some(a => a.announcements_id > announcements[0]?.announcements_id)) {
+          setHasNewAnnouncements(true);
+          localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
+        }
+        setAnnouncements(newAnnouncements);
+      });
   }, [announcements]);
 
 

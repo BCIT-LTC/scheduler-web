@@ -56,10 +56,10 @@ export default function Home() {
           <img src="./announcements-icon.png" alt="" />
           Announcements
         </Link>
-        <button className="button" onClick={handleContactUsClick}>
+        <Link href="#" className="button" onClick={handleContactUsClick}>
           <img src={InfoIcon} alt="" />
           Contact Us
-        </button>
+        </Link>
         <Link className="button" to="/faq">
           <img src="./faq.png" alt="" />
           Frequently Asked Questions
