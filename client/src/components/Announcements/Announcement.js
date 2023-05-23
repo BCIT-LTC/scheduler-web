@@ -4,12 +4,16 @@ import "./Announcements.css";
 import AnnouncementTable from "./AnnouncementTable";
 import Submission from "../Submission";
 import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
 
 const Announcement = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [submit, setSubmit] = useState(false); // for submission window component
   const [emptyField, setEmptyField] = useState("");
+
+  const user = jwtDecode(Cookies.get("jwt"));
+  const isAdmins = user.isAdmin;
 
   let date = new Date();
   const [count, setCount] = useState(0);
@@ -71,41 +75,43 @@ const Announcement = () => {
   return (
     <div>
       <div className="announcement-wrapper">
-        <form
-          className="form"
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          <h2>Create Announcement</h2>
-          <label>
-            <p>Title</p>
-            <input
-              id="title"
-              type="text"
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </label>
-          <label>
-            <p>Description</p>
-            <p className="count">{`${count}/200 Characters`}</p>
-            <textarea
-              id="description"
-              type="text"
-              maxLength="200"
-              onChange={(e) => {
-                setDescription(e.target.value);
-                counter(e);
-              }}
-            />
-            <div className="error-message">{emptyField}</div>
-          </label>
-          <div className="submit-button">
-            <button id="submit-button" type="submit">
-              SUBMIT
-            </button>
-          </div>
-        </form>
+        {isAdmins && (
+          <form
+            className="form"
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            <h2>Create Announcement</h2>
+            <label>
+              <p>Title</p>
+              <input
+                id="title"
+                type="text"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </label>
+            <label>
+              <p>Description</p>
+              <p className="count">{`${count}/200 Characters`}</p>
+              <textarea
+                id="description"
+                type="text"
+                maxLength="200"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  counter(e);
+                }}
+              />
+              <div className="error-message">{emptyField}</div>
+            </label>
+            <div className="submit-button">
+              <button id="submit-button" type="submit">
+                SUBMIT
+              </button>
+            </div>
+          </form>
+        )}
         <div>
           <h3>List of Announcements</h3>
           <AnnouncementTable />
