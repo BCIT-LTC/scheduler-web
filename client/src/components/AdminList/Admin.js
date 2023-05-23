@@ -1,8 +1,13 @@
 import React from 'react';
 import './AdminList.css';
 
-
+/**
+ * single item in the list of admins
+ */
 export default function AdminList({ email, onRemove }) {
+    /**
+     * onChange handler
+     */
     function handleChange() {
         onRemove(email)
     }
