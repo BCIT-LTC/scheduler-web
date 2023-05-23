@@ -7,13 +7,13 @@ import Cookies from 'js-cookie';
 export default function Logout() {
   fetch('/logout', {
     method: 'POST',
-    credentials: 'include' // Include credentials (cookies) in the request
+    credentials: 'include', // Include credentials (cookies) in the request
   })
     .then(() => {
       // Once the request is successful, redirect the user
       window.location.href = '/';
     })
-    .catch(error => {
+    .catch((error) => {
       // Handle any errors that occur during the request
       console.error('Logout error:', error);
     });

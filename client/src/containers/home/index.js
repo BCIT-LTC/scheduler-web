@@ -1,18 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Home.css";
-import pdf from "../../openLab-pdf/Guidelines.pdf";
-import { useState } from "react";
-import jwtDecode from "jwt-decode";
-import Cookies from "js-cookie";
-import ContactModal from "../../components/ContactUs/ContactModal";
-import InfoIcon from "./icons/info-icon.png";
+import React from 'react';
+import {Link} from 'react-router-dom';
+import './Home.css';
+import pdf from '../../openLab-pdf/Guidelines.pdf';
+import {useState} from 'react';
+import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
+import ContactModal from '../../components/ContactUs/ContactModal';
+import InfoIcon from './icons/info-icon.png';
 
+/**
+ *
+ * @returns {JSX.Element} - Home Component
+ */
 export default function Home() {
-  const user = jwtDecode(Cookies.get("jwt"));
+  // Decode the JWT token stored in the "jwt" cookie to get user information
+  const user = jwtDecode(Cookies.get('jwt'));
   const isAdmin = user.isAdmin;
+
+  // State to manage the visibility of the contact modal
   const [showContactModal, setShowContactModal] = useState(false);
 
+  /**
+   * Handle click event for the "Contact Us" button
+   */
   const handleContactUsClick = () => {
     setShowContactModal(true);
   };

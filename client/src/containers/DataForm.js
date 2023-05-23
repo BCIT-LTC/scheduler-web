@@ -1,8 +1,9 @@
-import FormContainer from "../components/FormContainer"
-// import "./data-form.css"
+import FormContainer from '../components/FormContainer';
 
-export default function DataForm () {
-  return (
-    <FormContainer disableAddRowButton={false} />
-  )
+/**
+ *
+ * @returns {JSX.Element} - Form Container
+ */
+export default function DataForm() {
+  return <FormContainer disableAddRowButton={false} />;
 }
