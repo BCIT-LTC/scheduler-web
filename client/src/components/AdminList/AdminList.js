@@ -3,12 +3,17 @@ import Cookies from 'js-cookie';
 import Admin from './Admin';
 import './AdminList.css';
 
+/**
+ * shows a list of admin users
+ */
 export default function AdminList() {
     const [adminList, setAdminList] = useState([]);
     const [warning, setWarning] = useState([]);
     const adminEmailRef = useRef();
 
-
+    /**
+     * fetch admin users when the page is rendered
+     */
     useEffect(() => {
         fetch(`${process.env.PUBLIC_URL}/admin`, {
             method: 'GET',
@@ -21,7 +26,9 @@ export default function AdminList() {
             .then(data => setAdminList(data));
     }, []);
 
-
+    /**
+     * makes a call to the api to edit an admin user's info
+     */
     async function editAdmin(email, isAdmin) {
         let errors = "";
         await fetch(`${process.env.PUBLIC_URL}/admin`, {
@@ -45,7 +52,10 @@ export default function AdminList() {
         });
         return errors;
     }
-
+    
+    /**
+     * add an admin 
+     */
     async function addItem(e) {
         const email = adminEmailRef.current.value;
         if (email === '') return;
@@ -60,6 +70,9 @@ export default function AdminList() {
         adminEmailRef.current.value = null;
     }
 
+  /**
+   * remve an admin
+   */
     async function removeItem(email) {
         setAdminList(adminList.filter(item => item.email !== email));
         editAdmin(email, false);

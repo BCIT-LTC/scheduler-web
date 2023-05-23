@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
-
+/**
+ * Represents contact us modal
+ */
 const ContactUs = () => {
   const [message, setMessage] = useState(
     'For any questions related to the Open Lab Application or general use of Open Lab, please contact jasica_munday@BCIT.ca. For any other inquiries (e.g. clinical skills) please contact your clinical instructor.'
@@ -12,18 +14,27 @@ const ContactUs = () => {
   const isAdmin = user.isAdmin;
   const [showModal, setShowModal] = useState(false);
 
+  /**
+   * onChange handler for editing
+   */
   const handleEdit = () => {
     setEditMode(true);
     setEditedMessage(message);
     setShowModal(true);
   };
 
+  /**
+   * onCLick handler for saving
+   */
   const handleSave = () => {
     setMessage(editedMessage);
     setEditMode(false);
     setShowModal(false);
   };
 
+  /**
+   * onCLick handler for contact us button click
+   */
   const handleContactUsClick = () => {
     if (isAdmin) {
       handleEdit();

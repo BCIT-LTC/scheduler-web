@@ -3,6 +3,9 @@ import './Contact.css';
 import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
+/**
+ * represents modal window for contact infromation
+ */
 const ContactModal = ({onClose}) => {
   // State variables
   const [message, setMessage] = useState(
