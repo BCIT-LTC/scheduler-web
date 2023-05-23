@@ -4,6 +4,9 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import "./Announcements.css";
 
+/**
+ * represents the table of announcements
+ */
 const AnnouncementTable = () => {
   const [table, setTable] = useState([]);
   // when the user clicks on a button, deleteClicked is updated
@@ -18,9 +21,9 @@ const AnnouncementTable = () => {
   const user = jwtDecode(Cookies.get("jwt"));
   const isAdmins = user.isAdmin;
 
+  //fetch announcement data every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      //fetch announcement data every 3 seconds
       fetch(`${process.env.PUBLIC_URL}/announcement`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("jwt")}`,
@@ -56,6 +59,9 @@ const AnnouncementTable = () => {
     });
   };
 
+  /**
+   * onCOnfirm handler for edit announcement form
+   **/  
   const editAnnouncement = async (userid, updatedTitle, updatedDescription) => {
     return await fetch(`${process.env.PUBLIC_URL}/announcement`, {
       method: "PUT",

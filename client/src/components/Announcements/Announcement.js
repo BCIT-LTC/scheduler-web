@@ -1,15 +1,17 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import "./Announcements.css";
 import AnnouncementTable from "./AnnouncementTable";
 import Submission from "../Submission";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
+/**
+ * represents create announcement form
+ */
 const Announcement = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [submit, setSubmit] = useState(false); // for submission window component
+  const [submit, setSubmit] = useState(false);
   const [emptyField, setEmptyField] = useState("");
 
   const user = jwtDecode(Cookies.get("jwt"));
@@ -23,10 +25,16 @@ const Announcement = () => {
     .slice(0, 19)
     .replace("T", " ");
 
+  /**
+   * tracks the number of letter for each field
+   */
   const counter = (e) => {
     setCount(e.target.value.length);
   };
 
+  /**
+   * onSubmit handler for creae announemnt form
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (title === "" || description === "") {

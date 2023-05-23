@@ -1,48 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../../App.css';
-import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
+/**
+ * represents announcement dropdown
+ */
 const DropdownAnnouncement = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
   const [hasNewAnnouncements, setHasNewAnnouncements] = useState(false);
-  const [lastLogoutTime, setLastLogoutTime] = useState(null);
   const firstRender = useRef(true);
-  // useEffect(() => {
-  //   var user = jwtDecode(Cookies.get('jwt'));
-  //   fetch('http://localhost:8000/api/logouttime', {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       'Authorization': Cookies.get('jwt')
-  //     },
-  //     body: JSON.stringify({ email: user.email })
-  //   })
-  //     .then(result => result.json())
-  //     .then(data => {
-  //       if (data[0].logoutTime == null) {
-  //         setHasNewAnnouncements(true);
-  //         localStorage.setItem("hasNewAnnouncements", JSON.stringify(true));
-  //       } else {
-  //         const logoutTime = data[0].logoutTime;
-  //         setLastLogoutTime(logoutTime);
-  //         localStorage.setItem("lastLogoutTime", logoutTime);
-  //       }
-  //     })
-  // }, [user.email, lastLogoutTime])
 
-
+  /**
+   * get hashed announcment from local storage when the page is rendered
+   */
   useEffect(() => {
     const storedHasNewAnnouncements = localStorage.getItem("hasNewAnnouncements");
-
     if (storedHasNewAnnouncements) {
       setHasNewAnnouncements(JSON.parse(storedHasNewAnnouncements));
     }
-
   }, []);
 
-
+  /**
+   * determine if there has been a new announcement every 3 seconds
+   */
   useEffect(() => {
     const interval = setInterval(() => {
       fetch(`${process.env.PUBLIC_URL}/announcement`, {
@@ -75,7 +56,9 @@ const DropdownAnnouncement = () => {
     return () => clearInterval(interval);
   }, [announcements]);
 
-
+  /**
+   * change the icon color if there has been a new announcement
+   */
   useEffect(() => {
     if (!firstRender.current) {
       const icon = document.getElementById('icon');
@@ -98,7 +81,9 @@ const DropdownAnnouncement = () => {
     }
   }, [hasNewAnnouncements]);
 
-
+  /**
+   * onClick handler for the notification icon
+   */
   const handleIconClick = () => {
     if (hasNewAnnouncements) {
       setHasNewAnnouncements(false);
