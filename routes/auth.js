@@ -40,12 +40,13 @@ router.get("/login", async (req, res) => {
  * @return {} 200 if true
  */
 router.post("/logout", async (req, res) => {
-    // Unset the cookies by setting their expiration date in the past
-    res.clearCookie('jwt');
-    res.clearCookie('PHPSESSIDIDP');
-    res.clearCookie('SimpleSAMLAuthTokenIdp');
-    res.clearCookie('session');
-    res.clearCookie('session.sig');
+    // Get all cookies
+    const cookies = Object.keys(req.cookies);
+
+    // Iterate through each cookie and set its expiration date in the past
+    cookies.forEach(cookie => {
+        res.clearCookie(cookie);
+    });
 
     // Send a response to indicate the cookies have been unset
     res.sendStatus(200);
