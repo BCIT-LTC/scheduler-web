@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+
+# Flux envsubst replaces variables found in `deploy-vars.env` or falls back to defaults
+#
+namespace: ${DEPLOY_NAMESPACE:=scheduler-web}
+
+resources:
+- ../../base
+
+commonLabels:
+  environment: review
+
+commonAnnotations:
+  version: ${GIT_TAG:=stable}
+
+images:
+- name: scheduler-web
+  newName: ${IMAGE_NAME:=registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web}
+  newTag: ${IMAGE_TAG:=stable}
+
+patches:
+- target:
+    kind: Ingress
+  path: ingress-patch.yaml
+- target:
+    kind: Deployment
+  path: deployment-patch.yaml
+
+# # Create a .dockerconfig.json. Then uncomment this section for local cluster development.
+# #
+# - target:
+#     kind: Deployment
+#   patch: |-
+#     - op: add
+#       path: /spec/template/spec/imagePullSecrets
+#       value: [name: gitlab-registry-credentials]
+
+secretGenerator:
+  - name: vault-secrets-override
+    literals:
+      - INITIAL_USER=admin
+      - INITIAL_PASSWORD=password123
+
+  # # Uncomment for local cluster development
+  # #
+  # - name: gitlab-registry-credentials
+  #   type: kubernetes.io/dockerconfigjson
+  #   files:
+  #     - .dockerconfigjson=secrets/.dockerconfig.json

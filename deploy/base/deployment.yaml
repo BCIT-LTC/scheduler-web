@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      serviceAccountName: scheduler-web-serviceaccount
+      containers:
+        - name: scheduler-web
+          image: scheduler-web
+          envFrom:
+          - configMapRef:
+              name: initial-user-credentials
+          - configMapRef:
+              name: elasticapm-config
+          - configMapRef:
+              name: api-config
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: 8000
+          #   initialDelaySeconds: 20
+          #   periodSeconds: 30
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: 8000
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 30
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+

@@ -1,13 +1,13 @@
 version: "3.9"
 
-networks:
-  test-web-network:
-    driver: bridge
-
 services:
+
   app:
-    networks:
-      - test-web-network
+    image: scheduler-web
+    build: 
+      context: .
+      args:
+        - VERSION=dev
     command:
       - /bin/sh
       - -c
@@ -16,28 +16,27 @@ services:
         (cd /app/client && npm run build)
         npm install
         npm start
-    build: .
-    ports:
-      - "9000:9000"
     environment:
+      - INITIAL_USER=admin
+      - INITIAL_PASSWORD=password123
+      - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
-      - LOCAL_PASSWORD=password123
-      - LOCAL_USER=admin
-      - API_URL=http://host.docker.internal:8000/api/
       - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+    volumes:
+      - .:/app
+    ports:
+      - "9000:9000"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
       interval: 1m30s
       timeout: 10s
       retries: 3
       start_period: 40s
-    volumes:
-      - .:/app
-
-  idp:
     networks:
       - test-web-network
+
+  idp:
     image: kenchan0130/simplesamlphp
     ports:
       - "8080:8080"
@@ -47,17 +46,24 @@ services:
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
     volumes:
       - ./local_saml_config/authsources.php:/var/www/simplesamlphp/config/authsources.php
-  test:
     networks:
       - test-web-network
-    # TODO: the url prefix after http is dependent on the name of the container for the frotend
-    environment:
-      - URL_FRONTEND=http://scheduler-web-app-1:9000
+
+  test:
     build:
       dockerfile: Dockerfile.playwright
       args:
         - TEST_USER=root
+    # TODO: the url prefix after http is dependent on the name of the container for the frotend
+    environment:
+      - URL_FRONTEND=http://scheduler-web-app-1:9000
     restart: on-failure
     # depends_on:
     #   app:
     #     condition: service_healthy
+    networks:
+      - test-web-network
+
+networks:
+  test-web-network:
+    driver: bridge
