@@ -12,8 +12,6 @@ services:
       - /bin/sh
       - -c
       - |
-        (cd /app/client && npm install)
-        (cd /app/client && npm run build)
         npm install
         npm start
     environment:
@@ -35,6 +33,10 @@ services:
       start_period: 40s
     networks:
       - test-web-network
+    depends_on:
+      frontend-builder:
+        condition:  service_completed_successfully
+
 
   idp:
     image: kenchan0130/simplesamlphp
@@ -49,20 +51,33 @@ services:
     networks:
       - test-web-network
 
-  test:
-    build:
-      dockerfile: Dockerfile.playwright
-      args:
-        - TEST_USER=root
-    # TODO: the url prefix after http is dependent on the name of the container for the frotend
-    environment:
-      - URL_FRONTEND=http://scheduler-web-app-1:9000
-    restart: on-failure
-    # depends_on:
-    #   app:
-    #     condition: service_healthy
-    networks:
-      - test-web-network
+  # test:
+  #   build:
+  #     dockerfile: Dockerfile.playwright
+  #     args:
+  #       - TEST_USER=root
+  #   # TODO: the url prefix after http is dependent on the name of the container for the frotend
+  #   environment:
+  #     - URL_FRONTEND=http://scheduler-web-app-1:9000
+  #   restart: on-failure
+  #   # depends_on:
+  #   #   app:
+  #   #     condition: service_healthy
+  #   networks:
+  #     - test-web-network
+
+  frontend-builder:
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        npm run build
+    image: node:19.4.0-alpine
+    working_dir: /app
+    volumes:
+      - ./client:/app
+      # - data:/code/frontend/build/:rw
 
 networks:
   test-web-network:

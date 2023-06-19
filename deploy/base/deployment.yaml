@@ -17,7 +17,7 @@ spec:
         - name: scheduler-web
           image: scheduler-web
           envFrom:
-          - configMapRef:
+          - secretRef:
               name: initial-user-credentials
           - configMapRef:
               name: elasticapm-config
