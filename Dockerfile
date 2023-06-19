@@ -8,7 +8,8 @@ ENV npm_config_cache /app/.cacheapi
 ENV npm_config_cache /app/client/.cacheapi
 
 RUN apk --update add \
-    curl;
+        curl \
+    ;
 
 COPY client .
 
