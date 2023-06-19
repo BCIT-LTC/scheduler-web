@@ -19,7 +19,6 @@
     "path": "^0.12.7",
     "playwright": "^1.33.0",
     "pspdfkit": "^2023.3.0",
-    "react": "^18.2.0",
     "react-calendar": "^4.0.0",
     "react-datepicker": "^4.11.0",
     "react-pdf": "^6.2.2",
