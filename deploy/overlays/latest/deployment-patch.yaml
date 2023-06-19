@@ -23,6 +23,6 @@ spec:
           env:
             - name: ELASTIC_APM_SERVICE_NAME
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: elasticapm-config
                   key: ELASTIC_APM_SERVICE_NAME
