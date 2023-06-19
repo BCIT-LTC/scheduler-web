@@ -2,10 +2,10 @@
 
 FROM node:19.4.0-alpine
 
-WORKDIR /app2/client
+WORKDIR /app/client
 
-ENV npm_config_cache /app2/.cacheapi
-ENV npm_config_cache /app2/client/.cacheapi
+ENV npm_config_cache /app/.cacheapi
+ENV npm_config_cache /app/client/.cacheapi
 
 RUN apk --update add \
     curl;
@@ -16,9 +16,9 @@ RUN npm install --cache="/app/client/.cacheapi" --unsafe-perm=true --allow-root
 RUN npm run build
 
 
-WORKDIR /app2
+WORKDIR /app
 
-ENV npm_config_cache /app2/.cacheapi
+ENV npm_config_cache /app/.cacheapi
 
 # COPY controllers ./controllers
 COPY middleware ./middleware
@@ -29,9 +29,9 @@ COPY package.json ./
 COPY helpers ./helpers
 COPY local_saml_config ./local_saml_config
 
-RUN npm install  --cache="/app2/.cacheapi" --unsafe-perm=true --allow-root
-RUN chown -R node:node /app2
-RUN chown -R node:node /app2/client/node_modules
+RUN npm install  --cache="/app/.cacheapi" --unsafe-perm=true --allow-root
+RUN chown -R node:node /app
+RUN chown -R node:node /app/client/node_modules
 
 COPY docker-entrypoint.sh /usr/local/bin
 
