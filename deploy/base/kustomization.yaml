@@ -7,16 +7,17 @@ resources:
   - deployment.yaml
   - ingress.yaml
   - serviceaccount.yaml
-
+  - service.yaml
+  
 commonLabels:
   app: scheduler-web
   app.kubernetes.io/name: scheduler-web
 
 secretGenerator:
-  - name: initial-user-credentials
+  - name: local-user-credentials
     literals:
-      - INITIAL_USER=admin
-      - INITIAL_PASSWORD=password123
+      - LOCAL_USER=admin
+      - LOCAL_PASSWORD=password123
 
 configMapGenerator:
 # Generates elasticapm config

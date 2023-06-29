@@ -15,7 +15,6 @@ FROM node:19.4.0-alpine AS release
 WORKDIR /app
 
 COPY helpers ./helpers
-COPY local_saml_config ./local_saml_config
 COPY middleware ./middleware
 COPY routes ./routes
 
