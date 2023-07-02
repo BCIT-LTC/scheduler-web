@@ -17,12 +17,12 @@ spec:
         - name: scheduler-web
           image: scheduler-web
           envFrom:
-          - secretRef:
-              name: local-user-credentials
-          - configMapRef:
-              name: elasticapm-config
-          - configMapRef:
-              name: api-config
+            - secretRef:
+                name: local-user-credentials
+            - configMapRef:
+                name: elasticapm-config
+            - configMapRef:
+                name: api-config
           # readinessProbe:
           #   tcpSocket:
           #     port: 8000

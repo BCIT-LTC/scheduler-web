@@ -27,6 +27,7 @@ const callAPI = require("../helpers/API_caller");
  * @return {Object} array of all annoucements
  */
 router.get("/announcement", async (req, res) => {
+  console.log("annoucnement")
   let response = await callAPI("announcement", "GET", req);
   res.status(response.status).json(response.data);
 });
@@ -45,7 +46,13 @@ router.get("/announcement", async (req, res) => {
  */
 router.post("/announcement", async (req, res) => {
   let response = await callAPI("announcement", "POST", req);
-  res.status(response.status).json(response.data);
+  console.log("response details")
+  console.log(response.status)
+  // console.log(response.data)
+  // if(response.status != 200){
+  //   console.log(response.data)
+  // }
+  // res.status(response.status).json(response.data);
 });
 
 /**

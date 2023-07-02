@@ -29,5 +29,5 @@ configMapGenerator:
 #
   - name: api-config
     literals:
-      - API_URL=scheduler-web.openlab-scheduler:8000/api/
+      - API_URL=https://scheduler-api.ltc.bcit.ca/api/
 

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
@@ -17,7 +18,6 @@ const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
 
 const passport = require("./middleware/passport");
-
 const app = express();
 app.use(cors());
 app.use(express.static("build"));
