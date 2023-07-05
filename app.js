@@ -14,6 +14,7 @@ const lab_guidelines = require("./routes/lab_guidelines");
 const faq = require("./routes/faq");
 const indexRoute = require("./routes/indexRoute");
 const saml_auth = require("./routes/saml_auth");
+const openid_auth =  require("./routes/openid_auth");
 const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
 
@@ -50,7 +51,8 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/login", saml_auth);
+// app.use("/login", saml_auth);
+app.use("/login", openid_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/", announcements, login, calendar, faq, lab_guidelines);
