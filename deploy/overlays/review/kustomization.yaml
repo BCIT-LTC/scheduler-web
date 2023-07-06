@@ -43,15 +43,24 @@ secretGenerator:
       - LOCAL_USER=admin
       - LOCAL_PASSWORD=password123
       - SECRET_KEY=ahuaejsdb
-  - name: idp-cert
-    files:
-    - secrets/idp.crt
+  - name: oidc-secret
+    literals:
+      - CLIENT_ID=slGQesNqqYgOjuQsKrVoNkdO0NrF85zJ
+      - CLIENT_SECRET=hvo_secret_T3lfFGtvhicYfjBmEEq8ydwpjucImDYLlPZvGSo9MHvU75EZTT4btqm4iBhi3p8n
 
 configMapGenerator:
   - name: api-config
     literals:
       - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
     behavior: merge
+  - name: oidc-config
+    literals:
+      - ISSUER=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth
+      - AUTHORIZATION_URL=https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize
+      - TOKEN_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token
+      - USERINFO_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo
+      - CALLBACK_URL=http://localhost:9000/login/callback
+
 
 # # Uncomment for local cluster development
 # #

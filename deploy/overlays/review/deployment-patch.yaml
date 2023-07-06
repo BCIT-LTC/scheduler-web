@@ -13,9 +13,10 @@ spec:
           envFrom:
             - secretRef:
                 name: vault-secrets-override
-          env:
-            - name: SAML_URL
-              value: "http://localhost:8080/simplesaml/saml2/idp/SSOService.php"
+            - secretRef:
+                name: oidc-secret
+            - configMapRef:
+                name: oidc-config
           ports:
             - containerPort: 9000
               protocol: TCP
