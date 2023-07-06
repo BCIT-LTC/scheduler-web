@@ -41,4 +41,29 @@ router.post('/',
         res.redirect('/');
     });
 
+
+/**
+ * Route to deal with login callback
+ * @name get/callback
+ * @function
+ * @memberof module:routers/login~loginRouter
+ */
+router.get('/callback',
+function (req, res, next) {
+    console.log('-----------------------------');
+    console.log('/Start login callback ');
+    next();
+},
+passport.authenticate('oidcStrategy'),
+function (req, res) {
+    console.log(req.user.token);
+    res.cookie('jwt', req.user.token, { httpOnly: true });
+    console.log('-----------------------------');
+    console.log('login call back dumps');
+    console.log(req.user);
+    console.log('-----------------------------');
+    res.redirect('/');
+}
+);
+
 module.exports = router;

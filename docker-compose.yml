@@ -20,9 +20,14 @@ services:
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
+      #OIDC PARAMS
       - CLIENT_ID=slGQesNqqYgOjuQsKrVoNkdO0NrF85zJ
       - CLIENT_SECRET=hvo_secret_T3lfFGtvhicYfjBmEEq8ydwpjucImDYLlPZvGSo9MHvU75EZTT4btqm4iBhi3p8n
-      - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+      - ISSUER=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth
+      - AUTHORIZATION_URL=https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize
+      - TOKEN_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token
+      - USERINFO_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo
+      - CALLBACK_URL=http://localhost:9000/login/callback
     volumes:
       - .:/app
     ports:
@@ -39,18 +44,17 @@ services:
       frontend-builder:
         condition:  service_completed_successfully
 
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    command:
-      - start-dev
-    ports:
-      - "8080:8080" 
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    networks:
-      - test-web-network
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:latest
+  #   command:
+  #     - start-dev
+  #   ports:
+  #     - "8080:8080" 
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #   networks:
+  #     - test-web-network
 
   # idp:
   #   image: kenchan0130/simplesamlphp

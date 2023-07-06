@@ -50,52 +50,24 @@ var samlStrategy = new saml.Strategy({
 
 
 var oidcStrategy = new OpenIDConnectStrategy.Strategy({
-    issuer: 'https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth',
-    authorizationURL: 'https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize',
-    tokenURL: 'https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token',
-    userInfoURL: 'https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo',
+    issuer: process.env['ISSUER'],
+    authorizationURL: process.env['AUTHORIZATION_URL'],
+    tokenURL: process.env['TOKEN_URL'],
+    userInfoURL: process.env['USERINFO_URL'],
     clientID: process.env['CLIENT_ID'],
     clientSecret: process.env['CLIENT_SECRET'],
-    callbackURL: 'http://localhost:9000/login/callback'
-  }, async (profile, done) => {
-    console.log("profile info: ");
-    console.log("email:", profile.email);
-    console.log("firstname:", profile.firstname);
-    console.log("lastname:", profile.lastname);
-    console.log("(type):", profile.type);
-    console.log("(program):", profile.program);
+    callbackURL: process.env['CALLBACK_URL']
+}, function verify(issuer, profile, cb) {
 
-    let email = profile.email
-    let firstname = profile.firstname
-    let lastname = profile.lastname
-    let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
-    let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.SECRET_KEY);
-    await fetch(`${process.env.API_URL}login`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${jwtToken}`,
-            'content-Type': 'application/json',
-        },
-        mode: 'cors',
-    }).then(async (response) => {
-        return await response.json();
-    }).then((response) => {
-        console.log(response);
-        let isAdmin = response;
-        jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.SECRET_KEY);
-        console.log(jwtToken)
-    });
-    return done(null, { token: jwtToken });
-});
+    console.log("callback ")
+    console.log(issuer)
+    console.log(profile)
+    console.log(cb)
 
-
-
-
-
-
+})
 
 passport.use("oidcStrategy", oidcStrategy)
-passport.use("samlStrategy", samlStrategy)
+// passport.use("samlStrategy", samlStrategy)
 
 passport.serializeUser((user, done) => {
     done(null, user);
