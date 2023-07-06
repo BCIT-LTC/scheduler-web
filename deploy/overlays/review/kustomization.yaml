@@ -59,7 +59,7 @@ configMapGenerator:
       - AUTHORIZATION_URL=https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize
       - TOKEN_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token
       - USERINFO_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo
-      - CALLBACK_URL=http://localhost:9000/login/callback
+      - CALLBACK_URL=https://review--45-replace-saml-with-oidc-to-test-vault--scheduler-web.ltc.bcit.ca/login/callback
 
 
 # # Uncomment for local cluster development
