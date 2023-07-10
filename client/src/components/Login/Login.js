@@ -11,7 +11,7 @@ export default function Login({setLocalLogin}) {
     <>
       <div>
         <div className="login-wrapper">
-          <form className="form" action="/login" method="post">
+          <form className="form" action="/loginopenid" method="get">
             <h1>Sign in with BCIT</h1>
             <div className="submit-button">
               <button type="submit">SIGN IN</button>

@@ -26,7 +26,8 @@ const callAPI = require("../helpers/API_caller");
  * @inner
  * @return {Object} boolean of if the user is admin
  */
-router.get("/login", async (req, res) => {
+router.get("/apilogin", async (req, res) => {
+    console.log("api login")
     let response = await callAPI("login", "GET", req);
     res.status(response.status).json(response.data);
 });

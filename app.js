@@ -52,7 +52,7 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use("/login", saml_auth);
-app.use("/login", openid_auth);
+app.use("/loginopenid", openid_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/", announcements, login, calendar, faq, lab_guidelines);

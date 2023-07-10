@@ -59,10 +59,10 @@ var oidcStrategy = new OpenIDConnectStrategy.Strategy({
     callbackURL: process.env['CALLBACK_URL']
 }, function verify(issuer, profile, cb) {
 
-    console.log("callback ")
-    console.log(issuer)
-    console.log(profile)
-    console.log(cb)
+    console.log("verify ")
+    // console.log(issuer)
+    // console.log(profile)
+    // console.log(cb)
 
 })
 
