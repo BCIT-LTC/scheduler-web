@@ -1,7 +1,8 @@
 require('dotenv').config()
 const express = require('express');
 const rateLimit = require("express-rate-limit");
-const cookieSession = require("cookie-session");
+// const cookieSession = require("cookie-session");
+var session = require('express-session')
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const port = 9000;
@@ -26,18 +27,26 @@ app.use(express.static("client/build"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(
-  cookieSession({
-    secret: "cookies are gud 4 health",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: false,
-      secure: false,
-      maxAge: 24 * 60 * 60 * 1000,
-    },
-  })
-);
+// app.use(
+//   cookieSession({
+//     secret: "cookies are gud 4 health",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: false,
+//       secure: false,
+//       maxAge: 24 * 60 * 60 * 1000,
+//     },
+//   })
+// );
+
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
 
 const localLoginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

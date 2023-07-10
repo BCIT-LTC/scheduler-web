@@ -42,7 +42,7 @@ require("dotenv").config();
 //         res.redirect('/');
 //     });
 
-router.get('/', passport.authenticate('oidcStrategy'));
+router.get('/', passport.authenticate('openidconnect'));
 
 // router.get('/',
 //   passport.authenticate('oidcStrategy', { failureRedirect: '/', failureMessage: false }),
@@ -64,12 +64,18 @@ router.get('/', passport.authenticate('oidcStrategy'));
 //     next();
 // },
 
-router.get('/callback',
-  // passport.authenticate('oidcStrategy', { failureRedirect: '/login', failureMessage: true }),
-  function(req, res) {
-    console.log("callback ")
-    res.redirect('/');
-  });
+router.get('/callback', (req, res, next) => {
+  console.log('callback called')
+  console.log(req.query)
+  passport.authenticate('openidconnect', (err, user, info) => {
+    console.log('authentication inside callback')
+    if (err) return next(err)
+    if (!user) return res.redirect("/failure?info=" + JSON.stringify(info))
+
+  })
+});
+
+
 // passport.authenticate('oidcStrategy'),
 // function (req, res) {
 //     console.log(req.user.token);

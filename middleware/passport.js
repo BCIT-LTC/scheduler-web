@@ -49,7 +49,7 @@ const jwt = require("jsonwebtoken");
 // });
 
 
-var oidcStrategy = new OpenIDConnectStrategy.Strategy({
+passport.use(new OpenIDConnectStrategy.Strategy({
     issuer: process.env['ISSUER'],
     authorizationURL: process.env['AUTHORIZATION_URL'],
     tokenURL: process.env['TOKEN_URL'],
@@ -57,16 +57,17 @@ var oidcStrategy = new OpenIDConnectStrategy.Strategy({
     clientID: process.env['CLIENT_ID'],
     clientSecret: process.env['CLIENT_SECRET'],
     callbackURL: process.env['CALLBACK_URL']
-}, function verify(issuer, profile, cb) {
+}, (issuer, profile, callback) => {
 
     console.log("verify ")
+
     // console.log(issuer)
     // console.log(profile)
     // console.log(cb)
 
-})
+}));
 
-passport.use("oidcStrategy", oidcStrategy)
+// passport.use("oidcStrategy", oidcStrategy)
 // passport.use("samlStrategy", samlStrategy)
 
 passport.serializeUser((user, done) => {
