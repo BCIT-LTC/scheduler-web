@@ -16,11 +16,12 @@ services:
         npm start
     environment:
       - LOCAL_USER=admin
-      - LOCAL_PASSWORD=password123
+      - LOCAL_PASSWORD=admin
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
       - SECRET_KEY=ahuaejsdb
       #OIDC PARAMS
+      - DISCOVERY=http://scheduler.local:8080/realms/master/.well-known/openid-configuration
       - CLIENT_ID=slGQesNqqYgOjuQsKrVoNkdO0NrF85zJ
       - CLIENT_SECRET=hvo_secret_T3lfFGtvhicYfjBmEEq8ydwpjucImDYLlPZvGSo9MHvU75EZTT4btqm4iBhi3p8n
       - ISSUER=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth
@@ -39,10 +40,10 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - test-web-network
-    depends_on:
-      frontend-builder:
-        condition:  service_completed_successfully
+      - scheduler-network
+    # depends_on:
+    #   frontend-builder:
+    #     condition:  service_completed_successfully
 
   # keycloak:
   #   image: quay.io/keycloak/keycloak:latest
@@ -53,19 +54,6 @@ services:
   #   environment:
   #     KEYCLOAK_ADMIN: admin
   #     KEYCLOAK_ADMIN_PASSWORD: admin
-  #   networks:
-  #     - test-web-network
-
-  # idp:
-  #   image: kenchan0130/simplesamlphp
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     SIMPLESAMLPHP_SP_ENTITY_ID: localhost
-  #     SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback
-  #     SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
-  #   volumes:
-  #     - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
   #   networks:
   #     - test-web-network
 
@@ -84,19 +72,20 @@ services:
   #   networks:
   #     - test-web-network
 
-  frontend-builder:
-    command:
-      - /bin/sh
-      - -c
-      - |
-        npm install
-        npm run build
-    image: node:19.4.0-alpine
-    working_dir: /app
-    volumes:
-      - ./client:/app
+  # frontend-builder:
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       npm install
+  #       npm run build
+  #   image: node:19.4.0-alpine
+  #   working_dir: /app
+  #   volumes:
+  #     - ./client:/app
       # - data:/code/frontend/build/:rw
 
 networks:
-  test-web-network:
+  scheduler-network:
     driver: bridge
+    name: scheduler-network

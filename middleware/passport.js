@@ -1,9 +1,9 @@
 const passport = require('passport');
 // var saml = require('passport-saml');
 var OpenIDConnectStrategy = require('passport-openidconnect');
+// const { Issuer, Strategy, generators } = require('openid-client');                                                                                                                                 
 var fs = require('fs');
 const jwt = require("jsonwebtoken");
-
 
 // var samlStrategy = new saml.Strategy({
 //     // config options here
@@ -57,26 +57,54 @@ passport.use(new OpenIDConnectStrategy.Strategy({
     clientID: process.env['CLIENT_ID'],
     clientSecret: process.env['CLIENT_SECRET'],
     callbackURL: process.env['CALLBACK_URL']
-}, (issuer, profile, callback) => {
-
+}, function verify(issuer, profile, cb) {
     console.log("verify ")
-
-    // console.log(issuer)
-    // console.log(profile)
-    // console.log(cb)
-
 }));
+
+// Issuer.discover(process.env['DISCOVERY'])
+//     .then(criiptoIssuer => {
+//         console.log('Discovered issuer %s %O', criiptoIssuer.issuer, criiptoIssuer.metadata);
+//         var client = new criiptoIssuer.Client({
+//             client_id: process.env['CLIENT_ID'],
+//             client_secret: process.env['CLIENT_SECRET'],
+//             redirect_uris: [process.env['CALLBACK_URL']],
+//             response_types: ['code'],
+//         });
+
+//         console.log('OIDC client initialized')
+
+//         passport.use(
+//             'openidconnect',
+//             new Strategy({ client }, (tokenSet, userinfo, done) => {
+//                 console.log("check if this prints")
+//                 console.log(userinfo)
+//                 return done(null, tokenSet.claims());
+//             })
+//         );
+
+//         // handles serialization and deserialization of authenticated user
+//         passport.serializeUser(function (user, done) {
+//             done(null, user);
+//         });
+//         passport.deserializeUser(function (user, done) {
+//             done(null, user);
+//         });
+
+//     })
+
+
+
 
 // passport.use("oidcStrategy", oidcStrategy)
 // passport.use("samlStrategy", samlStrategy)
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
+// passport.serializeUser((user, done) => {
+//     done(null, user);
+// });
 
-passport.deserializeUser(async (user, done) => {
-    done(null, user);
-});
+// passport.deserializeUser(async (user, done) => {
+//     done(null, user);
+// });
 
 
 module.exports = passport;

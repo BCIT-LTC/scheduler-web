@@ -18,7 +18,7 @@ const saml_auth = require("./routes/saml_auth");
 const openid_auth =  require("./routes/openid_auth");
 const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
-
+// const { auth } = require('express-openid-connect');    
 const passport = require("./middleware/passport");
 const app = express();
 app.use(cors());
@@ -37,6 +37,16 @@ app.use(cookieParser());
 //       secure: false,
 //       maxAge: 24 * 60 * 60 * 1000,
 //     },
+//   })
+// );
+
+// app.use(
+//   auth({
+//      issuerBaseURL: process.env['ISSUER'],
+//      baseURL: 'http://localhost:9000',
+//      clientID: process.env['CLIENT_ID'],
+//      secret: 'LONG_RANDOM_STRING',
+//      clientSecret: process.env['CLIENT_SECRET']
 //   })
 // );
 

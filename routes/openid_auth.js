@@ -18,8 +18,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 require("dotenv").config();
-// import { Issuer } from 'openid-client';
-// const issuer = require('openid-client')
+const { generators } = require('openid-client');  
 
 /**
  * Route to openid Login page
@@ -42,7 +41,7 @@ require("dotenv").config();
 //         res.redirect('/');
 //     });
 
-router.get('/', passport.authenticate('openidconnect'));
+// router.get('/', passport.authenticate('openidconnect'));
 
 // router.get('/',
 //   passport.authenticate('oidcStrategy', { failureRedirect: '/', failureMessage: false }),
@@ -64,17 +63,35 @@ router.get('/', passport.authenticate('openidconnect'));
 //     next();
 // },
 
+// router.get('/callback', 
+//   passport.authenticate('openidconnect', (err, user, info) => {
+//     console.log('authentication inside callback')
+//     if (err) return next(err)
+//     if (!user) return res.redirect("/failure?info=" + JSON.stringify(info))
+
+//   })
+// );
+
+router.get('/', passport.authenticate('openidconnect'));
+
+// router.get('/', (req, res) => {
+//   res.send(`hello ${req.oidc.user.name}`);
+// });
+
 router.get('/callback', (req, res, next) => {
-  console.log('callback called')
-  console.log(req.query)
+
+  console.log("callback ")
   passport.authenticate('openidconnect', (err, user, info) => {
     console.log('authentication inside callback')
     if (err) return next(err)
     if (!user) return res.redirect("/failure?info=" + JSON.stringify(info))
-
   })
+  console.log("test")
+  console.log(req.query)
+  // const code_verifier = generators.codeVerifier();
+  // const code_challenge = generators.codeChallenge(code_verifier);
+  res.redirect('/');
 });
-
 
 // passport.authenticate('oidcStrategy'),
 // function (req, res) {
