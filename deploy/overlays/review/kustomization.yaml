@@ -45,8 +45,11 @@ secretGenerator:
       - SECRET_KEY=ahuaejsdb
   - name: oidc-secret
     literals:
-      - CLIENT_ID=slGQesNqqYgOjuQsKrVoNkdO0NrF85zJ
-      - CLIENT_SECRET=hvo_secret_T3lfFGtvhicYfjBmEEq8ydwpjucImDYLlPZvGSo9MHvU75EZTT4btqm4iBhi3p8n
+      - CLIENT_ID=scheduler-web
+      - CLIENT_SECRET=xEjivQjflvp2yGiW7yOCcAQ9fDYCAMuy
+
+      # - CLIENT_ID=slGQesNqqYgOjuQsKrVoNkdO0NrF85zJ
+      # - CLIENT_SECRET=hvo_secret_T3lfFGtvhicYfjBmEEq8ydwpjucImDYLlPZvGSo9MHvU75EZTT4btqm4iBhi3p8n
 
 configMapGenerator:
   - name: api-config
@@ -55,12 +58,20 @@ configMapGenerator:
     behavior: merge
   - name: oidc-config
     literals:
-      - DISCOVERY=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/.well-known/openid-configuration
-      - ISSUER=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth
-      - AUTHORIZATION_URL=https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize
-      - TOKEN_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token
-      - USERINFO_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo
+      - DISCOVERY=http://research-04.ltc.bcit.ca:8080/realms/master/.well-known/openid-configuration
+      - ISSUER=http://research-04.ltc.bcit.ca:8080/realms/master
+      - AUTHORIZATION_URL=http://research-04.ltc.bcit.ca:8080/realms/master/protocol/openid-connect/auth
+      - TOKEN_URL=http://research-04.ltc.bcit.ca:8080/realms/master/protocol/openid-connect/token
+      - USERINFO_URL=http://research-04.ltc.bcit.ca:8080/realms/master/protocol/openid-connect/userinfo
       - CALLBACK_URL=https://review--45-replace-saml-with-oidc-to-test-vault--scheduler-web.ltc.bcit.ca/loginopenid/callback
+
+    # literals:
+    #   - DISCOVERY=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/.well-known/openid-configuration
+    #   - ISSUER=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth
+    #   - AUTHORIZATION_URL=https://vault.ltc.bcit.ca/ui/vault/identity/oidc/provider/ltc-auth/authorize
+    #   - TOKEN_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/token
+    #   - USERINFO_URL=https://vault.ltc.bcit.ca/v1/identity/oidc/provider/ltc-auth/userinfo
+    #   - CALLBACK_URL=https://review--45-replace-saml-with-oidc-to-test-vault--scheduler-web.ltc.bcit.ca/loginopenid/callback
 
 # # Uncomment for local cluster development
 # #
