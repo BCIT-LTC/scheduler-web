@@ -13,9 +13,11 @@ spec:
           envFrom:
             - secretRef:
                 name: vault-secrets-override
+            - configMapRef:
+                name: oidc-config
           env:
             - name: SAML_URL
-              value: "http://localhost:8080/simplesaml/saml2/idp/SSOService.php"
+              value: "https://review--45-keycloak--scheduler-web.ltc.bcit.ca/realms/realm1/broker/saml/endpoint"
           ports:
             - containerPort: 9000
               protocol: TCP
@@ -23,15 +25,6 @@ spec:
             - name: idp-cert
               mountPath: "/app/saml/certs"
               readOnly: true
-        - name: idp
-          image:  kenchan0130/simplesamlphp
-          env:
-          - name: SIMPLESAMLPHP_SP_ENTITY_ID
-            value: "localhost"
-          - name: SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE
-            value: "http://localhost:9000/login/callback"
-          - name: SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE
-            value: "http://localhost:9000/logout/callback"
       volumes:
       - name: idp-cert
         secret:
