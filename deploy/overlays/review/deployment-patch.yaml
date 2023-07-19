@@ -14,10 +14,7 @@ spec:
             - secretRef:
                 name: vault-secrets-override
             - configMapRef:
-                name: oidc-config
-          env:
-            - name: SAML_URL
-              value: "https://review--45-keycloak--scheduler-web.ltc.bcit.ca/realms/realm1/broker/saml/endpoint"
+                name: saml-config
           ports:
             - containerPort: 9000
               protocol: TCP
