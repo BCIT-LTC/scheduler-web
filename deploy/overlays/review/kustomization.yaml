@@ -52,6 +52,9 @@ configMapGenerator:
     literals:
       - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
     behavior: merge
+  - name: saml-config
+    literals:
+      - SAML_URL=https://review--45-keycloak--scheduler-web.ltc.bcit.ca/realms/realm1/broker/saml/endpoint
 
 # # Uncomment for local cluster development
 # #
