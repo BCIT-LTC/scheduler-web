@@ -18,7 +18,7 @@ spec:
           ADMIN_USERNAME="{{ .Data.data.ADMIN_USERNAME }}"
           ADMIN_PASSWORD="{{ .Data.data.ADMIN_PASSWORD }}"
           API_KEY="{{ .Data.data.API_KEY }}"
-          DJANGO_SECRET_KEY="{{ .Data.data.DJANGO_SECRET_KEY }}"
+          DJANGO_JWT_TOKEN_SIGNING_KEY="{{ .Data.data.DJANGO_JWT_TOKEN_SIGNING_KEY }}"
           POSTGRES_PASSWORD="{{ .Data.data.POSTGRES_PASSWORD }}"
           ELASTIC_APM_SECRET_TOKEN="{{ .Data.data.ELASTIC_APM_SECRET_TOKEN }}"
           {{- end }}

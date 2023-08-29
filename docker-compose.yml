@@ -19,7 +19,7 @@ services:
       - LOCAL_PASSWORD=password123
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
-      - SECRET_KEY=ahuaejsdb
+      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
       - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
     volumes:
       - .:/app

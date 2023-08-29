@@ -36,7 +36,7 @@ var samlStrategy = new saml.Strategy({
             'content-Type': 'application/json',
         },
         mode: 'cors',
-    }).then(async (response) => {
+    }).then(async (response) => {JWT_TOKEN_SIGNING_KEY
         return await response.json();
     }).then((response) => {
         console.log(response);
@@ -49,7 +49,7 @@ var samlStrategy = new saml.Strategy({
 
 passport.use("samlStrategy", samlStrategy)
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user, done) => {JWT_TOKEN_SIGNING_KEY
     done(null, user);
 });
 

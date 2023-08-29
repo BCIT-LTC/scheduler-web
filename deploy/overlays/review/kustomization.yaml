@@ -42,7 +42,7 @@ secretGenerator:
     literals:
       - LOCAL_USER=admin
       - LOCAL_PASSWORD=password123
-      - SECRET_KEY=ahuaejsdb
+      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
   - name: idp-cert
     files:
     - secrets/idp.crt
