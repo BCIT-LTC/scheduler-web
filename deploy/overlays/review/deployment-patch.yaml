@@ -22,7 +22,13 @@ spec:
             - name: idp-cert
               mountPath: "/app/saml/certs"
               readOnly: true
+            - name: idp-pvkey
+              mountPath: "/app/saml/secrets"
+              readOnly: true
       volumes:
       - name: idp-cert
         secret:
           secretName: idp-cert
+      - name: idp-pvkey
+        secret:
+          secretName: idp-pvkey

@@ -6,18 +6,26 @@ const jwt = require("jsonwebtoken");
 
 var samlStrategy = new saml.Strategy({
     // config options here
-    callbackUrl: `${process.env.PUBLIC_URL}/login/callback`,
+    path: '/login/callback',
+    callbackUrl: process.env.SAML_CALLBACK_URL,
     entryPoint: process.env.SAML_URL,
-    issuer: 'localhost',
-    identifierFormat: null,
+    issuer: process.env.SAML_ISSUER,
+    audience: process.env.SAML_ISSUER,
+    // wantAuthnResponseSigned: false,
+    // signatureAlgorithm: 'sha256',
+    cert: fs.readFileSync('saml/certs/idp.crt', 'utf-8'),
+    // privateKey: fs.readFileSync('saml/secrets/private.key', 'utf-8'),
+    // passReqToCallback: true,
+    // authnRequestBinding: 'HTTP-POST',
+    // identifierFormat: null,
     // privateKey: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),
     // decryptionPvk: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),//optional private key that will be used to attempt to decrypt any encrypted assertions that are received
-    cert: fs.readFileSync('saml/certs/idp.crt', 'utf8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
-    validateInResponseTo: false,
-    disableRequestedAuthnContext: true
-
+    // cert: fs.readFileSync('saml/certs/idp.crt', 'utf-8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
+    // validateInResponseTo: false,
+    // disableRequestedAuthnContext: true
 }, async (profile, done) => {
     console.log("profile info: ");
+    console.log(profile)
     console.log("email:", profile.email);
     console.log("firstname:", profile.firstname);
     console.log("lastname:", profile.lastname);
@@ -37,6 +45,8 @@ var samlStrategy = new saml.Strategy({
         },
         mode: 'cors',
     }).then(async (response) => {
+        console.log("RESPONSE FROM API")
+        console.log(response)
         return await response.json();
     }).then((response) => {
         console.log(response);
