@@ -6,8 +6,8 @@ if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vau
 set -o allexport && source .env && set +o allexport;fi
 
 # Verify that the minimally required environment variables are set.
-if [ -z "$LOCAL_USER" ] || [ -z "$LOCAL_PASSWORD" ] || [ -z "$SECRET_KEY" ]; then
-    printf 'environment variables are not set\n\tYou need to specify LOCAL_USER, LOCAL_PASSWORD, SECRET_KEY\n'
+if [ -z "$LOCAL_USER" ] || [ -z "$LOCAL_PASSWORD" ] || [ -z "$JWT_TOKEN_SIGNING_KEY" ]; then
+    printf 'environment variables are not set\n\tYou need to specify LOCAL_USER, LOCAL_PASSWORD, JWT_TOKEN_SIGNING_KEY\n'
     exit 1
 fi
 

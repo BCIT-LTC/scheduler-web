@@ -19,7 +19,7 @@ services:
       - LOCAL_PASSWORD=password123
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
-      - SECRET_KEY=ahuaejsdb
+      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
       - SAML_ISSUER=localhost
       - SAML_CALLBACK_URL=http://localhost:9000/login/callback
       # - SAML_URL=https://keycloak.ltc.bcit.ca/realms/dev/protocol/saml
