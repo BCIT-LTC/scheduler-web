@@ -18,6 +18,7 @@ secretGenerator:
     literals:
       - LOCAL_USER=admin
       - LOCAL_PASSWORD=password123
+      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
 
 configMapGenerator:
 # Generates elasticapm config
@@ -29,5 +30,8 @@ configMapGenerator:
 #
   - name: api-config
     literals:
-      - API_URL=https://scheduler-api.ltc.bcit.ca/api/
+      - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
 
+  - name: saml-config
+    literals:
+      - SAML_URL=https://keycloak.ltc.bcit.ca/realms/dev/protocol/saml

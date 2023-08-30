@@ -23,6 +23,8 @@ spec:
                 name: elasticapm-config
             - configMapRef:
                 name: api-config
+            - configMapRef:
+                name: saml-config
           # readinessProbe:
           #   tcpSocket:
           #     port: 8000

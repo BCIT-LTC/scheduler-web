@@ -27,3 +27,6 @@ configMapGenerator:
     literals:
       - ELASTIC_APM_SERVICE_NAME=scheduler-web-stable
     behavior: merge
+  - name: api-config
+    literals:
+      - API_URL=https://scheduler-api.ltc.bcit.ca/api/

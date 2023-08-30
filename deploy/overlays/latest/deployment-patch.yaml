@@ -17,6 +17,11 @@ spec:
           {{ with secret "web-apps/data/scheduler-web" -}}
           JWT_TOKEN_SIGNING_KEY="{{ .Data.data.JWT_TOKEN_SIGNING_KEY }}"
           {{- end }}
+        vault.hashicorp.com/agent-inject-secret-keycloak: "ltc-infrastructure/data/keycloak"
+        vault.hashicorp.com/agent-inject-template-keycloak: |
+          {{ with secret "ltc-infrastructure/data/keycloak" -}}
+          KEYCLOAK_REALM_CERT="{{ .Data.data.KEYCLOAK_REALM_CERT }}"
+          {{- end }}
     spec:
       containers:
         - name: scheduler-web

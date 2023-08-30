@@ -20,7 +20,7 @@ services:
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
       - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
-      - SAML_ISSUER=localhost
+      - SAML_CLIENT_ID=localhost
       - SAML_CALLBACK_URL=http://localhost:9000/login/callback
       # - SAML_URL=https://keycloak.ltc.bcit.ca/realms/dev/protocol/saml
       - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php

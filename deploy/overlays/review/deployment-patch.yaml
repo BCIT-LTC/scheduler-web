@@ -10,25 +10,11 @@ spec:
     spec:
       containers:
         - name: scheduler-web
-          envFrom:
-            - secretRef:
-                name: vault-secrets-override
-            - configMapRef:
-                name: saml-config
-          ports:
-            - containerPort: 9000
-              protocol: TCP
           volumeMounts:
-            - name: idp-cert
-              mountPath: "/app/saml/certs"
-              readOnly: true
-            - name: idp-pvkey
-              mountPath: "/app/saml/secrets"
+            - name: keycloak-realm-cert
+              mountPath: /app/saml/certs
               readOnly: true
       volumes:
-      - name: idp-cert
+      - name: keycloak-realm-cert
         secret:
-          secretName: idp-cert
-      - name: idp-pvkey
-        secret:
-          secretName: idp-pvkey
+          secretName: keycloak-realm-cert
