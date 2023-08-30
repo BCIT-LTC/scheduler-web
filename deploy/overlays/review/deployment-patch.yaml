@@ -18,7 +18,7 @@ spec:
       volumes:
       - name: keycloak-realm-cert
         secret:
-          name: keycloak-realm-cert
+          secretName: keycloak-realm-cert
           items:
             - key: KEYCLOAK_REALM_CERT
               path: idp.crt
