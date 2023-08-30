@@ -21,4 +21,4 @@ spec:
           secretName: keycloak-realm-cert
           items:
             - key: KEYCLOAK_REALM_CERT
-              path: idp.crt
+              path: idp.crt.stub
