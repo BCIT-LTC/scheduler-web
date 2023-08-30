@@ -2,7 +2,9 @@
 set -e
 
 # Get secrets from Vault init container (latest/stable environments only) and set as ENV VARS
-if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config > .env; 
+touch .env
+if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config >> .env; 
+if [ -f "/vault/secrets/keycloak" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/keycloak >> .env; 
 set -o allexport && source .env && set +o allexport;fi
 
 # Verify that the minimally required environment variables are set.

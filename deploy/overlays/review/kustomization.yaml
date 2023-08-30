@@ -38,6 +38,9 @@ patches:
 #       value: [name: gitlab-registry-credentials]
 
 configMapGenerator:
+
+# Link with Keycloak client created by the ci/cd pipeline
+#
   - name: saml-config
     literals:
       - SAML_CLIENT_ID=scheduler-web
@@ -47,6 +50,7 @@ configMapGenerator:
 
 # # Uncomment for local cluster development
 # #
+# secretGenerator:
 # - name: gitlab-registry-credentials
 #   type: kubernetes.io/dockerconfigjson
 #   files:

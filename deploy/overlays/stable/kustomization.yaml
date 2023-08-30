@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: openlab-scheduler
 resources:
   - ../../base
+  - alternate-ingress.yaml
 commonLabels:
   environment: stable
 commonAnnotations:
@@ -14,9 +15,6 @@ images:
 # Adds elasticapm config and Vault agent annotations to deployment
 #
 patches:
-  - target:
-      kind: Ingress
-    path: ingress-patch.yaml
   - target:
       kind: Deployment
     path: deployment-patch.yaml
@@ -30,3 +28,4 @@ configMapGenerator:
   - name: api-config
     literals:
       - API_URL=https://scheduler-api.ltc.bcit.ca/api/
+    behavior: replace

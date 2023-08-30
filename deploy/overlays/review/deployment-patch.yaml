@@ -10,6 +10,8 @@ spec:
     spec:
       containers:
         - name: scheduler-web
+# Keycloak realm cert is provisioned by the ci/cd pipeline when the
+#   GitLab project settings > CI/CD variable `KEYCLOAK_ENABLED=true`
           volumeMounts:
             - name: keycloak-realm-cert
               mountPath: /app/saml/certs

@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     app: scheduler-web
-    tier: frontend
   ports:
     - protocol: TCP
       port: 9000
