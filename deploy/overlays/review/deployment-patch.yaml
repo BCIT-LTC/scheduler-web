@@ -15,8 +15,10 @@ spec:
           volumeMounts:
             - name: keycloak-realm-cert
               mountPath: /app/saml/certs
-              readOnly: true
       volumes:
       - name: keycloak-realm-cert
         secret:
-          secretName: keycloak-realm-cert
+          name: keycloak-realm-cert
+          items:
+            - key: KEYCLOAK_REALM_CERT
+              path: idp.crt

@@ -20,7 +20,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-keycloak: "ltc-infrastructure/data/keycloak"
         vault.hashicorp.com/agent-inject-template-keycloak: |
           {{ with secret "ltc-infrastructure/data/keycloak" -}}
-          KEYCLOAK_REALM_CERT="{{ .Data.data.KEYCLOAK_REALM_CERT }}"
+          KEYCLOAK_REALM_CERT="{{ .Data.data.KEYCLOAK_REALM_CERT.base64 }}"
           {{- end }}
     spec:
       containers:
