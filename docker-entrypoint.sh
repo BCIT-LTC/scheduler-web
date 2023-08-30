@@ -3,9 +3,9 @@ set -e
 
 # Get secrets from Vault init container (latest/stable environments only) and set as ENV VARS
 touch .env
-if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config >> .env; 
-if [ -f "/vault/secrets/keycloak" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/keycloak >> .env; 
-set -o allexport && source .env && set +o allexport;fi
+if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config >> .env; fi
+if [ -f "/vault/secrets/keycloak" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/keycloak >> .env; fi
+if [ -f ".env" ]; then set -o allexport && source .env && set +o allexport; fi
 
 # Verify that the minimally required environment variables are set.
 if [ -z "$LOCAL_USER" ] || [ -z "$LOCAL_PASSWORD" ] || [ -z "$JWT_TOKEN_SIGNING_KEY" ]; then
