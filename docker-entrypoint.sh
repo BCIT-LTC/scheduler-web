@@ -7,6 +7,8 @@ set -e
 if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config > .env; 
 set -o allexport && source .env && set +o allexport;fi
 
+cat .env
+printenv
 
 # Verify that the minimally required environment variables are set.
 #
