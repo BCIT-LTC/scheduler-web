@@ -21,3 +21,4 @@ With Docker:
   - Run npm run dev in /client
   - You may need to npm install
 - If you run into an error that says `"can't find file \r\n"`, go to the `docker-entrypoint.sh` file and change the End of Line sequence from `CRLF` to `LF` (in the bottom right)
+
