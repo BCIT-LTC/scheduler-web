@@ -10,25 +10,27 @@ spec:
     spec:
       containers:
         - name: scheduler-web
-          envFrom:
-            - secretRef:
-                name: vault-secrets-override
-            - configMapRef:
-                name: saml-config
+          env:
+            - name: SAML_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: saml-config
+                  key: SAML_URL
+            - name: SAML_ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: saml-config
+                  key: SAML_ISSUER
+            - name: SAML_CALLBACK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: saml-config
+                  key: SAML_CALLBACK_URL
+            - name: SAML_IDP_CERTIFICATE
+              valueFrom:
+                secretKeyRef:
+                  name: saml-idp-certificate
+                  key: SAML_IDP_CERTIFICATE
           ports:
             - containerPort: 9000
               protocol: TCP
-          volumeMounts:
-            - name: idp-cert
-              mountPath: "/app/saml/certs"
-              readOnly: true
-            - name: idp-pvkey
-              mountPath: "/app/saml/secrets"
-              readOnly: true
-      volumes:
-      - name: idp-cert
-        secret:
-          secretName: idp-cert
-      - name: idp-pvkey
-        secret:
-          secretName: idp-pvkey

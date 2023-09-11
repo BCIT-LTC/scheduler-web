@@ -27,12 +27,14 @@ var samlStrategy = new saml.Strategy({
 }, async (profile, done) => {
     console.log("profile info: ");
     console.log(profile)
+    console.log("---------------------------");
     console.log("email:", profile.email);
     console.log("firstname:", profile.firstname);
     console.log("lastname:", profile.lastname);
     console.log("(type):", profile.type);
     console.log("(program):", profile.program);
 
+    
     let email = profile.email
     let firstname = profile.firstname
     let lastname = profile.lastname

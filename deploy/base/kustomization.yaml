@@ -18,6 +18,9 @@ secretGenerator:
     literals:
       - LOCAL_USER=admin
       - LOCAL_PASSWORD=password123
+  - name: auth-signing-key
+    literals:
+      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
 
 configMapGenerator:
 # Generates elasticapm config
