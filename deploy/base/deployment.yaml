@@ -19,6 +19,8 @@ spec:
           envFrom:
             - secretRef:
                 name: local-user-credentials
+            - secretRef:
+                name: auth-signing-key
             - configMapRef:
                 name: elasticapm-config
             - configMapRef:
