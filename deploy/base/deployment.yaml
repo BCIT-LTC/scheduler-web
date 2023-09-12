@@ -3,14 +3,13 @@ kind: Deployment
 metadata:
   name: deployment
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      tier: frontend
+      app: scheduler-web
   template:
     metadata:
       labels:
-        tier: frontend
+        app: scheduler-web
     spec:
       serviceAccountName: scheduler-web-serviceaccount
       containers:
@@ -25,6 +24,8 @@ spec:
                 name: elasticapm-config
             - configMapRef:
                 name: api-config
+            - configMapRef:
+                name: saml-config
           # readinessProbe:
           #   tcpSocket:
           #     port: 8000

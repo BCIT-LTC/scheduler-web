@@ -18,6 +18,7 @@ secretGenerator:
     literals:
       - LOCAL_USER=admin
       - LOCAL_PASSWORD=password123
+
   - name: auth-signing-key
     literals:
       - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
@@ -34,3 +35,6 @@ configMapGenerator:
     literals:
       - API_URL=https://scheduler-api.ltc.bcit.ca/api/
 
+  - name: saml-config
+    literals:
+      - SAML_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml

@@ -9,9 +9,9 @@ spec:
   template:
     metadata:
       annotations:
+        vault.hashicorp.com/role: "scheduler-web-kubeauthbot-latest"
         config.linkerd.io/skip-outbound-ports: "443"
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "scheduler-web-kubeauthbot-latest"
         vault.hashicorp.com/agent-inject-secret-config: "web-apps/data/scheduler-web"
         vault.hashicorp.com/agent-inject-template-config: |
           {{ with secret "web-apps/data/scheduler-web" -}}

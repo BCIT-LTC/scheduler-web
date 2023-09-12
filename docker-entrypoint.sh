@@ -2,7 +2,8 @@
 set -e
 
 
-# Get secrets from Vault init container (latest/stable environments only) and set as ENV VARS
+# If secrets are being injected by Vault (latest/stable environments only), set them as ENV VARS and store them in .env file
+# Required secret: JWT_TOKEN_SIGNING_KEY
 #
 if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config >> .env; 
 set -o allexport && source .env && set +o allexport;fi
@@ -19,7 +20,7 @@ fi
 # Inject SAML IdP certificate secret and manipulate to meet passport.js requirements
 #
 if [ -n "${SAML_IDP_CERTIFICATE}" ]; then
-    echo "Review branch SAML IdP certificate injection..."
+    echo "Review/dev branch SAML IdP certificate injection..."
     echo -e "\nSAML_IDP_CERT_STRING=$(echo "${SAML_IDP_CERTIFICATE}" | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
 elif [ -f "/vault/secrets/saml-idp-certificate.crt" ]; then
     echo "Injecting SAML IdP certificate from Vault..."
