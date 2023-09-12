@@ -5,7 +5,7 @@ set -e
 # If secrets are being injected by Vault (latest/stable environments only), set them as ENV VARS and store them in .env file
 # Required secret: JWT_TOKEN_SIGNING_KEY
 #
-if [ -f "/vault/secrets/config" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/config >> .env; 
+if [ -f "/vault/secrets/auth-signing-key" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/auth-signing-key >> .env; 
 set -o allexport && source .env && set +o allexport;fi
 
 
