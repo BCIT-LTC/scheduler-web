@@ -6,10 +6,12 @@ spec:
   selector:
     matchLabels:
       app: scheduler-web
+      tier: frontend
   template:
     metadata:
       labels:
         app: scheduler-web
+        tier: frontend
     spec:
       serviceAccountName: scheduler-web-serviceaccount
       containers:

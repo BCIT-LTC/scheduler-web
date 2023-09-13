@@ -21,7 +21,12 @@ fi
 #
 if [ -n "${SAML_IDP_CERTIFICATE}" ]; then
     echo "Review/dev branch SAML IdP certificate injection..."
-    echo -e "\nSAML_IDP_CERT_STRING=$(echo "${SAML_IDP_CERTIFICATE}" | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
+    # echo -e "\nSAML_IDP_CERT_STRING=$(echo "${SAML_IDP_CERTIFICATE}" | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
+    
+    echo -e "\nSAML_IDP_CERT_STRING=$(echo "MIIClTCCAX0CBgGKZuexVTANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANsdGMwHhcNMjMwOTA1MTk1MTE0WhcNMzMwOTA1MTk1MjU0WjAOMQwwCgYDVQQDDANsdGMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCiMxbGDJ2/Ys0s2XY5iBlRwEHPwXVGBTYbAvYIMkTiZ/6y0qiy2MuM7kxfpxiVF2ZmbMDe0/gduavNS5bwn3ZvQtGOExu9zx9JchiA71Ycdl7lZ9smDvZ0FrAtMOmkRomoo9WdqHySYSsPRw8EcsPig10rRBbWhFGqZBpDQO0enT/UJyQyKb7rAs3R19h4ugSx1lI25XV8rj4X3U9RLO12DEHsPE83SGT6EBAtXEZihYzhMqg0L0S0urvrntRRKGmReeRHRpY5f4PWsHm0zN0Mh/KRfpL6cmy1436RQt/h81XIWx2KBLim+8O1uo17tq9R5Ymxa1AOOYLa1d+GLijdAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHrJJXv3uVpGhsoHlpQhzpJRWzo9Sm7y9iS2BVGa7pcoTX52J2ICuEE0TN+4rEKW1bwVurC1BOTbV2OZSbG1vW4GHVvVJfXGlQ9wz+MmFDhOW9VGQaBSavzgPv7mBgJk/pl3mircQFOnYGpX2PmgRnW+oPaEqVDt6IRsvnZAsHTg+pIF8fBvU+gVpTx/22kblfRl9vQrpHy33iAX127BjHxdQaWWpluryk2EQrrxeUmssMVNllTr9pNO2vMHl/m61oEE8EF+bFWLr0EUxb5HqXb7exGuj0lwOYiQfFVi7Or0a1t+Psc+XWCOvoAuCc7oL1yLOT84GyqWqzl2h9oYotg=")" >> .env
+    
+    cat .env
+
 elif [ -f "/vault/secrets/saml-idp-certificate.crt" ]; then
     echo "Injecting SAML IdP certificate from Vault..."
     echo -e "\nSAML_IDP_CERT_STRING=$(cat /vault/secrets/saml-idp-certificate.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
@@ -30,7 +35,7 @@ elif [ -f "/vault/secrets/saml-idp-certificate.crt" ]; then
 #     echo -e "\nSAML_IDP_CERT_STRING=$(cat /vault/secrets/bcit-saml-idp-certificate.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
 else
     echo "Vault secret doesn't exist...using default from /simplesaml/idp.crt instead..."
-    echo -e "\nSAML_IDP_CERT_STRING=$(cat /simplesaml/idp.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
+    echo -e "\nSAML_IDP_CERT_STRING=$(cat ./simplesaml/idp.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
 fi
 
 

@@ -50,9 +50,6 @@ router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
         console.log('/Start login callback ');
-        console.log(req)
-        console.log("res")
-        console.log(res)
         next();
     },
     passport.authenticate('samlStrategy'),
