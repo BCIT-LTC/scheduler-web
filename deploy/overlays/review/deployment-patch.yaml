@@ -6,6 +6,7 @@ spec:
   selector:
     matchLabels:
       app: scheduler-web
+      tier: frontend
   template:
     spec:
       containers:
