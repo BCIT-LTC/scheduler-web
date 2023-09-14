@@ -22,6 +22,8 @@ spec:
           {{ with secret "ltc-infrastructure/data/keycloak/realm-config" -}}
           {{ .Data.data.SAML_IDP_CERTIFICATE }}
           {{- end }}
+      labels:
+        app: keycloak
     spec:
       containers:
         - name: scheduler-web
