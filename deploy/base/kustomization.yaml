@@ -9,9 +9,9 @@ resources:
   - serviceaccount.yaml
   - service.yaml
   
-commonLabels:
-  app: scheduler-web
-  app.kubernetes.io/name: scheduler-web
+# commonLabels:
+#   app: scheduler-web
+#   app.kubernetes.io/name: scheduler-web
 
 secretGenerator:
   - name: local-user-credentials
