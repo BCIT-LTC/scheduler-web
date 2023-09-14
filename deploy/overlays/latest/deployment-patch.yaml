@@ -23,7 +23,7 @@ spec:
           {{ .Data.data.SAML_IDP_CERTIFICATE }}
           {{- end }}
       labels:
-        app: keycloak
+        app: scheduler-web
     spec:
       containers:
         - name: scheduler-web
