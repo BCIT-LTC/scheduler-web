@@ -5,6 +5,7 @@ resources:
   - ../../base
   - secrets/auth-signing-key.yaml
   - secrets/saml-idp-certificate.yaml
+  - secrets/vault-auth.yaml
 commonLabels:
   environment: latest
 commonAnnotations:
