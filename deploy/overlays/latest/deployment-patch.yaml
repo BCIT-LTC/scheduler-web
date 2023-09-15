@@ -7,24 +7,24 @@ spec:
     matchLabels:
       app: scheduler-web
   template:
-    metadata:
-      annotations:
-        vault.hashicorp.com/role: "scheduler-web-kubeauthbot-latest"
-        config.linkerd.io/skip-outbound-ports: "443"
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-secret-auth-signing-key: "web-apps/data/scheduler-web"
-        vault.hashicorp.com/agent-inject-template-auth-signing-key: |
-          {{ with secret "web-apps/data/scheduler-web" -}}
-          JWT_TOKEN_SIGNING_KEY="{{ .Data.data.JWT_TOKEN_SIGNING_KEY }}"
-          {{- end }}
-        vault.hashicorp.com/agent-inject-secret-saml-idp-certificate.crt: "ltc-infrastructure/data/keycloak/realm-config"
-        vault.hashicorp.com/agent-inject-template-saml-idp-certificate.crt: |
-          {{ with secret "ltc-infrastructure/data/keycloak/realm-config" -}}
-          {{ .Data.data.SAML_IDP_CERTIFICATE }}
-          {{- end }}
     spec:
       containers:
         - name: scheduler-web
+          envFrom:
+          - secretRef:
+              name: auth-signing-key
+          - secretRef:
+              name: saml-idp-certificate
+          - secretRef:
+              name: local-user-credentials
+          - secretRef:
+              name: auth-signing-key
+          - configMapRef:
+              name: elasticapm-config
+          - configMapRef:
+              name: api-config
+          - configMapRef:
+              name: saml-config
           env:
             - name: ELASTIC_APM_SERVICE_NAME
               valueFrom:
