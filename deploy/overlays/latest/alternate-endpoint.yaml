@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  tls:
+    - hosts:
+        - latest--openlab-scheduler.ltc.bcit.ca
+      secretName: star-ltc-bcit-ca
+  rules:
+    - host: latest--openlab-scheduler.ltc.bcit.ca
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scheduler-web-service
+                port:
+                  number: 9000

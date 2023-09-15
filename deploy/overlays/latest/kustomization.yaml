@@ -6,6 +6,7 @@ resources:
   - secrets/auth-signing-key.yaml
   - secrets/saml-idp-certificate.yaml
   - secrets/vault-auth.yaml
+  - alternate-endpoint.yaml
 commonLabels:
   environment: latest
 commonAnnotations:
