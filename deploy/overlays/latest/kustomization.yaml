@@ -10,11 +10,11 @@ resources:
 commonLabels:
   environment: latest
 commonAnnotations:
-  version: 1.0.6-de137feb--2023-09-15.1694817600 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
+  version: 1.0.7-3243a921--2023-09-18.1695080048 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
 images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
-    newTag: "1.0.6-de137feb--2023-09-15.1694817600" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
+    newTag: "1.0.7-3243a921--2023-09-18.1695080048" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
 # Adds elasticapm config to deployment
 #
 patches:
