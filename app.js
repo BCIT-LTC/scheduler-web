@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const winston = require('winston');
 const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
@@ -56,7 +57,26 @@ app.use("/loginlocal", localLoginLimiter, local_auth);
 app.use("/", announcements, login, calendar, faq, lab_guidelines);
 app.use("/", indexRoute);
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'scheduler-web' },
+  transports: [
+      new winston.transports.File({ filename: 
+         'error.log', level: 'error' }),
+      new winston.transports.File({ 
+          filename: 'combined.log' 
+      })
+  ]
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+      format: winston.format.simple()
+  }));
+}
 
 app.listen(port, hostname, () => {
   console.log(`Server on port ${port}`);
+  logger.info(`Server on port ${port}`);
 });
