@@ -51,32 +51,64 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
+
+const { format } = require('logform');
+const { combine, timestamp, label, json } = format;
+
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: 'combined.log',
+      format: combine(
+        timestamp(),
+        json())
+    }),
+    new winston.transports.Console({
+      format: combine(
+        timestamp(),
+        json())
+    })
+  ]
+});
+
+
+// Define an API route for viewing the logs
+app.get('/log', (req, res) => {
+
+  // Query the logger for the latest log entries
+  logger.query({ order: 'desc', limit: 100 },
+    (err, results) => {
+      if (err) {
+
+        // If an error occurs, send an
+        // error response
+        res.status(500).send({
+          error: 'Error retrieving logs'
+        });
+      } else {
+
+        // If successful, send the log 
+        // entries as a response
+        res.send(results);
+      }
+    });
+});
+
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/", announcements, login, calendar, faq, lab_guidelines);
 app.use("/", indexRoute);
 
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'scheduler-web' },
-  transports: [
-      new winston.transports.File({ filename: 
-         'error.log', level: 'error' }),
-      new winston.transports.File({ 
-          filename: 'combined.log' 
-      })
-  ]
-});
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-      format: winston.format.simple()
-  }));
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   logger.add(new winston.transports.Console({
+//       format: winston.format.simple()
+//   }));
+// }
+
 
 app.listen(port, hostname, () => {
-  console.log(`Server on port ${port}`);
+  // console.log(`Server on port ${port}`);
   logger.info(`Server on port ${port}`);
 });
