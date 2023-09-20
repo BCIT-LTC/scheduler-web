@@ -9,6 +9,8 @@ const port = 9000;
 const hostname = "0.0.0.0";
 const cookieParser = require('cookie-parser');
 
+const logger = require('./logger')(module);
+
 const login = require("./routes/auth");
 const calendar = require("./routes/calendar");
 const lab_guidelines = require("./routes/lab_guidelines");
@@ -51,30 +53,8 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
-
-const { format } = require('logform');
-const { combine, timestamp, label, json } = format;
-
-const logger = winston.createLogger({
-  transports: [
-    new winston.transports.File({
-      filename: 'combined.log',
-      format: combine(
-        timestamp(),
-        json())
-    }),
-    new winston.transports.Console({
-      format: combine(
-        timestamp(),
-        json())
-    })
-  ]
-});
-
-
 // Define an API route for viewing the logs
 app.get('/log', (req, res) => {
-
   // Query the logger for the latest log entries
   logger.query({ order: 'desc', limit: 100 },
     (err, results) => {
@@ -99,13 +79,6 @@ app.use("/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/", announcements, login, calendar, faq, lab_guidelines);
 app.use("/", indexRoute);
-
-
-// if (process.env.NODE_ENV !== 'production') {
-//   logger.add(new winston.transports.Console({
-//       format: winston.format.simple()
-//   }));
-// }
 
 
 app.listen(port, hostname, () => {
