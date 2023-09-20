@@ -26,6 +26,7 @@ COPY helpers ./helpers
 COPY middleware ./middleware
 COPY routes ./routes
 COPY app.js ./
+COPY logger.js ./
 COPY package.json ./
 
 RUN npm install
