@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const winston = require('winston');
 const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
@@ -7,6 +8,8 @@ const bodyParser = require("body-parser");
 const port = 9000;
 const hostname = "0.0.0.0";
 const cookieParser = require('cookie-parser');
+
+const logger = require('./logger')(module);
 
 const login = require("./routes/auth");
 const calendar = require("./routes/calendar");
@@ -50,6 +53,27 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
+// Define an API route for viewing the logs
+app.get('/log', (req, res) => {
+  // Query the logger for the latest log entries
+  logger.query({ order: 'desc', limit: 100 },
+    (err, results) => {
+      if (err) {
+
+        // If an error occurs, send an
+        // error response
+        res.status(500).send({
+          error: 'Error retrieving logs'
+        });
+      } else {
+
+        // If successful, send the log 
+        // entries as a response
+        res.send(results);
+      }
+    });
+});
+
 app.use("/login", saml_auth);
 app.use("/loginlocal", localLoginLimiter, local_auth);
 
@@ -58,5 +82,6 @@ app.use("/", indexRoute);
 
 
 app.listen(port, hostname, () => {
-  console.log(`Server on port ${port}`);
+  // console.log(`Server on port ${port}`);
+  logger.info(`Server on port ${port}`);
 });
