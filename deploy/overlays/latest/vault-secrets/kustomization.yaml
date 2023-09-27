@@ -4,6 +4,7 @@ kind: Component
 resources:
   - tokens.yaml
   - saml-idp-certificate.yaml
+  - local-user-credentials.yaml
 
 # Default VaultAuth configuration
 #
