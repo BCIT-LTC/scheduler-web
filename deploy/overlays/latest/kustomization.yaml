@@ -9,11 +9,11 @@ namePrefix: scheduler-web-
 commonLabels:
   environment: latest
 commonAnnotations:
-  version: 1.0.7-cba13d58--2023-09-26.1695744717 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
+  version: 1.0.7-aef6b528--2023-09-27.1695795388 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
 images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
-    newTag: "1.0.7-cba13d58--2023-09-26.1695744717" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
+    newTag: "1.0.7-aef6b528--2023-09-27.1695795388" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
 # Patches ingress with "latest--" and deployment with annotations
 #
 patches:
