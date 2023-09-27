@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: deployment
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: scheduler-web
@@ -19,7 +20,9 @@ spec:
             - secretRef:
                 name: local-user-credentials
             - secretRef:
-                name: auth-signing-key
+                name: tokens
+            - secretRef:
+                name: saml-idp-certificate
             - configMapRef:
                 name: elasticapm-config
             - configMapRef:

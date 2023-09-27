@@ -4,10 +4,10 @@ metadata:
   name: saml-idp-certificate
 spec:
   type: kv-v2
+  vaultAuthRef: vault-auth
+  refreshAfter: 6h
   mount: ltc-infrastructure
   path: keycloak/realm-config
   destination:
     name: saml-idp-certificate
     create: true
-  refreshAfter: 6h
-  vaultAuthRef: scheduler-web-kubeauthbot-latest

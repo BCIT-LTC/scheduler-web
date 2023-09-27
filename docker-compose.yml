@@ -19,7 +19,7 @@ services:
       - LOCAL_PASSWORD=password123
       - API_URL=http://host.docker.internal:8000/api/
       - TZ=America/Vancouver
-      - JWT_TOKEN_SIGNING_KEY=insecureT0kenSigningKey
+      - JWT_AUTH_SIGNING_KEY=insecureT0kenSigningKey
       - SAML_ISSUER=localhost
       - SAML_CALLBACK_URL=http://localhost:9000/login/callback
       # - SAML_URL=https://keycloak.ltc.bcit.ca/realms/dev/protocol/saml

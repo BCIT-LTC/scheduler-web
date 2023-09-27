@@ -39,7 +39,7 @@ var samlStrategy = new saml.Strategy({
     let firstname = profile.firstname
     let lastname = profile.lastname
     let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
-    let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.JWT_TOKEN_SIGNING_KEY);
+    let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
     await fetch(`${process.env.API_URL}login`, {
         method: 'GET',
         headers: {
@@ -54,7 +54,7 @@ var samlStrategy = new saml.Strategy({
     }).then((response) => {
         console.log(response);
         let isAdmin = response;
-        jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.JWT_TOKEN_SIGNING_KEY);
+        jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
         console.log(jwtToken)
     });
     return done(null, { token: jwtToken });

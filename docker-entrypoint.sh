@@ -3,16 +3,16 @@ set -e
 
 
 # If secrets are being injected by Vault (latest/stable environments only), set them as ENV VARS and store them in .env file
-# Required secret: JWT_TOKEN_SIGNING_KEY
+# Required secret: JWT_AUTH_SIGNING_KEY
 #
-if [ -f "/vault/secrets/auth-signing-key" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/auth-signing-key >> .env; 
+if [ -f "/vault/secrets/tokens" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/tokens >> .env; 
 set -o allexport && source .env && set +o allexport;fi
 
 
 # Verify that the minimally required environment variables are set.
 #
-if [ -z "$LOCAL_USER" ] || [ -z "$LOCAL_PASSWORD" ] || [ -z "$JWT_TOKEN_SIGNING_KEY" ]; then
-    printf 'environment variables are not set\n\tYou need to specify LOCAL_USER, LOCAL_PASSWORD, JWT_TOKEN_SIGNING_KEY\n'
+if [ -z "$LOCAL_USER" ] || [ -z "$LOCAL_PASSWORD" ] || [ -z "$JWT_AUTH_SIGNING_KEY" ]; then
+    printf 'environment variables are not set\n\tYou need to specify LOCAL_USER, LOCAL_PASSWORD, JWT_AUTH_SIGNING_KEY\n'
     exit 1
 fi
 

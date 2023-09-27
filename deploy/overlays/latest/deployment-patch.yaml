@@ -7,27 +7,9 @@ spec:
     matchLabels:
       app: scheduler-web
   template:
+    metadata:
+      annotations:
+        config.linkerd.io/skip-outbound-ports: "443"
     spec:
       containers:
         - name: scheduler-web
-          envFrom:
-          - secretRef:
-              name: auth-signing-key
-          - secretRef:
-              name: saml-idp-certificate
-          - secretRef:
-              name: local-user-credentials
-          - secretRef:
-              name: auth-signing-key
-          - configMapRef:
-              name: elasticapm-config
-          - configMapRef:
-              name: api-config
-          - configMapRef:
-              name: saml-config
-          env:
-            - name: ELASTIC_APM_SERVICE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: elasticapm-config
-                  key: ELASTIC_APM_SERVICE_NAME

@@ -9,6 +9,11 @@ namespace: ${DEPLOY_NAMESPACE:=scheduler-web}
 resources:
 - ../../base
 
+
+# Resource names in a shared namespace must be unique
+#
+namePrefix: scheduler-web-
+
 commonLabels:
   environment: review
 
@@ -20,13 +25,13 @@ images:
   newName: ${IMAGE_NAME:=registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web}
   newTag: ${IMAGE_TAG:=stable}
 
+
+# Patches ingress with "review--"
+#
 patches:
 - target:
     kind: Ingress
   path: ingress-patch.yaml
-- target:
-    kind: Deployment
-  path: deployment-patch.yaml
 
 # # Create a .dockerconfig.json. Then uncomment this section for local cluster development.
 # #
@@ -37,26 +42,36 @@ patches:
 #       path: /spec/template/spec/imagePullSecrets
 #       value: [name: gitlab-registry-credentials]
 
-secretGenerator:
-  - name: auth-signing-key
-    literals:
-      - JWT_TOKEN_SIGNING_KEY=ahuaejsdb
 
 configMapGenerator:
+
+  # Review branches connect to `latest` API by default
+  #
   - name: api-config
     literals:
       - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
     behavior: replace
 
+  # Review branches use a unique SAML issuer
+  #
   - name: saml-config
     literals:
       - SAML_ISSUER=review--${DEPLOY_NAMESPACE}--scheduler-web
       - SAML_CALLBACK_URL=${APP_URL}login/callback
     behavior: merge
 
+
 # # Uncomment for local cluster development
-# #
+#
+# secretGenerator:
+#
 # - name: gitlab-registry-credentials
 #   type: kubernetes.io/dockerconfigjson
 #   files:
 #     - .dockerconfigjson=secrets/.dockerconfig.json
+
+
+# Inject secrets from Vault Secrets Operator
+#    
+components:
+  - ./vault-secrets

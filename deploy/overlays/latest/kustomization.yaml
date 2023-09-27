@@ -3,10 +3,9 @@ kind: Kustomization
 namespace: openlab-scheduler
 resources:
   - ../../base
-  - secrets/auth-signing-key.yaml
-  - secrets/saml-idp-certificate.yaml
-  - secrets/vault-auth.yaml
-  - alternate-endpoint.yaml
+# Resource names in a shared namespace must be unique
+#
+namePrefix: scheduler-web-
 commonLabels:
   environment: latest
 commonAnnotations:
@@ -15,7 +14,7 @@ images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
     newTag: "1.0.7-cba13d58--2023-09-26.1695744717" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
-# Adds elasticapm config to deployment
+# Patches ingress with "latest--" and deployment with annotations
 #
 patches:
   - target:
@@ -25,9 +24,13 @@ patches:
       kind: Deployment
     path: deployment-patch.yaml
 configMapGenerator:
-  # Generates elasticapm config
+  # Updates elasticapm config
   #
   - name: elasticapm-config
     literals:
       - ELASTIC_APM_SERVICE_NAME=scheduler-web-latest
     behavior: merge
+# Inject secrets from Vault Secrets Operator
+#    
+components:
+  - ./vault-secrets

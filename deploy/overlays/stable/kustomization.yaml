@@ -3,6 +3,9 @@ kind: Kustomization
 namespace: openlab-scheduler
 resources:
   - ../../base
+# Resource names in a shared namespace must be unique
+#
+namePrefix: scheduler-web-
 commonLabels:
   environment: stable
 commonAnnotations:
@@ -11,7 +14,7 @@ images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
     newTag: "1.0.7" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy:tag"}
-# Adds elasticapm config and Vault agent annotations to deployment
+# Patches ingress with public URL and deployment with annotations
 #
 patches:
   - target:
@@ -20,10 +23,14 @@ patches:
   - target:
       kind: Deployment
     path: deployment-patch.yaml
-# Generates elasticapm config
-#
 configMapGenerator:
+  # Updates elasticapm config
+  #
   - name: elasticapm-config
     literals:
       - ELASTIC_APM_SERVICE_NAME=scheduler-web-stable
     behavior: merge
+# Inject secrets from Vault Secrets Operator
+# 
+components:
+  - ./vault-secrets
