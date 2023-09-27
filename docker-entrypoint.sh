@@ -1,12 +1,6 @@
 #!/usr/bin/env sh
+
 set -e
-
-
-# If secrets are being injected by Vault (latest/stable environments only), set them as ENV VARS and store them in .env file
-# Required secret: JWT_AUTH_SIGNING_KEY
-#
-if [ -f "/vault/secrets/tokens" ]; then grep -v -e '^#' -e '^[[:space:]]*$' /vault/secrets/tokens >> .env; 
-set -o allexport && source .env && set +o allexport;fi
 
 
 # Verify that the minimally required environment variables are set.
@@ -20,21 +14,11 @@ fi
 # Inject SAML IdP certificate secret from Vault or use default
 #
 if [ -n "${SAML_IDP_CERTIFICATE}" ]; then
-    echo "Review/dev branch SAML IdP certificate injection..."
-    # echo -e "\nSAML_IDP_CERT_STRING=$(echo "${SAML_IDP_CERTIFICATE}" | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
+    echo "SAML IdP certificate env var present. Using..."
     echo "${SAML_IDP_CERTIFICATE}" > idp.crt
 
-elif [ -f "/vault/secrets/saml-idp-certificate.crt" ]; then
-    echo "Injecting SAML IdP certificate from Vault..."
-    # echo -e "\nSAML_IDP_CERT_STRING=$(cat /vault/secrets/saml-idp-certificate.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
-    echo -e "$(cat /vault/secrets/saml-idp-certificate.crt)" > idp.crt
-
-# elif [ -f "/vault/secrets/bcit-saml-idp-certificate.crt" ]; then
-#     echo "Injecting BCIT SAML IdP certificate from Vault..."
-#     echo -e "\nSAML_IDP_CERT_STRING=$(cat /vault/secrets/bcit-saml-idp-certificate.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
 else
-    echo "Vault secret doesn't exist...using default from /simplesaml/idp.crt instead..."
-    # echo -e "\nSAML_IDP_CERT_STRING=$(cat ./simplesaml/idp.crt | sed 1d | sed '$ d' | awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' | sed 's/\\n//g')" >> .env
+    echo "SAML IdP certificate env var doesn't exist...using default from /simplesaml/idp.crt instead..."
     echo -e "$(cat ./simplesaml/idp.crt)" > idp.crt
 fi
 
