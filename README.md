@@ -25,3 +25,12 @@ With Docker:
 Test Super User login:
 - Username: `admin`
 - Password: `password123`
+
+Local dev SAML users: 
+- Username: `admin@bcit.ca`
+- Password: `admin`
+or student account:
+- Username: `student1@bcit.ca`
+- Password: `student`
+
+To add/edit accounts for local users see ```/simplesaml/authsources.php```
