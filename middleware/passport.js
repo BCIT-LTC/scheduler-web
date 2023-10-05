@@ -40,23 +40,23 @@ var samlStrategy = new saml.Strategy({
     let lastname = profile.lastname
     let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
     let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
-    await fetch(`${process.env.API_URL}login`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${jwtToken}`,
-            'content-Type': 'application/json',
-        },
-        mode: 'cors',
-    }).then(async (response) => {
-        console.log("RESPONSE FROM API")
-        console.log(response)
-        return await response.json();
-    }).then((response) => {
-        console.log(response);
-        let isAdmin = response;
-        jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
-        console.log(jwtToken)
-    });
+    // await fetch(`${process.env.API_URL}login`, {
+    //     method: 'GET',
+    //     headers: {
+    //         'Authorization': `Bearer ${jwtToken}`,
+    //         'content-Type': 'application/json',
+    //     },
+    //     mode: 'cors',
+    // }).then(async (response) => {
+    //     console.log("RESPONSE FROM API")
+    //     console.log(response)
+    //     return await response.json();
+    // }).then((response) => {
+    //     console.log(response);
+    //     let isAdmin = response;
+    //     jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
+    //     console.log(jwtToken)
+    // });
     return done(null, { token: jwtToken });
 });
 
