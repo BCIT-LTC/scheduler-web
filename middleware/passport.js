@@ -13,7 +13,7 @@ var samlStrategy = new saml.Strategy({
     audience: process.env.SAML_ISSUER,
     // wantAuthnResponseSigned: false,
     // signatureAlgorithm: 'sha256',
-    cert: process.env.SAML_IDP_CERTIFICATE,
+    cert: fs.readFileSync('/app/saml/idp.crt', 'utf-8'),
     // cert: process.env.SAML_IDP_CERT_STRING
     // privateKey: fs.readFileSync('saml/secrets/private.key', 'utf-8'),
     // passReqToCallback: true,

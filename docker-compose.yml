@@ -39,6 +39,7 @@ services:
 
     volumes:
       - .:/app
+      # - ./saml/idp.crt:/saml/idp.crt
     ports:
       - 9000:9000
     healthcheck:
@@ -63,8 +64,8 @@ services:
       SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/login/callback
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/logout/callback
     volumes:
-      - ./simplesaml/authsources.php:/var/www/simplesamlphp/config/authsources.php
-      - ./simplesaml/idp.crt:/var/www/simplesamlphp/config/idp.crt
+      - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
+      - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
     networks:
       - test-web-network
 
