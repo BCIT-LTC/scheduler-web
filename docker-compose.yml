@@ -39,7 +39,6 @@ services:
 
     volumes:
       - .:/app
-      # - ./saml/idp.crt:/saml/idp.crt
     ports:
       - 9000:9000
     healthcheck:
