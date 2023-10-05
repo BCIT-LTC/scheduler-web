@@ -36,3 +36,10 @@ spec:
           ports:
             - containerPort: 9000
               protocol: TCP
+          volumeMounts:
+            - name: saml-idp-certificate
+              mountPath: /saml
+      volumes:
+        - name: saml-idp-certificate
+          configMap:
+            name: saml-idp-certificate

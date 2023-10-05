@@ -1,0 +1,12 @@
+# Component that imports the default `idp.crt` file
+#
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+metadata:
+  name: saml-idp-certificate
+
+configMapGenerator:
+  - name: saml-idp-certificate
+    files:
+      - idp.crt
