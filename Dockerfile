@@ -1,3 +1,5 @@
+# Dockerfile
+
 ## Frontend Builder
 FROM node:19.4.0-alpine AS frontend-builder
 
@@ -8,8 +10,7 @@ RUN npm install
 RUN npm run build
 
 
-# Release
-
+## Release
 FROM node:19.4.0-alpine AS release
 
 LABEL maintainer courseproduction@bcit.ca
@@ -17,9 +18,11 @@ ARG VERSION
 ENV VERSION=${VERSION:-0.0.0}
 
 WORKDIR /app
+
 COPY --from=frontend-builder /app/build ./client/build/
+
 RUN apk --update add \
-        curl \
+    curl \
     ;
 
 COPY helpers ./helpers

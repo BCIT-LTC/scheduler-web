@@ -1,13 +1,14 @@
+---
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
-  name: tokens
+  name: saml-idp-certificate
 spec:
   type: kv-v2
   vaultAuthRef: vault-auth
   refreshAfter: 6h
-  mount: apps
-  path: scheduler-web/latest/tokens
+  mount: ltc-infrastructure
+  path: keycloak/stable/saml-idp-certificate
   destination:
-    name: tokens
+    name: saml-idp-certificate
     create: true

@@ -20,8 +20,8 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const LOCAL_PASSWORD = process.env.LOCAL_PASSWORD;
-const LOCAL_USER = process.env.LOCAL_USER;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 
 
 /**
@@ -35,7 +35,7 @@ const LOCAL_USER = process.env.LOCAL_USER;
  * @return {Object} JWT cookie if success
  */
 router.post('/', function (req, res) {
-    if (req.body.email === LOCAL_USER && req.body.password === LOCAL_PASSWORD) {
+    if (req.body.email === ADMIN_USERNAME && req.body.password === ADMIN_PASSWORD) {
         let email = req.body.email;
         let firstname = 'admin';
         let lastname = 'admin';

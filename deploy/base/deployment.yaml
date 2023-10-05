@@ -17,12 +17,6 @@ spec:
         - name: scheduler-web
           image: scheduler-web
           envFrom:
-            - secretRef:
-                name: local-user-credentials
-            - secretRef:
-                name: tokens
-            - secretRef:
-                name: saml-idp-certificate
             - configMapRef:
                 name: elasticapm-config
             - configMapRef:
@@ -42,4 +36,3 @@ spec:
           ports:
             - containerPort: 9000
               protocol: TCP
-

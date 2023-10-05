@@ -13,14 +13,6 @@
     secretRef:
       name: auth-signing-key
 
-- op: add
-  path: /spec/template/spec/containers/0/envFrom/-
-  value:
-    secretRef:
-      name: saml-idp-certificate
-
-- op: add
-  path: /spec/template/spec/containers/0/envFrom/-
-  value:
-    secretRef:
-      name: elastic-apm-token
+# removes elastic-apm-config
+- op: remove
+  path: /spec/template/spec/containers/0/envFrom/0

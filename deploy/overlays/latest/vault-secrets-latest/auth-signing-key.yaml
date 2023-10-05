@@ -1,13 +1,14 @@
+---
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
-  name: local-user-credentials
+  name: auth-signing-key
 spec:
   type: kv-v2
   vaultAuthRef: vault-auth
   refreshAfter: 6h
   mount: apps
-  path: scheduler-web/review/local-user-credentials
+  path: scheduler-web/latest/auth-signing-key
   destination:
-    name: local-user-credentials
+    name: auth-signing-key
     create: true

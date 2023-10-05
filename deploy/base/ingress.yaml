@@ -6,10 +6,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - scheduler-web.ltc.bcit.ca
+        - openlab-scheduler.ltc.bcit.ca
       secretName: star-ltc-bcit-ca
   rules:
-    - host: scheduler-web.ltc.bcit.ca
+    - host: openlab-scheduler.ltc.bcit.ca
       http:
         paths:
           - path: /
@@ -19,3 +19,4 @@ spec:
                 name: scheduler-web-service
                 port:
                   number: 9000
+

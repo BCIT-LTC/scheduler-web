@@ -1,10 +1,11 @@
-# OpenLabs Scheduler WEB
-_This is the WEB and it connects to the OpenLabs Scheduler API backend_
+# OpenLab Scheduler Web
 
-## General description of the project
-OpenLabs Scheduler is a web application designed for BCIT's Nursing students and instructors. Students will be able to view the current schedule for the OpenLab as well as access surveys that will help the instructors gain insights on their student's learning.
+> This is the WEB and it connects to the OpenLabs Scheduler API backend
+
+OpenLab Scheduler is a web application designed to help BCIT's Nursing instructors communicate the calendar of the OpenLab to students. Students are also able to view announcements about the lab and take surveys that help instructors gain insights into students' learning.
 
 ## Required Technologies
+
 - React
 - Node/Express
 - Docker
@@ -13,23 +14,36 @@ OpenLabs Scheduler is a web application designed for BCIT's Nursing students and
 
 With Docker:
 
-- Ensure Docker is running on your local machine
-- In the root of the project, run `docker compose up`
-- This may take a long time, be patient
-- Open `http://localhost:9000` to see the webpage
-- If you want to view changes without taking down the Docker containers:    
-  - Run npm run dev in /client
-  - You may need to npm install
-- If you run into an error that says `"can't find file \r\n"`, go to the `docker-entrypoint.sh` file and change the End of Line sequence from `CRLF` to `LF` (in the bottom right)
+1. Ensure Docker is running on your local machine
+1. In the root of the project, run `docker compose up`
+1. This may take a long time, be patient
+1. Open `http://localhost:9000` to see the webpage
 
-Test Super User login:
+### Live Preview
+
+If you want to view changes without taking down the Docker containers:
+
+1. Run `npm run dev` in `/client`
+1. You may need to `npm install`
+
+If you run into an error that says `"can't find file \r\n"`, go to the `docker-entrypoint.sh` file and change the End of Line sequence from `CRLF` to `LF` (in the bottom right)
+
+### Credentials for LOCAL login
+
+> Role = Admin
+
 - Username: `admin`
 - Password: `password123`
 
-Local dev SAML users: 
+### Credentials for SAML-based login
+
+> Role = Admin
+
 - Username: `admin@bcit.ca`
 - Password: `admin`
-or student account:
+
+> Role = Student
+
 - Username: `student1@bcit.ca`
 - Password: `student`
 

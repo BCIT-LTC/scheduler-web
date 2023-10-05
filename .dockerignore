@@ -1,0 +1,13 @@
+.DS_Store
+.dockerignore
+Dockerfile
+temp
+**/migrations
+**/.git
+**/.gitignore
+**/.vscode
+**/coverage
+README.md
+docker-compose.yml
+**/.DS_Store
+**/env

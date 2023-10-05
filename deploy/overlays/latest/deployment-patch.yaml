@@ -1,15 +1,27 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: deployment
-spec:
-  selector:
-    matchLabels:
-      app: scheduler-web
-  template:
-    metadata:
-      annotations:
-        config.linkerd.io/skip-outbound-ports: "443"
-    spec:
-      containers:
-        - name: scheduler-web
+# adds secrets to deployment
+#
+---
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
+      name: admin-credentials
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
+      name: auth-signing-key
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
+      name: saml-idp-certificate
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
+      name: elastic-apm-token
+
