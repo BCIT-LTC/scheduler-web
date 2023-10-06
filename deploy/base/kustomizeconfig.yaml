@@ -15,4 +15,4 @@ nameReference:
   - kind: VaultStaticSecret
     fieldSpecs:
       - kind: Deployment
-        path: spec/template/spec/volumes/secret/name
+        path: spec/template/spec/volumes/secret/secretName

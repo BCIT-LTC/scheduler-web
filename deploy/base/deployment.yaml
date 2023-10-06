@@ -42,4 +42,4 @@ spec:
       volumes:
         - name: saml-idp-certificate
           secret:
-            name: saml-idp-certificate
+            secretName: saml-idp-certificate
