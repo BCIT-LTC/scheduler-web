@@ -35,6 +35,8 @@ patches:
   - target:
       kind: Ingress
     path: ingress-patch.yaml
+
+  # Adjusts secrets for review branches
   - target:
       kind: Deployment
     path: deployment-patch.yaml
