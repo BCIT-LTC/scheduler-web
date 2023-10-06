@@ -38,8 +38,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: saml-idp-certificate
-              mountPath: /saml
+              mountPath: /app/saml
       volumes:
         - name: saml-idp-certificate
-          configMap:
+          secret:
             name: saml-idp-certificate

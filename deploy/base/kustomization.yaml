@@ -31,6 +31,3 @@ configMapGenerator:
   - name: saml-config
     literals:
       - SAML_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
-
-components:
-  - ../../saml/

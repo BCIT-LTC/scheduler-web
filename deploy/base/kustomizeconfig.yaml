@@ -12,3 +12,7 @@ nameReference:
       - path: spec/vaultAuthRef
         kind: VaultStaticSecret
 
+  - kind: VaultStaticSecret
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/volumes/secret/name
