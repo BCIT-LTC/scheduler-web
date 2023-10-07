@@ -2,6 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+commonLabels:
+  environment: stable
 # Prefix/Suffix required for VaultAuth configuration
 #
 namePrefix: scheduler-web-
@@ -10,8 +12,6 @@ nameSuffix: -stable
 #
 configurations:
   - kustomizeconfig.yaml
-commonLabels:
-  environment: stable
 commonAnnotations:
   version: 1.0.7 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
 images:

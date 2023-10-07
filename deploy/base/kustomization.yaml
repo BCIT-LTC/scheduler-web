@@ -7,14 +7,14 @@ resources:
   - service.yaml
   - serviceaccount.yaml
 
+commonLabels:
+  app: scheduler-web
+  app.kubernetes.io/name: scheduler-web
+
 # Facilitate kustomization name updating
 #
 configurations:
   - kustomizeconfig.yaml
-
-commonLabels:
-  app: scheduler-web
-  app.kubernetes.io/name: scheduler-web
 
 configMapGenerator:
   # Specify API backend location
