@@ -4,3 +4,5 @@ kind: Component
 
 resources:
   - star-ltc-bcit-ca.yaml
+  - saml-idp-certificate.yaml
+  - auth-signing-key.yaml

@@ -39,7 +39,7 @@ router.get("/login", async (req, res) => {
  * @inner
  * @return {} 200 if true
  */
-router.post("/logout", async (req, res) => {
+router.post("", async (req, res) => {
     // Unset the cookies by setting their expiration date in the past
     res.clearCookie('jwt');
     res.clearCookie('PHPSESSIDIDP');
