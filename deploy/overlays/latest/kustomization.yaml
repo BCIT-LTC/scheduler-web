@@ -54,5 +54,5 @@ configMapGenerator:
   #
   - name: saml-config
     literals:
-      - SAML_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
+      - SAML_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
     behavior: merge

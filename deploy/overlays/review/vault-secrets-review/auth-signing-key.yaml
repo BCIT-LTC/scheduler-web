@@ -2,13 +2,13 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
-  name: saml-idp-certificate
+  name: auth-signing-key
 spec:
   type: kv-v2
   vaultAuthRef: vault-auth
   refreshAfter: 6h
-  mount: ltc-infrastructure
-  path: keycloak/stable/saml-idp-certificate
+  mount: apps
+  path: scheduler-web/latest/auth-signing-key
   destination:
-    name: saml-idp-certificate
+    name: auth-signing-key
     create: true
