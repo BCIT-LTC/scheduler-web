@@ -8,7 +8,7 @@ import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-import { GlobalContext } from '../../context/usercontext';
+import { GlobalContext } from '../context/usercontext';
 
 //Moved fetch request to inside the Login(). This sends the username and password as json to localhost:8000/login to get authenticated
 export default function Login({ setLocalLogin }) {

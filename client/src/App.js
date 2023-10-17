@@ -1,10 +1,11 @@
 import { useEffect, useContext, useState } from "react";
 // import "./App.css";
 // import "react-calendar/dist/Calendar.css";
-import Login from "./components/Login/Login";
-import ProtectedLayout from "./components/ProtectedLayout";
+import Login from "./containers/Login";
+import ProtectedLayout from "./containers/ProtectedLayout";
 import logout from "./containers/logout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import Announcements from "./containers/Announcements";
 // import CalendarPage from "./containers/CalendarPage";
 // import Locallogin from "./components/Locallogin/Locallogin";
 // import DataForm from "./containers/DataForm";
@@ -12,7 +13,6 @@ import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 // import OpenLabSignIn from "./containers/OpenLabSignIn";
 // import Home from "./containers/home";
 // import DropdownAnnouncement from "./components/Announcement_dropdown/announcement.js";
-// import Announcement from "./components/Announcements/Announcement";
 // import Faq from "./components/Faq/Faq";
 // import Cookies from "js-cookie";
 // import jwtDecode from "jwt-decode";
@@ -95,7 +95,7 @@ function App() {
               <ProtectedLayout />
             }>
             <Route path="calendar" element={<div>calendar page</div>} />
-            <Route path="announcements" element={<div>announcement page</div>} />
+            <Route path="announcements" element={<Announcements/>} />
             <Route path="openlab" element={<div>schedule openlab</div>} />
             <Route path="users" element={<div>List of admin and instructor users, students not included</div>} />
             <Route path="" element={<Navigate to="/home/calendar" replace />} />

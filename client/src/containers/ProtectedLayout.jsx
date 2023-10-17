@@ -14,6 +14,7 @@ import TodayIcon from '@mui/icons-material/Today';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import PersonIcon from '@mui/icons-material/Person';
+import Avatar from '@mui/material/Avatar';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -22,7 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import { GlobalContext } from '../context/usercontext';
-import logout from "../containers/logout";
+import logout from "./logout";
 
 export default function ProtectedLayout() {
     const globalcontext = useContext(GlobalContext);
@@ -55,8 +56,9 @@ export default function ProtectedLayout() {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Welcome to Openlabs {globalcontext.user.firstname}
+                            Welcome to Openlabs
                         </Typography>
+                        <Avatar>{globalcontext.user.firstname}</Avatar>
                         <Button color="inherit" onClick={logout}>Logout</Button>
                     </Toolbar>
                 </AppBar>
