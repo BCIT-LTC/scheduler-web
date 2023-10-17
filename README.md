@@ -48,3 +48,4 @@ If you run into an error that says `"can't find file \r\n"`, go to the `docker-e
 - Password: `student`
 
 To add/edit accounts for local users see ```/simplesaml/authsources.php```
+
