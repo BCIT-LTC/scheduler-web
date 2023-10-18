@@ -42,9 +42,14 @@ If you run into an error that says `"can't find file \r\n"`, go to the `docker-e
 - Username: `admin@bcit.ca`
 - Password: `admin`
 
+> Role = Instructor
+
+- Username: `instructor@bcit.ca`
+- Password: `instructor`
+
 > Role = Student
 
-- Username: `student1@bcit.ca`
+- Username: `student@bcit.ca`
 - Password: `student`
 
 To add/edit accounts for local users see ```/simplesaml/authsources.php```

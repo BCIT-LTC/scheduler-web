@@ -15,6 +15,8 @@ import AnnouncementIcon from '@mui/icons-material/Announcement';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import PersonIcon from '@mui/icons-material/Person';
 import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -28,10 +30,19 @@ import logout from "./logout";
 export default function ProtectedLayout() {
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     if (!globalcontext.isLoggedIn) {
         return <Navigate to="/login" />;
     }
+
+    const open = Boolean(anchorEl);
+    const userAvatarClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -58,8 +69,26 @@ export default function ProtectedLayout() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             Welcome to Openlabs
                         </Typography>
-                        <Avatar>{globalcontext.user.firstname}</Avatar>
-                        <Button color="inherit" onClick={logout}>Logout</Button>
+
+                        <Avatar
+                            onClick={userAvatarClick}
+                        >
+                            <PersonIcon />
+                        </Avatar>
+
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={handleClose}>{globalcontext.user.email}</MenuItem>
+                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        </Menu>
+
                     </Toolbar>
                 </AppBar>
             </Box>
