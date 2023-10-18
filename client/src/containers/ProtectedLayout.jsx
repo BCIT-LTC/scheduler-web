@@ -100,26 +100,6 @@ export default function ProtectedLayout() {
             >
                 <List>
                     <ListItem disablePadding
-                        onClick={() => { window.location.href = "/home/calendar" }}
-                    >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
-                                <TodayIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={"Calendar"} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-
-
-                <List>
-                    <ListItem disablePadding
                         onClick={() => { window.location.href = "/home/announcements" }}
                     >
                         <ListItemButton
@@ -140,7 +120,7 @@ export default function ProtectedLayout() {
 
                 <List>
                     <ListItem disablePadding
-                        onClick={() => { window.location.href = "/home/openlab" }}
+                        onClick={() => { window.location.href = "/home/calendar" }}
                     >
                         <ListItemButton
                             size="large"
@@ -150,17 +130,16 @@ export default function ProtectedLayout() {
                             sx={{ mr: 2 }}
                         >
                             <ListItemIcon>
-                                <EditCalendarIcon />
+                                <TodayIcon />
                             </ListItemIcon>
-                            <ListItemText primary={"Schedule Openlab"} />
+                            <ListItemText primary={"Calendar"} />
                         </ListItemButton>
                     </ListItem>
                 </List>
 
-
                 <List>
                     <ListItem disablePadding
-                        onClick={() => { window.location.href = "/home/users" }}
+                        onClick={() => { window.location.href = "/home/rolemanagement" }}
                     >
                         <ListItemButton
                             size="large"
@@ -172,7 +151,7 @@ export default function ProtectedLayout() {
                             <ListItemIcon>
                                 <PersonIcon />
                             </ListItemIcon>
-                            <ListItemText primary={"Users"} />
+                            <ListItemText primary={"Role administration"} />
                         </ListItemButton>
                     </ListItem>
                 </List>

@@ -5,7 +5,13 @@ export default function Announcements() {
 
   return (
     <>
-        TODO: announcements page
+        TODO: announcements containers 
+        <br></br>
+        See: /src/components/Announcements/
+        <br></br>
+        edit the following files:
+        <br></br>
+        AnnouncementFilter.jsx and AnnouncementList.jsx
     </>
   );
 }

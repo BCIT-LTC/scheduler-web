@@ -4,6 +4,7 @@ import ProtectedLayout from "./containers/ProtectedLayout";
 import logout from "./containers/logout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Announcements from "./containers/Announcements";
+import RoleManagement from "./containers/RoleManagement";
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
             <Route path="calendar" element={<div>calendar page</div>} />
             <Route path="announcements" element={<Announcements/>} />
             <Route path="openlab" element={<div>schedule openlab</div>} />
-            <Route path="users" element={<div>List of admin and instructor users, students not included</div>} />
+            <Route path="rolemanagement" element={<RoleManagement/>} />
             <Route path="" element={<Navigate to="/home/calendar" replace />} />
             <Route path="*" element={<Navigate to="/home/calendar" replace />} />
           </Route>
