@@ -68,23 +68,6 @@ services:
     networks:
       - test-web-network
 
-
-  # test:
-  #   build:
-  #     dockerfile: Dockerfile.playwright
-  #     args:
-  #       - TEST_USER=root
-  #   # TODO: the url prefix after http is dependent on the name of the container for the frotend
-  #   environment:
-  #     - URL_FRONTEND=http://scheduler-web-app-1:9000
-  #   restart: on-failure
-  #   # depends_on:
-  #   #   app:
-  #   #     condition: service_healthy
-  #   networks:
-  #     - test-web-network
-
-
   frontend-builder:
     image: node:19.4.0-alpine
     command:
@@ -96,7 +79,6 @@ services:
     working_dir: /app
     volumes:
       - ./client:/app
-      # - data:/code/frontend/build/:rw
 
 networks:
   test-web-network:
