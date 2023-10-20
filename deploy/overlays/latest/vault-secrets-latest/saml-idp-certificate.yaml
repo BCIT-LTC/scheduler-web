@@ -8,7 +8,7 @@ spec:
   vaultAuthRef: vault-auth
   refreshAfter: 6h
   mount: ltc-infrastructure
-  path: keycloak/stable/saml-idp-certificate
+  path: keycloak/latest/saml-idp-certificate
   destination:
     name: saml-idp-certificate
     create: true
