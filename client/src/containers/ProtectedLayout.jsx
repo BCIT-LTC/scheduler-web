@@ -44,6 +44,10 @@ export default function ProtectedLayout() {
         setAnchorEl(null);
     };
 
+    const handleLogout = () => {
+        logout();
+    };
+
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -86,7 +90,7 @@ export default function ProtectedLayout() {
                             }}
                         >
                             <MenuItem onClick={handleClose}>{globalcontext.user.email}</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
 
                     </Toolbar>

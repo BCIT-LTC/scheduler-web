@@ -1,5 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import Login from "./containers/Login";
+import RootUserLogin from "./containers/RootUserlogin";
 import ProtectedLayout from "./containers/ProtectedLayout";
 import logout from "./containers/logout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Outlet />}>
           {/* public routes */}
           <Route path="login" index element={<Login />} />
+          <Route path="rootuserlogin" index element={<RootUserLogin />} />
           <Route path="unauthorized" element={<div>unauthorized</div>} />
           <Route path="" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
