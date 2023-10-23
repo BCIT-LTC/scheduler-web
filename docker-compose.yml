@@ -69,7 +69,7 @@ services:
       - test-web-network
 
   frontend-builder:
-    image: node:19.4.0-alpine
+    image: node:19.4.0
     command:
       - /bin/sh
       - -c
