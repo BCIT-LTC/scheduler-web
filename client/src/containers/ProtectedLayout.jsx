@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import Drawer from '@mui/material/Drawer';
 import TodayIcon from '@mui/icons-material/Today';
@@ -16,7 +17,10 @@ import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import PersonIcon from '@mui/icons-material/Person';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
+import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -81,18 +85,32 @@ export default function ProtectedLayout() {
                         </Avatar>
 
                         <Menu
-                            id="basic-menu"
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}
                         >
-                            <MenuItem onClick={handleClose}>{globalcontext.user.email}</MenuItem>
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            <List>
+                                <ListItem
+                                    onClick={handleClose}
+                                >
+                                    <ListItemText
+                                        primary={globalcontext.user.firstname + " " + globalcontext.user.lastname}
+                                        secondary={globalcontext.user.email}
+                                    />
+                                </ListItem>
+                                <Divider />
+                                <MenuList>
+                                    <MenuItem
+                                        onClick={handleLogout}
+                                    >
+                                        <ListItemIcon>
+                                            <LogoutIcon />
+                                        </ListItemIcon>
+                                        <ListItemText>Logout</ListItemText>
+                                    </MenuItem>
+                                </MenuList>
+                            </List>
                         </Menu>
-
                     </Toolbar>
                 </AppBar>
             </Box>

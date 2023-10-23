@@ -1,7 +1,7 @@
 # Dockerfile
 
 ## Frontend Builder
-FROM node:19.4.0-alpine AS frontend-builder
+FROM node:19.4.0 AS frontend-builder
 
 WORKDIR /app
 COPY client ./
