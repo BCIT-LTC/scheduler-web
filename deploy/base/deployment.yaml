@@ -12,7 +12,7 @@ spec:
       labels:
         app: scheduler-web
     spec:
-      serviceAccountName: scheduler-web-serviceaccount
+      serviceAccountName: serviceaccount
       containers:
         - name: scheduler-web
           image: scheduler-web
@@ -37,9 +37,9 @@ spec:
             - containerPort: 9000
               protocol: TCP
           volumeMounts:
-            - name: saml-idp-certificate
+            - name: keycloak-ltc-realm-idp-cert
               mountPath: /app/saml
       volumes:
-        - name: saml-idp-certificate
+        - name: keycloak-ltc-realm-idp-cert
           secret:
-            secretName: saml-idp-certificate
+            secretName: keycloak-ltc-realm-idp-cert

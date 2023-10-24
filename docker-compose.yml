@@ -29,9 +29,6 @@ services:
       # auth-signing-key
       - JWT_AUTH_SIGNING_KEY=insecureT0kenSigningKey
 
-      # saml-idp-certificate
-      # SAML_IDP_CERTIFICATE set in `docker-entrypoint.sh` (uses default `/saml/idp.crt`)
-
       # simplesaml-config
       - TZ=America/Vancouver
       - SAML_ISSUER=localhost
@@ -64,6 +61,8 @@ services:
       SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/auth/logout/callback
     volumes:
       - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
+
+      # mount saml-idp-certificate
       - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
     networks:
       - test-web-network

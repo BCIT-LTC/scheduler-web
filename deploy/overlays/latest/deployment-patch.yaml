@@ -17,5 +17,11 @@
   path: /spec/template/spec/containers/0/envFrom/-
   value:
     secretRef:
+      name: keycloak-ltc-realm-idp-cert
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
       name: elastic-apm-token
 
