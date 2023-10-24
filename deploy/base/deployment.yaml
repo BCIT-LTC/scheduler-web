@@ -39,7 +39,6 @@ spec:
           volumeMounts:
             - name: keycloak-ltc-realm-idp-cert
               mountPath: /app/saml
-              subPath: idp.crt
       volumes:
         - name: keycloak-ltc-realm-idp-cert
           secret:
