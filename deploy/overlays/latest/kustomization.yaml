@@ -60,3 +60,4 @@ configMapGenerator:
   - name: app-url-config
     literals:
       - APP_URL=https://latest--openlab-scheduler.ltc.bcit.ca/
+      
