@@ -5,6 +5,12 @@
   path: /spec/template/spec/containers/0/envFrom/-
   value:
     secretRef:
+      name: admin-credentials
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    secretRef:
       name: auth-signing-key
 
 # removes elastic-apm-config
