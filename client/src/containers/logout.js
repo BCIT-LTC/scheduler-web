@@ -2,7 +2,7 @@
  *  Logout function will remove the JWT token from the cookies and
  *  send the user back to the home page.
  */
-export default function Logout() {
+export default function logout() {
   fetch('/logout', {
     method: 'POST',
     credentials: 'include', // Include credentials (cookies) in the request

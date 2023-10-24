@@ -26,7 +26,7 @@ require("dotenv").config();
  * @function
  * @memberof module:routers/login~loginrRouter
  */
-router.post('/login',
+router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
         res.cookie('jwt', req.user.token, { httpOnly: false });
@@ -46,7 +46,7 @@ router.post('/login',
  * @function
  * @memberof module:routers/login~loginRouter
  */
-router.post('/login/callback',
+router.post('/callback',
     function (req, res, next) {
         console.log('-----------------------------');
         console.log('/Start login callback ');
