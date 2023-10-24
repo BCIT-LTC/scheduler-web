@@ -56,3 +56,7 @@ configMapGenerator:
     literals:
       - SAML_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
     behavior: merge
+  # set APP_URL for the keycloak client creation job and the app to use
+  - name: app-url-config
+    literals:
+      - APP_URL=https://latest--openlab-scheduler.ltc.bcit.ca/
