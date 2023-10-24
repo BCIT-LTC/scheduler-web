@@ -6,5 +6,4 @@ resources:
   - admin-credentials.yaml
   - auth-signing-key.yaml
   - elastic-apm-token.yaml
-  - saml-idp-certificate.yaml
   - star-ltc-bcit-ca.yaml
