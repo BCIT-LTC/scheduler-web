@@ -65,7 +65,7 @@ configMapGenerator:
 replacements:
   - source:
       kind: Ingress
-      name: public-ingress
+      name: ingress
       fieldPath: spec.rules.0.host
     targets:
       - select:
