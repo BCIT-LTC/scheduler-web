@@ -18,9 +18,10 @@ services:
       # api-config
       - API_URL=http://host.docker.internal:8000/api/
 
-      # saml-config
-      # SAML_URL: https://keycloak.ltc.bcit.ca/realms/dev/protocol/saml
-      - SAML_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+      # local saml-config
+      - APP_URL=http://localhost:9000/
+      - SAML_IDENTITY_PROVIDER_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+      - SAML_ISSUER=localhost
 
       # admin-credentials
       - ADMIN_USERNAME=admin
@@ -31,8 +32,6 @@ services:
 
       # simplesaml-config
       - TZ=America/Vancouver
-      - SAML_ISSUER=localhost
-      - SAML_CALLBACK_URL=http://localhost:9000/login/callback
 
     volumes:
       - .:/app
@@ -56,9 +55,9 @@ services:
     ports:
       - 8080:8080
     environment:
-      SIMPLESAMLPHP_SP_ENTITY_ID: localhost
-      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:9000/auth/login/callback
-      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost:9000/auth/logout/callback
+      - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
+      - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback
+      - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost:9000/auth/logout/callback
     volumes:
       - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
 

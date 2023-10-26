@@ -34,6 +34,7 @@ images:
 patches:
   - target:
       kind: Ingress
+      name: ingress
     path: ingress-patch.yaml
 
   # Adjusts secrets for review branches
@@ -55,22 +56,6 @@ components:
   # Required for VaultAuth role and serviceaccounts
   - ../../base/components/vault-auth
 
-configMapGenerator:
-  # Review branches connect to `latest` API by default
-  #
-  - name: api-config
-    literals:
-      - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
-    behavior: replace
-
-  # Review branches use a unique SAML issuer
-  #
-  - name: saml-config
-    literals:
-      - SAML_ISSUER=scheduler-web--${DEPLOY_NAMESPACE}
-      - SAML_CALLBACK_URL=${APP_URL}auth/login/callback
-    behavior: merge
-
 secretGenerator:
   - name: admin-credentials
     literals:
@@ -80,3 +65,36 @@ secretGenerator:
   - name: auth-signing-key
     literals:
       - JWT_AUTH_SIGNING_KEY=insecureT0kenSigningKey
+
+configMapGenerator:
+  # Alternate API backend location
+  # - name: api-config
+  #   literals:
+  #     - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
+
+  # SAML config
+  #
+  # Alternate Keycloak SAML idP
+  # - name: saml-config
+  #   literals:
+  #     - SAML_IDENTITY_PROVIDER_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
+
+  # Environments use unique issuers; value should match KEYCLOAK_CLIENT in `create-saml-client` script
+  - name: saml-config
+    literals:
+      - SAML_ISSUER=scheduler-web--${DEPLOY_NAMESPACE}
+    behavior: merge
+
+# Replace APP_URL with ingress hostname
+replacements:
+  - source:
+      kind: Ingress
+      fieldPath: spec.rules.0.host
+    targets:
+      - select:
+          kind: Deployment
+        fieldPaths:
+          - spec.template.spec.containers.0.env.[name=APP_URL].value
+        options:
+          delimiter: "/"
+          index: 2
