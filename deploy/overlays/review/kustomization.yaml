@@ -82,7 +82,7 @@ configMapGenerator:
   # Environments use unique issuers; value should match KEYCLOAK_CLIENT in `create-saml-client` script
   - name: saml-config
     literals:
-      - SAML_ISSUER=scheduler-web--${DEPLOY_NAMESPACE}
+      - SAML_ISSUER=scheduler-web-${DEPLOY_NAMESPACE}
     behavior: merge
 
 # Replace APP_URL with ingress hostname
