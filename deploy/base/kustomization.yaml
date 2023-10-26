@@ -31,4 +31,4 @@ configMapGenerator:
   - name: saml-config
     literals:
       - SAML_IDENTITY_PROVIDER_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
-      - SAML_ISSUER=openlab-scheduler
+      - SAML_ISSUER=scheduler-web
