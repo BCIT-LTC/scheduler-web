@@ -2,19 +2,17 @@ const passport = require('passport');
 var saml = require('passport-saml');
 var fs = require('fs');
 const jwt = require("jsonwebtoken");
-
+const SAML_CALLBACK_URL = process.env.APP_URL+'auth/login/callback';
 
 var samlStrategy = new saml.Strategy({
     // config options here
-    path: '/login/callback',
-    callbackUrl: process.env.SAML_CALLBACK_URL,
-    entryPoint: process.env.SAML_URL,
+    callbackUrl: SAML_CALLBACK_URL,
+    entryPoint: process.env.SAML_IDENTITY_PROVIDER_URL,
     issuer: process.env.SAML_ISSUER,
     audience: process.env.SAML_ISSUER,
     // wantAuthnResponseSigned: false,
     // signatureAlgorithm: 'sha256',
     cert: fs.readFileSync('/app/saml/idp.crt', 'utf-8'),
-    // cert: process.env.SAML_IDP_CERT_STRING
     // privateKey: fs.readFileSync('saml/secrets/private.key', 'utf-8'),
     // passReqToCallback: true,
     // authnRequestBinding: 'HTTP-POST',

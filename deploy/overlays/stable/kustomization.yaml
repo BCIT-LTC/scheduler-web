@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - public-endpoint.yaml
 commonLabels:
   environment: stable
 # Prefix/Suffix required for VaultAuth configuration
@@ -25,7 +26,7 @@ patches:
     path: deployment-patch.yaml
   # Incorporate vault-secrets
   #
-  # adds `-latest` suffix to VaultAuth `spec.mount`
+  # adds `-stable` suffix to VaultAuth `spec.mount`
   - target:
       kind: VaultAuth
     path: vault-secrets-stable/vault-auth-patch.yaml
@@ -38,5 +39,15 @@ configMapGenerator:
   # Updates elasticapm config
   - name: elasticapm-config
     literals:
-      - ELASTIC_APM_SERVICE_NAME=scheduler-web-stable
+      - ELASTIC_APM_SERVICE_NAME=openlab-scheduler
     behavior: merge
+  # Alternate API backend location
+  # - name: api-config
+  #   literals:
+  #     - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
+  # SAML config
+  #
+  # Alternate Keycloak SAML idP
+  # - name: saml-config
+  #   literals:
+  #     - SAML_IDENTITY_PROVIDER_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
