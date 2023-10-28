@@ -8,9 +8,13 @@
 FROM node:19.4.0 AS frontend-builder
 
 WORKDIR /app
-COPY client ./
+
+COPY ./client/package.json ./
 
 RUN npm install
+
+COPY ./client ./
+
 RUN npm run build
 
 
@@ -29,14 +33,15 @@ RUN apk --update add \
     curl \
     ;
 
-COPY helpers ./helpers
-COPY middleware ./middleware
-COPY routes ./routes
-COPY app.js ./
-COPY logger.js ./
 COPY package.json ./
 
 RUN npm install
+
+COPY ./helpers ./helpers/
+COPY ./middleware ./middleware/
+COPY ./routes ./routes/
+COPY ./app.js ./
+COPY ./logger.js ./
 
 # Copy and run init script
 COPY docker-entrypoint.sh /usr/local/bin
