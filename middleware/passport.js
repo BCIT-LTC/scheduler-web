@@ -2,7 +2,7 @@ const passport = require('passport');
 var saml = require('passport-saml');
 var fs = require('fs');
 const jwt = require("jsonwebtoken");
-const SAML_CALLBACK_URL = process.env.APP_URL+'auth/login/callback';
+const SAML_CALLBACK_URL = process.env.APP_URL + 'auth/login/callback';
 
 var samlStrategy = new saml.Strategy({
     // config options here
@@ -27,17 +27,26 @@ var samlStrategy = new saml.Strategy({
     console.log(profile)
     console.log("---------------------------");
     console.log("email:", profile.email);
-    console.log("firstname:", profile.firstname);
-    console.log("lastname:", profile.lastname);
-    console.log("(type):", profile.type);
-    console.log("(program):", profile.program);
+    console.log("first_name:", profile.first_name);
+    console.log("last_name:", profile.last_name);
+    console.log("role:", profile.role);
+    console.log("school:", profile.school);
+    console.log("program:", profile.program);
 
-    
     let email = profile.email
-    let firstname = profile.firstname
-    let lastname = profile.lastname
-    let eligibleAdmin = (profile.program === 'BSN' && profile.type != 'student');
-    let jwtToken = jwt.sign({ email, firstname, lastname, eligibleAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
+    let first_name = profile.first_name
+    let last_name = profile.last_name
+    let role = profile.role
+    let school = profile.school
+    let program = profile.program
+    let jwtToken = jwt.sign({
+        email, 
+        first_name, 
+        last_name, 
+        role, 
+        school,
+        program
+    }, process.env.JWT_AUTH_SIGNING_KEY);
     // await fetch(`${process.env.API_URL}login`, {
     //     method: 'GET',
     //     headers: {

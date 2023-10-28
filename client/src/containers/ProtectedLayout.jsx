@@ -94,8 +94,14 @@ export default function ProtectedLayout() {
                                     onClick={handleClose}
                                 >
                                     <ListItemText
-                                        primary={globalcontext.user.firstname + " " + globalcontext.user.lastname}
+                                        primary={globalcontext.user.first_name + " " + globalcontext.user.last_name}
                                         secondary={globalcontext.user.email}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary="Role"
+                                        secondary={globalcontext.user.role}
                                     />
                                 </ListItem>
                                 <Divider />

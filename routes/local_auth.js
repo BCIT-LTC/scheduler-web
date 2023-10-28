@@ -37,9 +37,20 @@ const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 router.post('/', function (req, res) {
     if (req.body.email === ADMIN_USERNAME && req.body.password === ADMIN_PASSWORD) {
         let email = req.body.email;
-        let firstname = 'admin';
-        let lastname = 'admin';
-        let jwtToken = jwt.sign({ email, firstname, lastname, isAdmin: true, isLocal: true }, process.env.JWT_AUTH_SIGNING_KEY);
+        let first_name = 'admin';
+        let last_name = 'admin';
+        let role = 'admin';
+        let school = 'School of Health Sciences';
+        let program = 'Bachelor of Science in Nursing';
+        let jwtToken = jwt.sign({ 
+            email, 
+            first_name, 
+            last_name, 
+            role, 
+            school,
+            program
+        }, 
+            process.env.JWT_AUTH_SIGNING_KEY);
         res.cookie('jwt', jwtToken, { httpOnly: false });
         res.sendStatus(200);
     } else {
