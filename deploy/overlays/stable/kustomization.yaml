@@ -14,11 +14,11 @@ nameSuffix: -stable
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 1.0.10 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
+  version: 1.0.15 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
 images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
-    newTag: "1.0.10" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
+    newTag: "1.0.15" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
 patches:
   # Patches deployment with secrets
   - target:
@@ -41,13 +41,13 @@ configMapGenerator:
     literals:
       - ELASTIC_APM_SERVICE_NAME=openlab-scheduler
     behavior: merge
-  # Alternate API backend location
-  # - name: api-config
-  #   literals:
-  #     - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
-  # SAML config
-  #
-  # Alternate Keycloak SAML idP
-  # - name: saml-config
-  #   literals:
-  #     - SAML_IDENTITY_PROVIDER_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
+# Alternate API backend location
+# - name: api-config
+#   literals:
+#     - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
+# SAML config
+#
+# Alternate Keycloak SAML idP
+# - name: saml-config
+#   literals:
+#     - SAML_IDENTITY_PROVIDER_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
