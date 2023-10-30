@@ -15,6 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
 
 const columns = [
@@ -30,22 +31,26 @@ const rows = mockDataUser.map((user) => ({
   role: user.role
 }));
 
-const SideBar = () => {
+const SideBar = ({ onFilter }) => {
+  const handleFilterClick = (filterValue) => {
+    onFilter(filterValue);
+  };
+
   return (
     <Box sx={{ overflow: 'auto', width: '20%', borderRight: '1px solid grey', height: '100vh' }}>
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => handleFilterClick('all')}>
             <ListItemText primary="All Users" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => handleFilterClick("instructors")}>
             <ListItemText primary="Instructors" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => handleFilterClick("admins")}>
             <ListItemText primary="Admin" />
           </ListItemButton>
         </ListItem>
@@ -54,7 +59,40 @@ const SideBar = () => {
   )
 }
 
-const Table = () => {
+const Table = ({ filter }) => {
+  const [searchText, setSearchText] = useState('');
+
+  const searchTable = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchText(value);
+  }
+
+  const filteredRows = rows.filter((row) => {
+    if (filter === 'all') {
+      return (
+        row.user.toLowerCase().includes(searchText) ||
+        row.email.toLowerCase().includes(searchText) ||
+        row.role.toLowerCase().includes(searchText)
+      );
+    } else if (filter === 'instructors') {
+      return (
+        row.role.toLowerCase() === 'instructor' &&
+        (row.user.toLowerCase().includes(searchText) || row.email.toLowerCase().includes(searchText))
+      );
+    } else if (filter === 'admins') {
+      return (
+        row.role.toLowerCase() === 'admin' &&
+        (row.user.toLowerCase().includes(searchText) || row.email.toLowerCase().includes(searchText))
+      );
+    }
+    // Make sure to return a value for the default case
+    return (
+      row.user.toLowerCase().includes(searchText) ||
+      row.email.toLowerCase().includes(searchText) ||
+      row.role.toLowerCase().includes(searchText)
+    );
+  });
+
   return (
     <Box sx={{ height: 400, width: '100%', padding: '0em 1em' }}>
       <Typography variant="h5" component="div" sx={{ flexGrow: 1, padding: '1.3em 0em' }}>
@@ -62,12 +100,12 @@ const Table = () => {
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
-        <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' />
+        <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
         <Button variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit</Button>
       </Box>
 
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         initialState={{
           pagination: {
@@ -85,11 +123,17 @@ const Table = () => {
 }
 
 const UsersTable = () => {
+  const [filter, setFilter] = useState('all');
+
+  const applyFilter = (filterValue) => {
+    setFilter(filterValue);
+  };
+
   return (
-    <div>
+   <div>
       <Box sx={{ width: '100%', display: 'flex' }}>
-        <SideBar />
-        <Table />
+        <SideBar onFilter={applyFilter} />
+        <Table filter={filter} />
       </Box>
     </div>
   )
