@@ -11,9 +11,9 @@ WORKDIR /app
 
 COPY ./client/package.json ./
 
-COPY ./client ./
-
 RUN npm install
+
+COPY ./client ./
 
 RUN npm run build
 
