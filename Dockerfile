@@ -11,9 +11,9 @@ WORKDIR /app
 
 COPY ./client/package.json ./
 
-RUN npm install
-
 COPY ./client ./
+
+RUN npm install
 
 RUN npm run build
 
@@ -35,13 +35,14 @@ RUN apk --update add \
 
 COPY package.json ./
 
-RUN npm install
 
 COPY ./helpers ./helpers/
 COPY ./middleware ./middleware/
 COPY ./routes ./routes/
 COPY ./app.js ./
 COPY ./logger.js ./
+
+RUN npm install
 
 # Copy and run init script
 COPY docker-entrypoint.sh /usr/local/bin
