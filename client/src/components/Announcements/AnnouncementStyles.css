@@ -1,0 +1,18 @@
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    & > :first-child {
+        margin-right: 10px;
+    }
+}
+
+.cancel-button {
+    margin-right: 10px;
+    /* Other button-specific styles */
+}
+
+.save-button {
+    background-color: blue;
+    color: white;
+    /* Additional styles for SAVE button */
+}
