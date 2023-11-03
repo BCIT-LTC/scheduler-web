@@ -32,7 +32,8 @@ export default function ContextProvider({ children }) {
                 fetch(
                     "/auth/authorize",
                     {
-                        method: 'GET',
+                        method: 'POST',
+                        credentials: 'same-origin',
                         headers: {
                             Authorization: `Bearer ${Cookies.get('jwt')} `,
                             'Content-Type': 'application/json',
