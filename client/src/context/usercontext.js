@@ -7,33 +7,28 @@ export const GlobalContext = createContext(undefined);
 
 export default function ContextProvider({ children }) {
 
+    // Check if the user is logged in
+    let jwt = Cookies.get("jwt");
+    let user = null;
+    let isLoggedIn = false;
+
+    if (jwt !== undefined) {
+        user = jwtDecode(jwt);
+        isLoggedIn = true;
+    }
     // Create a state to store the user and the isLoggedIn status
     const [Usercontext, setUsercontext] = useState(
         {
-            user: null,
-            isLoggedIn: false,
-            authorizationChecked: false,
+            user: user,
+            isLoggedIn: isLoggedIn
         }
     )
 
     useEffect(() => {
-        if (Usercontext.isLoggedIn && Usercontext.authorizationChecked) {
-            return;
-        }
 
-        // Check if the user is logged in
-        let jwt = Cookies.get("jwt");
-        if (jwt !== undefined) {
-            let user = null;
-            user = jwtDecode(jwt);
-            setUsercontext({
-                user: user,
-                isLoggedIn: true,
-                authorizationChecked: { ...Usercontext.authorizationChecked },
-            });
-
+        if (Usercontext.isLoggedIn) {
             // Check if the user is authorized
-            if (!Usercontext.authorizationChecked) {
+            if (!Usercontext.user.authorizationChecked) {
                 fetch(
                     "/auth/authorize",
                     {
@@ -47,34 +42,25 @@ export default function ContextProvider({ children }) {
                 )
                     .then(response => {
                         if (!response.ok) {
-                            // throw new Error('Authorization failed due to Network error');
-                            return response.json().then((data) => {
-                                console.log(data);
-                            });
+                            return response.json().then(err => { throw err });
                         }
-                        return response.json();
+                        return;
                     })
-                    .then((data) =>
-                        setUsercontext(
-                            prevUsercontext => {
-                                return {
-                                    user: { ...prevUsercontext.user, role: data.role },
-                                    isLoggedIn: prevUsercontext.isLoggedIn,
-                                    authorizationChecked: true,
-                                }
-                            }))
+                    .then(() => {
+                        if (jwt !== undefined) {
+                            // Update the jwt
+                            let jwt = Cookies.get("jwt");
+                            setUsercontext(
+                                {
+                                    user: jwtDecode(jwt),
+                                    isLoggedIn: true
+                                })
+                        }
+                    })
                     .catch((error) => {
-                        // console.log(error);
+                        console.log(error);
                     });
             }
-        }
-        // If the user is not logged in, set the user to null, and reset to defaults
-        else {
-            setUsercontext({
-                user: null,
-                isLoggedIn: false,
-                authorizationChecked: false,
-            });
         }
     }, [])
 
