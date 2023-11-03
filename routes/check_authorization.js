@@ -8,6 +8,8 @@
  * @const
  */
 const express = require('express');
+const { connect } = require('./indexRoute');
+const jwt = require("jsonwebtoken");
 
 /**
  * Express router to mount authorization related functions on.
@@ -25,34 +27,62 @@ const router = express.Router();
  * @inner
  * @return {Object} boolean of if the user is admin
  */
-router.get("", async (req, res) => {
-    let status;
-    let data;
+router.get("", async (req, res, next) => {
+
     let response;
-    const url = new URL(process.env.API_URL + "/");
+    const url = new URL(process.env.API_URL + "authorize");
     try {
         response = await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': req.headers.authorization,
             }
         });
-        console.log("check_authorization.js: response: ", response.status);
-        if (response.status !== 200) {
-            throw new Error("Authorization failed due to error in API call");
-        }
-        data = await response.json();
-        status = response.status;
+
+        response.json().then((data) => {
+            if (response.status === 200) {
+                let email = data.email
+                let first_name = data.first_name
+                let last_name = data.last_name
+                let role = data.role
+                let school = data.school
+                let program = data.program
+                let jwtToken = jwt.sign({
+                    email,
+                    first_name,
+                    last_name,
+                    role,
+                    school,
+                    program,
+                    authorizationChecked: true,
+                }, process.env.JWT_AUTH_SIGNING_KEY);
+
+                res.cookie('jwt', jwtToken, { httpOnly: true, sameSite: 'none', secure: true });
+                next();
+            }
+            else {
+                throw {
+                    http_code: response.status,
+                    msg: data.error,
+                };
+            }
+        }).catch((error) => {
+            switch (error.http_code) {
+                case 400:
+                    console.log("error 400 in switch");
+                    return res.status(400).json({ error: "Bad request sent to API: " + error.msg });
+                case 500:
+                    console.log("error 500 in switch");
+                    return res.status(500).json({ error: "API cannot perform the request: " + error.msg });
+                default:
+                    console.log("error default in switch");
+                    return res.status(400).json({ error: "Unknown error: " + error.msg });
+            }
+        });
     } catch (error) {
-        console.log(error.message);
-        status = 500; //server error
-        data = { error: "API ERROR: " + error.message};
+        return res.status(500).json({ error: "API unreachable: " + error.message });
     }
-    console.log("check_authorization.js: req.body: ", req.body);
-    console.log("check_authorization.js: data: ", data);
-    res.status(status).json(data);
-    // res.status(200).json({ role: "admin" });
 });
 
 
