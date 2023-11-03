@@ -83,7 +83,7 @@ app.get('/log/', (req, res) => {
 app.use("/auth/login", saml_auth);
 app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
-app.use("/auth/authorize", authorization);
+app.use("/auth/authorize/", authorization);
 
 app.use("/api", announcements, calendar, faq, lab_guidelines);
 

@@ -27,7 +27,7 @@ const router = express.Router();
  * @inner
  * @return {Object} boolean of if the user is admin
  */
-router.get("", async (req, res, next) => {
+router.post("", async (req, res, next) => {
 
     let response;
     const url = new URL(process.env.API_URL + "authorize");
@@ -58,8 +58,8 @@ router.get("", async (req, res, next) => {
                     authorizationChecked: true,
                 }, process.env.JWT_AUTH_SIGNING_KEY);
 
-                res.cookie('jwt', jwtToken, { httpOnly: true, sameSite: 'none', secure: true });
-                next();
+                res.cookie('jwt', jwtToken, { httpOnly: false, sameSite: 'none', secure: true });
+                res.redirect('/');
             }
             else {
                 throw {
