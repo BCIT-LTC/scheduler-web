@@ -1,13 +1,6 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -17,6 +10,15 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
+
+//for mobile
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { useEffect } from 'react';
+import Paper from '@mui/material/Paper';
+import  GroupsIcon  from '@mui/icons-material/Groups';
+import  SchoolIcon  from '@mui/icons-material/School';
+import  AdminPanelSettingsIcon  from '@mui/icons-material/AdminPanelSettings';
 
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },
@@ -59,6 +61,30 @@ const SideBar = ({ onFilter }) => {
   )
 }
 
+const BottomNavigationBar = ({ onFilterChange }) => {
+  const [value, setValue] = useState('allUsers'); // Default filter value
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    onFilterChange(newValue); // Notify the parent component about the selected filter
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={handleChange}
+        >
+          <BottomNavigationAction label="All Users" value="allUsers" icon={<GroupsIcon />} />
+          <BottomNavigationAction label="Instructors" value="instructors" icon={<SchoolIcon />} />
+          <BottomNavigationAction label="Admin" value="admins" icon={<AdminPanelSettingsIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
+  );
+};
 const Table = ({ filter }) => {
   const [searchText, setSearchText] = useState('');
 
@@ -101,7 +127,7 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
-        <Button variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit</Button>
+        <Button variant="outlined" sx={{ position: 'absolute', right: '10px' , color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit</Button>
       </Box>
 
       <DataGrid
@@ -124,19 +150,42 @@ const Table = ({ filter }) => {
 
 const UsersTable = () => {
   const [filter, setFilter] = useState('all');
+  const [showBottomNav, setShowBottomNav] = useState(window.innerWidth <= 767);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 767;
+      setShowBottomNav(isMobile);
+      if (!isMobile) {
+        // If not mobile, hide the bottom navigation bar and show the sidebar
+        setFilter('all'); // Reset the filter to 'all'
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const applyFilter = (filterValue) => {
     setFilter(filterValue);
   };
 
   return (
-   <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Box sx={{ width: '100%', display: 'flex' }}>
+      {showBottomNav && (
+        <BottomNavigationBar onFilterChange={applyFilter} />
+      )}
+      {!showBottomNav && (
         <SideBar onFilter={applyFilter} />
+      )}
         <Table filter={filter} />
       </Box>
     </div>
-  )
+  );
 }
 
-export default UsersTable ;
+export default UsersTable;
