@@ -25,8 +25,10 @@ const indexRoute = require("./routes/indexRoute");
 const saml_auth = require("./routes/saml_auth");
 const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
+const users = require("./routes/users");
 
 const passport = require("./middleware/passport");
+const authentication_check = require("./middleware/authentication_check");
 const app = express();
 app.use(cors());
 app.use(express.static("client/build"));
@@ -83,9 +85,9 @@ app.get('/log/', (req, res) => {
 app.use("/auth/login", saml_auth);
 app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
-app.use("/auth/authorize/", authorization);
+app.use("/auth/authorize", authorization);
 
-app.use("/api", announcements, calendar, faq, lab_guidelines);
+app.use("/api", authentication_check, users, announcements, calendar, faq, lab_guidelines);
 
 app.use("/logout", auth);
 app.use("/", indexRoute);
