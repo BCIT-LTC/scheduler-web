@@ -18,6 +18,8 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
 
+import useGetUsersList from '../../hooks/useGetUsersList';
+
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },
   { field: 'email', headerName: 'Email',flex: 1 },
@@ -128,6 +130,11 @@ const UsersTable = () => {
   const applyFilter = (filterValue) => {
     setFilter(filterValue);
   };
+
+  let userslist = useGetUsersList();
+
+  console.log("userlist");
+  console.log(userslist);
 
   return (
    <div>
