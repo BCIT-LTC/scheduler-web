@@ -16,7 +16,7 @@ const express = require("express");
  * @namespace faqRouter
  */
 const router = express.Router();
-const callAPI = require("../helpers/API_caller");
+const callAPI = require("../services/API_caller");
 
 /**
  * Route to get all annoucements

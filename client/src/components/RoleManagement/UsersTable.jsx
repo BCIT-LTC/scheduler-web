@@ -18,7 +18,7 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
 
-import useGetUsersList from '../../hooks/useGetUsersList';
+import useGetUsersList from '../../hooks/users/useGetUsersList';
 
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },

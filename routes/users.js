@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 var jwt = require('jsonwebtoken');
+const ApiRequests = require('../services/api_requests');
 
 /**
  * Route to make sure the API db is storing the user
@@ -11,7 +12,16 @@ var jwt = require('jsonwebtoken');
  * @return {Object} list of all users
  */
 router.get("/users", (req, res) => {
-    console.log("users route")
+
+    const api_requests = new ApiRequests("users", req.headers.authorization);
+    let data = api_requests.get();
+    data.then((data) => {  // data is the response from the API
+        console.log(data);
+    })
+        .catch((error) => {
+            console.log(error);
+        });
+
     res.status(200).json({ users: "users" });
 });
 
@@ -31,6 +41,7 @@ router.route('/users/:user_id')
         // think of it as route specific middleware!
         next()
     })
+    //get user
     .get(function (req, res, next) {
         res.json(req.user)
     })
