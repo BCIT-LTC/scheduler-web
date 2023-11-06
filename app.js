@@ -17,7 +17,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('./logger')(module);
 
 const auth = require("./routes/auth");
-const authorization = require("./routes/check_authorization");
+const check_authorization = require("./routes/check_authorization");
 const calendar = require("./routes/calendar");
 const lab_guidelines = require("./routes/lab_guidelines");
 const faq = require("./routes/faq");
@@ -85,7 +85,7 @@ app.get('/log/', (req, res) => {
 app.use("/auth/login", saml_auth);
 app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
-app.use("/auth/authorize", authorization);
+app.use("/auth/authorize", check_authorization);
 
 app.use("/api", authentication_check, users, announcements, calendar, faq, lab_guidelines);
 

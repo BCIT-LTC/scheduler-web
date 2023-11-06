@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-var jwt = require('jsonwebtoken');
 const ApiRequests = require('../services/api_requests');
 
 /**
@@ -35,7 +34,7 @@ router.param('user_id', function (req, res, next, id) {
     next()
 })
 
-router.route('/users/:user_id')
+router.route('/user/:user_id')
     .all(function (req, res, next) {
         // runs for all HTTP verbs first
         // think of it as route specific middleware!

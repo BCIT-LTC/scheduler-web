@@ -3,10 +3,10 @@
 module.exports = class ApiRequests {
     constructor(path, auth_token, body) {
         if (path === undefined) {
-            throw new Error("path is undefined");
+            throw new Error("ApiRequests path is undefined");
         }
         if (auth_token === undefined) {
-            throw new Error("auth_token is undefined");
+            throw new Error("ApiRequest auth_token is undefined");
         }
         this.url = new URL(process.env.API_URL + path)
         const headers = new Headers();
@@ -18,10 +18,9 @@ module.exports = class ApiRequests {
             body: body
         };
     }
-    
+
     // used to get records
     async get() {
-        console.log("get");
         this.fetchoptions.method = "GET";
         let data;
         try {
