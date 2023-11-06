@@ -13,7 +13,7 @@ const NewAnnouncementComponent = () => {
     const [selectedDate, setSelectedDate] = useState(null);
 
     const handleSave = () => {
-        // No endpoints configured yet so just log the data to the console
+        // No endpoints configured yet so just log the data to the console for now
         console.log(title, announcement, selectedDate);
     };
 
