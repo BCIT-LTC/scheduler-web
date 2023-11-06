@@ -16,7 +16,7 @@ const express = require('express');
  * @namespace usersRouter
  */
 const router = express.Router();
-const callAPI = require("../helpers/API_caller");
+const callAPI = require("../services/API_caller");
 
 /**
  * Route to make sure the API db is storing the user

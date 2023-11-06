@@ -70,13 +70,10 @@ router.post("", async (req, res, next) => {
         }).catch((error) => {
             switch (error.http_code) {
                 case 400:
-                    console.log("error 400 in switch");
                     return res.status(400).json({ error: "Bad request sent to API: " + error.msg });
                 case 500:
-                    console.log("error 500 in switch");
                     return res.status(500).json({ error: "API cannot perform the request: " + error.msg });
                 default:
-                    console.log("error default in switch");
                     return res.status(400).json({ error: "Unknown error: " + error.msg });
             }
         });
