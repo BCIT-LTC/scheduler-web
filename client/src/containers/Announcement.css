@@ -1,0 +1,28 @@
+.announcements{
+    margin: 5% 20% 5% 20%;
+
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+.main-content{
+    display: flex;
+
+}
+.sort-container{
+    display: flex;
+    flex-direction: row;
+    margin-right: 5%;
+    width: 110%;
+    & div {
+        margin-right: 5%;
+    }
+}
+.announcement-list-line{
+    border-top: 2px solid #0e0007;
+}
+.header-controls{
+    width: 30%;
+    margin-top: 2%;
+}

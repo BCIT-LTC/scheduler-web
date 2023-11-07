@@ -36,7 +36,7 @@ RUN apk --update add \
 COPY package.json ./
 
 
-COPY ./helpers ./helpers/
+COPY ./services ./services/
 COPY ./middleware ./middleware/
 COPY ./routes ./routes/
 COPY ./app.js ./

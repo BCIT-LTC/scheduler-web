@@ -17,6 +17,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('./logger')(module);
 
 const auth = require("./routes/auth");
+const check_authorization = require("./routes/check_authorization");
 const calendar = require("./routes/calendar");
 const lab_guidelines = require("./routes/lab_guidelines");
 const faq = require("./routes/faq");
@@ -24,8 +25,10 @@ const indexRoute = require("./routes/indexRoute");
 const saml_auth = require("./routes/saml_auth");
 const local_auth = require("./routes/local_auth");
 const announcements = require("./routes/announcements");
+const users = require("./routes/users");
 
 const passport = require("./middleware/passport");
+const authentication_check = require("./middleware/authentication_check");
 const app = express();
 app.use(cors());
 app.use(express.static("client/build"));
@@ -82,7 +85,9 @@ app.get('/log/', (req, res) => {
 app.use("/auth/login", saml_auth);
 app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
-app.use("/api", announcements, calendar, faq, lab_guidelines);
+app.use("/auth/authorize", check_authorization);
+
+app.use("/api", authentication_check, users, announcements, calendar, faq, lab_guidelines);
 
 app.use("/logout", auth);
 app.use("/", indexRoute);

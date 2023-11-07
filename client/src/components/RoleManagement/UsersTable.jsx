@@ -20,6 +20,8 @@ import  GroupsIcon  from '@mui/icons-material/Groups';
 import  SchoolIcon  from '@mui/icons-material/School';
 import  AdminPanelSettingsIcon  from '@mui/icons-material/AdminPanelSettings';
 
+import useGetUsersList from '../../hooks/users/useGetUsersList';
+
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },
   { field: 'email', headerName: 'Email',flex: 1 },
@@ -172,6 +174,11 @@ const UsersTable = () => {
   const applyFilter = (filterValue) => {
     setFilter(filterValue);
   };
+
+  let userslist = useGetUsersList();
+
+  console.log("userlist");
+  console.log(userslist);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
