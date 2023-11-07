@@ -1,58 +1,104 @@
 import React, { useState } from 'react';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import './AnnouncementFilter.css'; // Make sure to have an AnnouncementFilter.css file
+import { Box, FormGroup, FormControlLabel, Checkbox, Typography, TextField, InputAdornment } from '@mui/material';
+import { LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import SearchIcon from '@mui/icons-material/Search';
+import dayjs from 'dayjs';
 
-export default function AnnouncementFilter() {
-    const [selectedDate, handleDateChange] = useState(new Date());
-    const [checked, setChecked] = useState({
-        room1: false,
-        room2: false,
-        room3: false,
-    });
+const filterStyles = {
+    searchSection: { mb: 2 },
+    roomSection: { mb: 2 },
+    dateSection: { mb: 2 },
+  };
+const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [searchText, setSearchText] = useState('');
+  const [selectedRooms, setSelectedRooms] = useState({
+    SE41025: false,
+    SE12339: false,
+  });
 
-    const handleCheckboxChange = (event) => {
-        setChecked({ ...checked, [event.target.name]: event.target.checked });
+  const handleRoomChange = (event) => {
+    const newSelectedRooms = {
+      ...selectedRooms,
+      [event.target.name]: event.target.checked,
     };
-    //
-    // Render the filter checkboxes and the calendar widget
-    return (
-        <div className="announcement-filter">
-            <TextField id="search-field" label="Search" variant="outlined" />
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Checkbox checked={checked.room1} onChange={handleCheckboxChange} name="room1" />
-                    }
-                    label="Room 1"
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox checked={checked.room2} onChange={handleCheckboxChange} name="room2" />
-                    }
-                    label="Room 2"
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox checked={checked.room3} onChange={handleCheckboxChange} name="room3" />
-                    }
-                    label="Room 3"
-                />
-                {/* Add more checkboxes for other rooms as needed */}
-            </FormGroup>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                    label="Filter by Date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
-        </div>
-    );
-}
+    setSelectedRooms(newSelectedRooms);
+    onFilterChange('rooms', Object.keys(newSelectedRooms).filter(key => newSelectedRooms[key]));
+  };
+
+  const handleSearchChange = (event) => {
+    const newValue = event.target.value;
+    setSearchText(newValue);
+    onSearchChange(newValue);
+  };
+
+
+  return (
+    <Box>
+        <Box sx={filterStyles.searchSection}>
+            <TextField
+            fullWidth
+            value={searchText}
+            onChange={handleSearchChange}
+            placeholder="Search announcements"
+            size="small"
+            margin="dense"
+            InputProps={{
+                startAdornment: (
+                <InputAdornment position="start">
+                    <SearchIcon />
+                </InputAdornment>
+                ),
+                sx: {
+                '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#ced4da',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#ced4da',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#ced4da',
+                },
+                borderRadius: 4,
+                },
+            }}
+            />
+        </Box>
+        <Box sx={filterStyles.roomSection}>
+          <Typography variant="subtitle1" gutterBottom>
+              Room
+          </Typography>
+          <FormGroup>
+            <FormControlLabel
+                control={<Checkbox checked={selectedRooms.SE41025} onChange={handleRoomChange} name="SE41025" />}
+                label="SE4-1025"
+            />
+            <FormControlLabel
+                control={<Checkbox checked={selectedRooms.SE12339} onChange={handleRoomChange} name="SE12339" />}
+                label="SE12-339"
+            />
+          </FormGroup>
+        </Box>
+        <Box sx={filterStyles.dateSection}>
+          <Typography variant="subtitle1" gutterBottom>
+              Filter by date
+          </Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <StaticDatePicker
+                  displayStaticWrapperAs="desktop"
+                  openTo="day"
+                  value={selectedDate}
+                  onChange={(newValue) => {
+                      setSelectedDate(newValue);
+                      onFilterChange('date', newValue ? newValue.format('YYYY-MM-DD') : null);
+                  }}
+                  renderInput={(params) => <div />} // This hides the input field
+              />
+          </LocalizationProvider>
+        </Box>
+    </Box>
+  );
+};
+
+export default AnnouncementFilter;

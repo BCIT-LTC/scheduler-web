@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="247ec846-6b04-406e-8244-190907d4ab8d" name="Changes" comment="feat(announcements): Integrate AnnouncementList and Filter components&#10;&#10;- Imported and implemented the AnnouncementList component within the announcements page.&#10;- Added the AnnouncementFilter component to provide sorting functionality.&#10;- Applied CSS stylings to the filters and announcement page for design coherence with Figma mockups.&#10;- Created a 'New' button and integrated it with the NewAnnouncementComponent to handle the creation of new announcements.&#10;- Added babel to devdependencies to resolve the relevant warning when running npm run dev" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2WuFLrrzSSB4rYv2mCuTwyZ1MJi" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Announcment-edit-component&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.7.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.7.0&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\denzd\WebstormProjects\scheduler-web\scheduler-web\client\src\components\Announcements" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="247ec846-6b04-406e-8244-190907d4ab8d" name="Changes" comment="" />
+      <created>1697574504926</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1697574504926</updated>
+      <workItem from="1697574506045" duration="3438000" />
+      <workItem from="1697578979940" duration="4000" />
+      <workItem from="1697666700703" duration="1308000" />
+      <workItem from="1697668086369" duration="1904000" />
+      <workItem from="1697693570472" duration="7000" />
+      <workItem from="1698357574496" duration="2822000" />
+      <workItem from="1698371669787" duration="19000" />
+      <workItem from="1698619122054" duration="6732000" />
+      <workItem from="1698647954487" duration="821000" />
+      <workItem from="1698736007878" duration="1210000" />
+      <workItem from="1698740183137" duration="30000" />
+      <workItem from="1698783796316" duration="7000" />
+      <workItem from="1698803216335" duration="7689000" />
+      <workItem from="1698875772411" duration="2051000" />
+      <workItem from="1699028948736" duration="10000" />
+      <workItem from="1699251149593" duration="1734000" />
+      <workItem from="1699259442070" duration="5373000" />
+      <workItem from="1699297985405" duration="2762000" />
+      <workItem from="1699323322778" duration="733000" />
+    </task>
+    <task id="LOCAL-00001" summary="- Introduced `NewAnnouncementComponent` for adding, editing (deleting comes next) announcements. This component provides a modal interface with form fields for announcement details based on the provided Figma design with minor differences.&#10;- Updated `AnnouncementPage` to incorporate a &quot;New Announcement&quot; button, conditional rendering based on user role (instructor but needs authentication state).&#10;- Integrated Material-UI components, including Paper, TextField, DatePicker, and Button.">
+      <option name="closed" value="true" />
+      <created>1698828228896</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1698828228896</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- Introduced `NewAnnouncementComponent` for adding, editing (deleting comes next) announcements. This component provides a modal interface with form fields for announcement details based on the provided Figma design with minor differences.&#10;- Updated `AnnouncementPage` to incorporate a &quot;New Announcement&quot; button, conditional rendering based on user role (instructor but needs authentication state).&#10;- Integrated Material-UI components, including Paper, TextField, DatePicker, and Button.">
+      <option name="closed" value="true" />
+      <created>1698828426364</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1698828426364</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Changing NewAnnouncementComponent.js to NewAnnouncementComponent.jsx to maintain file format consistency.">
+      <option name="closed" value="true" />
+      <created>1698828684210</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1698828684210</updated>
+    </task>
+    <task id="LOCAL-00004" summary="documentation.">
+      <option name="closed" value="true" />
+      <created>1699251759615</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1699251759615</updated>
+    </task>
+    <task id="LOCAL-00005" summary="documentation.">
+      <option name="closed" value="true" />
+      <created>1699252515133</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1699252515133</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat(announcements): Integrate AnnouncementList and Filter components&#10;&#10;- Imported and implemented the AnnouncementList component within the announcements page.&#10;- Added the AnnouncementFilter component to provide sorting functionality.&#10;- Applied CSS stylings to the filters and announcement page for design coherence with Figma mockups.&#10;- Created a 'New' button and integrated it with the NewAnnouncementComponent to handle the creation of new announcements.&#10;- Added babel to devdependencies to resolve the relevant warning when running npm run dev">
+      <option name="closed" value="true" />
+      <created>1699264858450</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1699264858450</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Introduced `NewAnnouncementComponent` for adding, editing (deleting comes next) announcements. This component provides a modal interface with form fields for announcement details based on the provided Figma design with minor differences.&#10;- Updated `AnnouncementPage` to incorporate a &quot;New Announcement&quot; button, conditional rendering based on user role (instructor but needs authentication state).&#10;- Integrated Material-UI components, including Paper, TextField, DatePicker, and Button." />
+    <MESSAGE value="Changing NewAnnouncementComponent.js to NewAnnouncementComponent.jsx to maintain file format consistency." />
+    <MESSAGE value="documentation." />
+    <MESSAGE value="feat(announcements): Integrate AnnouncementList and Filter components&#10;&#10;- Imported and implemented the AnnouncementList component within the announcements page.&#10;- Added the AnnouncementFilter component to provide sorting functionality.&#10;- Applied CSS stylings to the filters and announcement page for design coherence with Figma mockups.&#10;- Created a 'New' button and integrated it with the NewAnnouncementComponent to handle the creation of new announcements.&#10;- Added babel to devdependencies to resolve the relevant warning when running npm run dev" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(announcements): Integrate AnnouncementList and Filter components&#10;&#10;- Imported and implemented the AnnouncementList component within the announcements page.&#10;- Added the AnnouncementFilter component to provide sorting functionality.&#10;- Applied CSS stylings to the filters and announcement page for design coherence with Figma mockups.&#10;- Created a 'New' button and integrated it with the NewAnnouncementComponent to handle the creation of new announcements.&#10;- Added babel to devdependencies to resolve the relevant warning when running npm run dev" />
+  </component>
+</project>
