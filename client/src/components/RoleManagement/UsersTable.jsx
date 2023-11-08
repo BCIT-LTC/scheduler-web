@@ -10,6 +10,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
+import  EditUserModal  from './EditSingle.jsx'
+import  EditMultiModal  from './EditMultiple.jsx'
+
 
 //for mobile
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -34,6 +37,8 @@ const rows = mockDataUser.map((user) => ({
   email: user.email,
   role: user.role
 }));
+
+
 
 const SideBar = ({ onFilter }) => {
   const handleFilterClick = (filterValue) => {
@@ -89,7 +94,9 @@ const BottomNavigationBar = ({ onFilterChange }) => {
 };
 const Table = ({ filter }) => {
   const [searchText, setSearchText] = useState('');
-
+  const [selectedUsers, setSelectedUsers] = useState([]); //Track selected users
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isSingleUserEdit, setIsSingleUserEdit] = useState(false);
   const searchTable = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
@@ -120,7 +127,16 @@ const Table = ({ filter }) => {
       row.role.toLowerCase().includes(searchText)
     );
   });
-
+  const handleEdit = () => {
+    if (selectedUsers && selectedUsers.length){
+      if (selectedUsers.length === 1) {
+        setIsSingleUserEdit(true);
+      } else if (selectedUsers.length > 1) {
+        setIsSingleUserEdit(false);
+      }
+      setIsEditModalOpen(true);
+  }
+};
   return (
     <Box sx={{ height: 400, width: '100%', padding: '0em 1em' }}>
       <Typography variant="h5" component="div" sx={{ flexGrow: 1, padding: '1.3em 0em' }}>
@@ -129,7 +145,11 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
+<<<<<<< HEAD
         <Button variant="outlined" sx={{ position: 'absolute', right: '10px' , color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit</Button>
+=======
+        <Button onClick = {handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
+>>>>>>> main
       </Box>
 
       <DataGrid
@@ -145,10 +165,40 @@ const Table = ({ filter }) => {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
+        onRowSelectionModelChange={(newSelection) => {
+          console.log(newSelection);
+          setSelectedUsers(newSelection);
+        }
+      }                                           
       />
+      <EditUserModal />
+
+      {isEditModalOpen && isSingleUserEdit && (
+        <EditUserModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setIsSingleUserEdit(false);
+          }}
+          
+          userToEdit={selectedUsers[0]}
+        />
+      )}
+
+      {isEditModalOpen && !isSingleUserEdit && (
+        <EditMultiModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setIsSingleUserEdit(false);
+          }}
+          selectedUsers={selectedUsers}
+        />
+      )}
     </Box>
   );
 }
+
 
 const UsersTable = () => {
   const [filter, setFilter] = useState('all');
