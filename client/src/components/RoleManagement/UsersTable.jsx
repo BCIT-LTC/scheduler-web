@@ -145,11 +145,7 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
-<<<<<<< HEAD
-        <Button variant="outlined" sx={{ position: 'absolute', right: '10px' , color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit</Button>
-=======
         <Button onClick = {handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
->>>>>>> main
       </Box>
 
       <DataGrid
