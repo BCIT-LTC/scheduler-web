@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel, Button  } from '@mui/material';
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
+import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
 const announcementsData = [
     {
       id: 1,
@@ -38,13 +39,13 @@ const Announcements = () => {
     rooms: [],
     sort: 'latest',
   });
-
+  const { announcements, isLoading, error } = useGetAnnouncements();
   const handleSortChange = (event) => {
     setFilters(prev => ({ ...prev, sort: event.target.value }));
   };
 
   const sortedAnnouncements = useMemo(() => {
-    return [...announcementsData].sort((a, b) => {
+    return [...announcements].sort((a, b) => {
       if (filters.sort === 'latest') {
         return new Date(b.date) - new Date(a.date);
       } else {
@@ -62,7 +63,7 @@ const Announcements = () => {
   const handleSearchChange = (value) => {
     setFilters(prev => ({ ...prev, search: value }));
   };
-  
+
   const filteredAnnouncements = sortedAnnouncements.filter(announcement => {
     // Filter by date if a date is set
     if (filters.date && announcement.date !== filters.date) {
@@ -78,7 +79,14 @@ const Announcements = () => {
     }
     return true;
   });
-  
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Or some loading spinner
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>; // Display error message
+    }
   const TitleBar = () => (
     <Box sx={{ 
       bgcolor: 'white', 
