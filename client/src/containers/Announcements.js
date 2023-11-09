@@ -74,10 +74,8 @@ const Announcements = () => {
       return false;
     }
     // Filter by selected rooms if any rooms are selected
-    if (filters.rooms.length > 0 && !filters.rooms.includes(announcement.room)) {
-      return false;
-    }
-    return true;
+    return !(filters.rooms.length > 0 && !filters.rooms.includes(announcement.room));
+
   });
 
     if (isLoading) {
