@@ -61,7 +61,7 @@ function AnnouncementList({ announcements }) {
       {page === 1 && <SkeletonAnnouncementCard />}
       {announcements.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((announcement, index) => (
         <AnnouncementCard
-          key={announcement.id || index}
+          key={announcement.announcement_id || index}
           title={announcement.title}
           date={announcement.date}
           description={announcement.description}

@@ -7,25 +7,27 @@ async function callAPI(path, type, req, queryParams = {}) {
         const url = new URL(process.env.API_URL + path);
         Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 
+        const requestOptions = {
+            method: type,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': req.headers.authorization,
+            },
+        };
+
         if (type.toLowerCase() !== 'get') {
-            response = await fetch(url, {
-                method: type,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': req.headers.authorization,
-                },
-                body: JSON.stringify(req.body),
-            });
-        } else {
-            response = await fetch(url, {
-                method: type,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': req.headers.authorization,
-                }
-            });
+            requestOptions.body = JSON.stringify(req.body);
         }
-        data = await response.json();
+
+        response = await fetch(url, requestOptions);
+        const text = await response.text();
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Failed to parse as JSON:', text);
+            throw e; // Rethrow the parsing error
+        }
+
         status = response.status;
     } catch (error) {
         console.log(error.message);

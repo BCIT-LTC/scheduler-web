@@ -6,13 +6,19 @@ const useGetAnnouncements = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        const getCookie = (name) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        };
+        const jwtToken = getCookie('jwt');
         setIsLoading(true);
-        fetch(`http://localhost:8000/api/announcement`, {
+        fetch(`http://localhost:9000/api/announcement`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGJjaXQuY2EiLCJmaXJzdG5hbWUiOiJmaXJzdGFkbWluIGZpcnN0bmFtZSIsImxhc3RuYW1lIjoiZmlyc3RhZG1pbiBsYXN0bmFtZSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY4NDM1NTk4Mn0.EvhHE-YDl3-mxOEnEFfpV_Px7j2-ERNzBHmHP4f17lA`,
-            }
+                'Authorization': `Bearer ${jwtToken}`,
+            },
         })
             .then(response => {
                 if (!response.ok) {
@@ -29,7 +35,6 @@ const useGetAnnouncements = () => {
                 setIsLoading(false);
             });
     }, []);
-
     return { announcements, isLoading, error };
 };
 

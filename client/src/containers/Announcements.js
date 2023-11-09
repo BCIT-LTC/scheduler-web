@@ -3,34 +3,6 @@ import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl,
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
-const announcementsData = [
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    // ...other announcements
-];
-
 
 const Announcements = () => {
   const [filters, setFilters] = useState({
@@ -44,19 +16,19 @@ const Announcements = () => {
     setFilters(prev => ({ ...prev, sort: event.target.value }));
   };
 
-  const sortedAnnouncements = useMemo(() => {
-    return [...announcements].sort((a, b) => {
-      if (filters.sort === 'latest') {
-        return new Date(b.date) - new Date(a.date);
-      } else {
-        return new Date(a.date) - new Date(b.date);
-      }
-    });
-  }, [announcementsData, filters.sort]);
+    const sortedAnnouncements = useMemo(() => {
+        return [...announcements].sort((a, b) => {
+            if (filters.sort === 'latest') {
+                return new Date(b.date) - new Date(a.date);
+            } else {
+                return new Date(a.date) - new Date(b.date);
+            }
+        });
+    }, [announcements, filters.sort]);
 
 
 
-  const handleFilterChange = (filterType, value) => {
+    const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
