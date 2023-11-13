@@ -5,15 +5,19 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
-
-const NewAnnouncementComponent = ( {handleClose} ) => {
+import useCreateAnnouncement from "../../hooks/announcements/useCreateAnnouncement";
+const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated} ) => {
     const [title, setTitle] = useState('');
     const [announcement, setAnnouncement] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
-
+    const {createAnnouncement, error} = useCreateAnnouncement();
     const handleSave = () => {
-        console.log(title, announcement, selectedDate);
-    };
+        console.log('handleSave called with:', title, announcement, selectedDate);
+            createAnnouncement(title, announcement, selectedDate,)
+            alert('Announcement added successfully!');
+            onAnnouncementCreated();
+            handleClose();
+        };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
