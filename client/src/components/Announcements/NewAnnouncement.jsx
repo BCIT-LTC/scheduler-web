@@ -14,6 +14,7 @@ const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated} ) => {
     const handleSave = () => {
         console.log('handleSave called with:', title, announcement, selectedDate);
             createAnnouncement(title, announcement, selectedDate,)
+        // TODO: Add mui snackbar instead of alert
             alert('Announcement added successfully!');
             onAnnouncementCreated();
             handleClose();
