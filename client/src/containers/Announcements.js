@@ -8,11 +8,11 @@ import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
 
-  const handleOpenDialog = (event) => {
+  const handleOpenDialog = () => {
     setDialogue(true);
   }
 
-  const handleCloseDialog = (event) => {
+  const handleCloseDialog = () => {
     setDialogue(false);
   }
   const [filters, setFilters] = useState({
