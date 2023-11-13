@@ -3,15 +3,28 @@ import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl,
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
-
+import Dialog from '@mui/material/Dialog';
+import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 const Announcements = () => {
+  const [dialog, setDialogue] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogue(true);
+  }
+
+  const handleCloseDialog = () => {
+    setDialogue(false);
+  }
   const [filters, setFilters] = useState({
     date: null,
     search: '',
     rooms: [],
     sort: 'latest',
   });
-  const { announcements, isLoading, error } = useGetAnnouncements();
+  const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
+  const onAnnouncementCreated = () => {
+      refetchAnnouncements();
+  }
   const handleSortChange = (event) => {
     setFilters(prev => ({ ...prev, sort: event.target.value }));
   };
@@ -83,7 +96,8 @@ const Announcements = () => {
                     <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
             </FormControl>
-            <Button 
+            <Button
+                onClick={handleOpenDialog}
                 variant="contained" 
                 sx={{ 
                     bgcolor: '#1976d2', 
@@ -93,6 +107,13 @@ const Announcements = () => {
             >
                 NEW
             </Button>
+            <Dialog
+                open={dialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="new-announcement-dialog"
+            >
+                <NewAnnouncement handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
+            </Dialog>
         </Box>
     </Box>
 );
