@@ -165,24 +165,26 @@ export default function ProtectedLayout() {
                     </ListItem>
                 </List>
 
-                <List>
-                    <ListItem disablePadding
-                        onClick={() => { window.location.href = "/home/rolemanagement" }}
-                    >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
+                {globalcontext.user.role !== 'student' && (
+                    <List>
+                        <ListItem disablePadding
+                            onClick={() => { window.location.href = "/home/rolemanagement" }}
                         >
-                            <ListItemIcon>
-                                <PersonIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={"Role administration"} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
+                            <ListItemButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                                sx={{ mr: 2 }}
+                            >
+                                <ListItemIcon>
+                                    <PersonIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Role administration"} />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                )}
             </Drawer>
             <Outlet />
         </Fragment>
