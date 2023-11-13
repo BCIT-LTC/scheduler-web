@@ -21,7 +21,10 @@ const Announcements = () => {
     rooms: [],
     sort: 'latest',
   });
-  const { announcements, isLoading, error } = useGetAnnouncements();
+  const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
+  const onAnnouncementCreated = () => {
+      refetchAnnouncements();
+  }
   const handleSortChange = (event) => {
     setFilters(prev => ({ ...prev, sort: event.target.value }));
   };
@@ -109,7 +112,7 @@ const Announcements = () => {
                 onClose={handleCloseDialog}
                 aria-labelledby="new-announcement-dialog"
             >
-                <NewAnnouncement handleClose={handleCloseDialog} />
+                <NewAnnouncement handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
             </Dialog>
         </Box>
     </Box>
