@@ -130,9 +130,10 @@ const Announcements = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <AnnouncementList announcements={filteredAnnouncements}
-                                      onDelete={deleteAnnouncement}
-                                      refetchAnnouncements={refetchAnnouncements}
+                    <AnnouncementList
+                        announcements={filteredAnnouncements}
+                        onDelete={deleteAnnouncement}
+                        refetchAnnouncements={refetchAnnouncements}
                     />
                 </Grid>
             </Grid>
