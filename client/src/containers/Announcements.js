@@ -4,6 +4,7 @@ import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
 import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
+import useEditAnnouncement from "../hooks/announcements/useEditAnnouncement";
 import Dialog from '@mui/material/Dialog';
 import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 const Announcements = () => {
@@ -24,6 +25,7 @@ const Announcements = () => {
   });
   const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
   const { deleteAnnouncement } = useDeleteAnnouncements();
+  const { editAnnouncement } = useEditAnnouncement();
 
     const onAnnouncementCreated = () => {
       refetchAnnouncements();
@@ -130,9 +132,11 @@ const Announcements = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <AnnouncementList announcements={filteredAnnouncements}
-                                      onDelete={deleteAnnouncement}
-                                      refetchAnnouncements={refetchAnnouncements}
+                    <AnnouncementList
+                        announcements={filteredAnnouncements}
+                        onDelete={deleteAnnouncement}
+                        refetchAnnouncements={refetchAnnouncements}
+                        onEdit={editAnnouncement}
                     />
                 </Grid>
             </Grid>
