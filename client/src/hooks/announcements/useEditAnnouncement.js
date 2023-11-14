@@ -30,6 +30,7 @@ const useEditAnnouncement = () => {
             .catch(() => {
                 setIsSuccessful(false);
                 if (onError) onError();
+                setError('Network response was not ok')
             });
     };
     return {editAnnouncement, error, isSuccessful}

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import React from 'react';
 import Dialog from "@mui/material/Dialog";
 import EditAnnouncementComponent from "./EditAnnouncement";
+import dayjs from "dayjs";
 /**
  * Announcement card component
  * @param id
@@ -15,7 +16,8 @@ import EditAnnouncementComponent from "./EditAnnouncement";
  * @constructor
  */
 function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
-  return (
+    const formattedDate = dayjs(date).format('YYYY/MM/DD');
+    return (
     <Card style={{ marginBottom: '24px', boxShadow: '0 3px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
       <CardContent style={{ padding: '24px', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -23,7 +25,7 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
             {title}
           </Typography>
           <Typography color="secondary">
-            {date}
+            {formattedDate}
           </Typography>
         </div>
         <Typography variant="body2" style={{ marginBottom: '16px' }}>
@@ -39,7 +41,7 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
 }
 
 
-function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onEdit }) {
+function AnnouncementList({ announcements, onDelete, refetchAnnouncements }) {
   const [page, setPage] = useState(1);
   const [editAnnouncement, setEditAnnouncement] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);

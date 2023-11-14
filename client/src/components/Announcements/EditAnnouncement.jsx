@@ -13,10 +13,11 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
     const [selectedDate, setSelectedDate] = useState(existingDate ? dayjs(existingDate) : null);
     const { editAnnouncement } = useEditAnnouncement();
     const handleSave = () => {
+        const formattedDateForSave = selectedDate ? dayjs(selectedDate).toISOString() : null;
         const action = editAnnouncement
         const successCallback = onAnnouncementEdited
 
-        action(id, title, announcement, selectedDate, () => {
+        action(id, title, announcement, formattedDateForSave, () => {
             alert('Announcement edited successfully!');
             successCallback();
             handleClose();
