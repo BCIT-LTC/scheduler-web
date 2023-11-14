@@ -3,6 +3,7 @@ import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl,
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
+import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
 import Dialog from '@mui/material/Dialog';
 import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 const Announcements = () => {
@@ -22,7 +23,9 @@ const Announcements = () => {
     sort: 'latest',
   });
   const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
-  const onAnnouncementCreated = () => {
+  const { deleteAnnouncement } = useDeleteAnnouncements();
+
+    const onAnnouncementCreated = () => {
       refetchAnnouncements();
   }
   const handleSortChange = (event) => {
@@ -61,9 +64,7 @@ const Announcements = () => {
     // Filter by selected rooms if any rooms are selected
     return !(filters.rooms.length > 0 && !filters.rooms.includes(announcement.room));
 
-  });
-
-    if (isLoading) {
+  });   if (isLoading) {
         return <div>Loading...</div>; // Or some loading spinner
     }
 
@@ -129,7 +130,10 @@ const Announcements = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <AnnouncementList announcements={filteredAnnouncements} />
+                    <AnnouncementList announcements={filteredAnnouncements}
+                                      onDelete={deleteAnnouncement}
+                                      refetchAnnouncements={refetchAnnouncements}
+                    />
                 </Grid>
             </Grid>
         </Paper>
