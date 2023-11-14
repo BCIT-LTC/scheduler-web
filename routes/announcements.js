@@ -22,12 +22,11 @@ const callAPI = require("../services/API_caller");
  * Route to get all annoucements
  * @name get/annoucement
  * @function
- * @memberof module:routers/announcement~announcementRouter
+ * @memberof module:routers/announcement
  * @inner
  * @return {Object} array of all annoucements
  */
 router.get("/announcement", async (req, res) => {
-  console.log("annoucnement")
   let response = await callAPI("announcement", "GET", req);
   res.status(response.status).json(response.data);
 });
@@ -36,7 +35,7 @@ router.get("/announcement", async (req, res) => {
  * Route to create announcement
  * @name post/annoucement
  * @function
- * @memberof module:routers/announcement~announcementRouter
+ * @memberof module:routers/announcement
  * @inner
  * @param {string} req.body.title - The title of the announcement
  * @param {string} req.body.description - The description of the announcement

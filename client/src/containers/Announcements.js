@@ -2,67 +2,53 @@ import React, { useState, useMemo } from 'react';
 import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel, Button  } from '@mui/material';
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
-const announcementsData = [
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    {
-      id: 1,
-      title: 'Blood pressure station offline for maintenance',
-      date: 'February 4, 2023',
-      description: 'Lorem Ipsum is simply dummy text...'
-    },
-    // ...other announcements
-];
-
-
+import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
+import Dialog from '@mui/material/Dialog';
+import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 const Announcements = () => {
+  const [dialog, setDialogue] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogue(true);
+  }
+
+  const handleCloseDialog = () => {
+    setDialogue(false);
+  }
   const [filters, setFilters] = useState({
     date: null,
     search: '',
     rooms: [],
     sort: 'latest',
   });
-
+  const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
+  const onAnnouncementCreated = () => {
+      refetchAnnouncements();
+  }
   const handleSortChange = (event) => {
     setFilters(prev => ({ ...prev, sort: event.target.value }));
   };
 
-  const sortedAnnouncements = useMemo(() => {
-    return [...announcementsData].sort((a, b) => {
-      if (filters.sort === 'latest') {
-        return new Date(b.date) - new Date(a.date);
-      } else {
-        return new Date(a.date) - new Date(b.date);
-      }
-    });
-  }, [announcementsData, filters.sort]);
+    const sortedAnnouncements = useMemo(() => {
+        return [...announcements].sort((a, b) => {
+            if (filters.sort === 'latest') {
+                return new Date(b.date) - new Date(a.date);
+            } else {
+                return new Date(a.date) - new Date(b.date);
+            }
+        });
+    }, [announcements, filters.sort]);
 
 
 
-  const handleFilterChange = (filterType, value) => {
+    const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
   const handleSearchChange = (value) => {
     setFilters(prev => ({ ...prev, search: value }));
   };
-  
+
   const filteredAnnouncements = sortedAnnouncements.filter(announcement => {
     // Filter by date if a date is set
     if (filters.date && announcement.date !== filters.date) {
@@ -73,12 +59,17 @@ const Announcements = () => {
       return false;
     }
     // Filter by selected rooms if any rooms are selected
-    if (filters.rooms.length > 0 && !filters.rooms.includes(announcement.room)) {
-      return false;
-    }
-    return true;
+    return !(filters.rooms.length > 0 && !filters.rooms.includes(announcement.room));
+
   });
-  
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Or some loading spinner
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>; // Display error message
+    }
   const TitleBar = () => (
     <Box sx={{ 
       bgcolor: 'white', 
@@ -105,7 +96,8 @@ const Announcements = () => {
                     <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
             </FormControl>
-            <Button 
+            <Button
+                onClick={handleOpenDialog}
                 variant="contained" 
                 sx={{ 
                     bgcolor: '#1976d2', 
@@ -115,6 +107,13 @@ const Announcements = () => {
             >
                 NEW
             </Button>
+            <Dialog
+                open={dialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="new-announcement-dialog"
+            >
+                <NewAnnouncement handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
+            </Dialog>
         </Box>
     </Box>
 );
