@@ -19,9 +19,9 @@ import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
 import  EditUserModal  from './EditSingle.jsx'
 import  EditMultiModal  from './EditMultiple.jsx'
-
-
 import useGetUsersList from '../../hooks/users/useGetUsersList';
+import { GlobalContext } from '../../context/usercontext.js'
+import { useContext } from 'react';
 
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },
@@ -35,8 +35,6 @@ const rows = mockDataUser.map((user) => ({
   email: user.email,
   role: user.role
 }));
-
-
 
 const SideBar = ({ onFilter }) => {
   const handleFilterClick = (filterValue) => {
@@ -71,6 +69,8 @@ const Table = ({ filter }) => {
   const [selectedUsers, setSelectedUsers] = useState([]); //Track selected users
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSingleUserEdit, setIsSingleUserEdit] = useState(false);
+  const { user, isLoggedIn } = useContext(GlobalContext);
+
   const searchTable = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
@@ -101,6 +101,7 @@ const Table = ({ filter }) => {
       row.role.toLowerCase().includes(searchText)
     );
   });
+
   const handleEdit = () => {
     if (selectedUsers && selectedUsers.length){
       if (selectedUsers.length === 1) {
@@ -109,8 +110,9 @@ const Table = ({ filter }) => {
         setIsSingleUserEdit(false);
       }
       setIsEditModalOpen(true);
-  }
-};
+    }
+  };
+
   return (
     <Box sx={{ height: 400, width: '100%', padding: '0em 1em' }}>
       <Typography variant="h5" component="div" sx={{ flexGrow: 1, padding: '1.3em 0em' }}>
@@ -119,7 +121,9 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
-        <Button onClick = {handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
+        {user.role === 'admin' && (
+          <Button onClick = {handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
+        )}
       </Box>
 
       <DataGrid
@@ -169,18 +173,12 @@ const Table = ({ filter }) => {
   );
 }
 
-
 const UsersTable = () => {
   const [filter, setFilter] = useState('all');
 
   const applyFilter = (filterValue) => {
     setFilter(filterValue);
   };
-
-  let userslist = useGetUsersList();
-
-  console.log("userlist");
-  console.log(userslist);
 
   return (
    <div>
