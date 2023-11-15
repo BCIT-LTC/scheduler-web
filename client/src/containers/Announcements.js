@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'; 
+import React, {useState, useMemo, useContext} from 'react';
 import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel, Button  } from '@mui/material';
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
@@ -6,10 +6,12 @@ import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
 import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
 import Dialog from '@mui/material/Dialog';
 import NewAnnouncement from '../components/Announcements/NewAnnouncement';
+import {GlobalContext} from "../context/usercontext";
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
-
-  const handleOpenDialog = () => {
+    const { user } = useContext(GlobalContext);
+    const role = user.role;
+    const handleOpenDialog = () => {
     setDialogue(true);
   }
 
@@ -97,17 +99,19 @@ const Announcements = () => {
                     <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
             </FormControl>
+            {role && (role === 'admin' || role === 'instructor') && (
             <Button
                 onClick={handleOpenDialog}
-                variant="contained" 
-                sx={{ 
-                    bgcolor: '#1976d2', 
-                    color: 'white', 
-                    '&:hover': { bgcolor: '#1565c0' } 
+                variant="contained"
+                sx={{
+                    bgcolor: '#1976d2',
+                    color: 'white',
+                    '&:hover': { bgcolor: '#1565c0' }
                 }}
             >
                 NEW
             </Button>
+            )}
             <Dialog
                 open={dialog}
                 onClose={handleCloseDialog}

@@ -1,9 +1,10 @@
 import { Card, CardContent, Typography, Button, Pagination, Box } from '@mui/material';
-import { useState } from 'react';
+import {useContext, useState} from 'react';
 import React from 'react';
 import Dialog from "@mui/material/Dialog";
 import EditAnnouncementComponent from "./EditAnnouncement";
 import dayjs from "dayjs";
+import {GlobalContext} from "../../context/usercontext";
 /**
  * Announcement card component
  * @param id
@@ -16,6 +17,8 @@ import dayjs from "dayjs";
  * @constructor
  */
 function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
+    const { user } = useContext(GlobalContext);
+    const role = user.role;
     const formattedDate = dayjs(date).format('YYYY/MM/DD');
     return (
     <Card style={{ marginBottom: '24px', boxShadow: '0 3px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
@@ -32,8 +35,12 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
           {description}
         </Typography>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {role && (role === "admin" || role === "instructor") && (
             <Button variant="outlined" color="primary" onClick={() => onEdit(id)}>EDIT</Button>
-          <Button variant="outlined" color="secondary" style={{ marginLeft: '8px' }} onClick={() => onDelete(id)}>DELETE</Button>
+            )}
+            {role && (role === "admin" || role === "instructor") && (
+                <Button variant="outlined" color="secondary" style={{ marginLeft: '8px' }} onClick={() => onDelete(id)}>DELETE</Button>
+                )}
         </div>
       </CardContent>
     </Card>
