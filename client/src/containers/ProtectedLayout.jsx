@@ -5,7 +5,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -13,13 +12,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Drawer from '@mui/material/Drawer';
 import TodayIcon from '@mui/icons-material/Today';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
-import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import PersonIcon from '@mui/icons-material/Person';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 
 import List from '@mui/material/List';
@@ -165,26 +162,26 @@ export default function ProtectedLayout() {
                     </ListItem>
                 </List>
 
-                {globalcontext.user.role !== 'student' && (
-                    <List>
-                        <ListItem disablePadding
-                            onClick={() => { window.location.href = "/home/rolemanagement" }}
+                <List>
+                    {globalcontext.user.role && (globalcontext.user.role=== "admin" || globalcontext.user.role === "instructor") &&(
+                    <ListItem disablePadding
+                        onClick={() => { window.location.href = "/home/rolemanagement" }}
+                    >
+                        <ListItemButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
                         >
-                            <ListItemButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ mr: 2 }}
-                            >
-                                <ListItemIcon>
-                                    <PersonIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={"Role administration"} />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                )}
+                            <ListItemIcon>
+                                <PersonIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={"Role administration"} />
+                        </ListItemButton>
+                    </ListItem>
+                    )}
+                </List>
             </Drawer>
             <Outlet />
         </Fragment>
