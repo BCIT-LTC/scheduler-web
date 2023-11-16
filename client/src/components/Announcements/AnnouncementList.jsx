@@ -58,10 +58,11 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
   };
   const handleDelete = (id) => {
     onDelete(id, () => {
-        alert("Announcement deleted successfully!")
+        onSnackbarOpen('Announcement deleted successfully!', "success");
         refetchAnnouncements();
     }, (error) => {
         console.log("Announcement not deleted" + error)
+        onSnackbarOpen('Announcement not deleted', "error");
     });
   }
   const handleEdit = (id) => {
