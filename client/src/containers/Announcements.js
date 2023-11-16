@@ -1,5 +1,17 @@
 import React, {useState, useMemo, useContext} from 'react';
-import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel, Button  } from '@mui/material';
+import {
+    Container,
+    Grid,
+    Paper,
+    Typography,
+    Box,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Button,
+    Slide
+} from '@mui/material';
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
@@ -14,6 +26,9 @@ const Announcements = () => {
   const [snackbarColor, setSnackbarColor] = useState('success');
     const { user } = useContext(GlobalContext);
     const role = user.role;
+    function TransitionLeft(props) {
+        return <Slide {...props} direction="left"/>;
+    }
     const handleOpenDialog = () => {
     setDialogue(true);
   }
@@ -138,7 +153,7 @@ const Announcements = () => {
             >
                 <NewAnnouncement onSnackbarOpen={handleSnackbarOpen} onSnackbarClose={handleSnackbarClose}  handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
             </Dialog>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose} TransitionComponent={TransitionLeft}>
                 <Alert onClose={handleAlertClose} severity={severity} sx={{ width: '100%' }} color={snackbarColor}>
                     {message}
                 </Alert>
