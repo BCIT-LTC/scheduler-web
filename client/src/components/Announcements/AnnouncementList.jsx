@@ -48,7 +48,7 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
 }
 
 
-function AnnouncementList({ announcements, onDelete, refetchAnnouncements }) {
+function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSnackbarOpen }) {
   const [page, setPage] = useState(1);
   const [editAnnouncement, setEditAnnouncement] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -58,10 +58,11 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements }) {
   };
   const handleDelete = (id) => {
     onDelete(id, () => {
-        alert("Announcement deleted successfully!")
+        onSnackbarOpen('Announcement deleted successfully!', "success");
         refetchAnnouncements();
     }, (error) => {
         console.log("Announcement not deleted" + error)
+        onSnackbarOpen('Announcement not deleted', "error");
     });
   }
   const handleEdit = (id) => {
@@ -91,6 +92,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements }) {
         {isEditDialogOpen && editAnnouncement && (
             <Dialog open={isEditDialogOpen} onClose={handleEditClose}>
                 <EditAnnouncementComponent
+                    onSnackbarOpen={onSnackbarOpen}
                     id={editAnnouncement.announcements_id}
                     existingTitle={editAnnouncement.title}
                     existingDescription={editAnnouncement.description}
