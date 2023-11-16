@@ -1,37 +1,39 @@
 import {useState} from 'react';
 
-const useDeleteAnnouncements = () => {
-    const [isDeleted, setIsDeleted] = useState(false);
+const useEditAnnouncement = () => {
     const [error, setError] = useState(null);
+    const [isSuccessful, setIsSuccessful] = useState(false);
 
-    const deleteAnnouncement = (id, onSuccess, onError) => {
+    const editAnnouncement = (id, title, description, date, onSuccess, onError) => {
         const getCookie = (name) => {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         };
         const jwtToken = getCookie('jwt');
+
         fetch(`http://localhost:9000/api/announcement`, {
-            method: 'DELETE',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwtToken}`,
             },
-            body: JSON.stringify({id}),
+            body: JSON.stringify({id, title, description, date}),
         })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                setIsDeleted(true);
+                setIsSuccessful(true);
                 if (onSuccess) onSuccess();
             })
-            .catch(error => {
-                setError(error.message);
+            .catch(() => {
+                setIsSuccessful(false);
                 if (onError) onError();
+                setError('Network response was not ok')
             });
     };
-        return {deleteAnnouncement, isDeleted, error};
-};
+    return {editAnnouncement, error, isSuccessful}
+}
 
-export default useDeleteAnnouncements;
+export default useEditAnnouncement;

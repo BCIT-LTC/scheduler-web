@@ -1,14 +1,14 @@
-import { useEffect, useContext, useState } from "react";
 import Login from "./containers/Login";
 import RootUserLogin from "./containers/RootUserlogin";
 import ProtectedLayout from "./containers/ProtectedLayout";
-import logout from "./containers/logout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Announcements from "./containers/Announcements";
 import RoleManagement from "./containers/RoleManagement";
+import ProtectedRoute from "./containers/ProtectedRoute";
 
 function App() {
 
+// Role-based route protection component
   return (
     <>
       <Routes>
@@ -29,7 +29,9 @@ function App() {
             <Route path="calendar" element={<div>calendar page</div>} />
             <Route path="announcements" element={<Announcements/>} />
             <Route path="openlab" element={<div>schedule openlab</div>} />
-            <Route path="rolemanagement" element={<RoleManagement/>} />
+            <Route element={<ProtectedRoute/>}>
+              <Route path="rolemanagement" element={<RoleManagement />} />
+            </Route>
             <Route path="" element={<Navigate to="/home/calendar" replace />} />
             <Route path="*" element={<Navigate to="/home/calendar" replace />} />
           </Route>

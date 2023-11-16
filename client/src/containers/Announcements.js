@@ -1,17 +1,54 @@
-import React, { useState, useMemo } from 'react'; 
-import { Container, Grid, Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel, Button  } from '@mui/material';
+import React, {useState, useMemo, useContext} from 'react';
+import {
+    Container,
+    Grid,
+    Paper,
+    Typography,
+    Box,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Button,
+    Slide
+} from '@mui/material';
 import AnnouncementList from "../components/Announcements/AnnouncementList"
 import AnnouncementFilter from '../components/Announcements/AnnouncementFilter';
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
+import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
 import Dialog from '@mui/material/Dialog';
 import NewAnnouncement from '../components/Announcements/NewAnnouncement';
+import {GlobalContext} from "../context/usercontext";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
-
-  const handleOpenDialog = () => {
+  const [snackbarColor, setSnackbarColor] = useState('success');
+    const { user } = useContext(GlobalContext);
+    const role = user.role;
+    function TransitionLeft(props) {
+        return <Slide {...props} direction="left"/>;
+    }
+    const handleOpenDialog = () => {
     setDialogue(true);
   }
-
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState('');
+    const [message, setMessage] = useState('');
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            setOpen(false);
+        }
+    }
+    const handleAlertClose = () => {
+        setOpen(false);
+    }
+    const handleSnackbarOpen = (message, severity) => {
+        setSeverity(severity);
+        setMessage(message);
+        setOpen(true);
+        setSnackbarColor(severity === 'success' ? 'info' : severity);
+    }
   const handleCloseDialog = () => {
     setDialogue(false);
   }
@@ -22,7 +59,9 @@ const Announcements = () => {
     sort: 'latest',
   });
   const { announcements, isLoading, error, refetchAnnouncements } = useGetAnnouncements();
-  const onAnnouncementCreated = () => {
+  const { deleteAnnouncement } = useDeleteAnnouncements();
+
+    const onAnnouncementCreated = () => {
       refetchAnnouncements();
   }
   const handleSortChange = (event) => {
@@ -61,9 +100,7 @@ const Announcements = () => {
     // Filter by selected rooms if any rooms are selected
     return !(filters.rooms.length > 0 && !filters.rooms.includes(announcement.room));
 
-  });
-
-    if (isLoading) {
+  });   if (isLoading) {
         return <div>Loading...</div>; // Or some loading spinner
     }
 
@@ -96,24 +133,31 @@ const Announcements = () => {
                     <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
             </FormControl>
+            {role && (role === 'admin' || role === 'instructor') && (
             <Button
                 onClick={handleOpenDialog}
-                variant="contained" 
-                sx={{ 
-                    bgcolor: '#1976d2', 
-                    color: 'white', 
-                    '&:hover': { bgcolor: '#1565c0' } 
+                variant="contained"
+                sx={{
+                    bgcolor: '#1976d2',
+                    color: 'white',
+                    '&:hover': { bgcolor: '#1565c0' }
                 }}
             >
                 NEW
             </Button>
+            )}
             <Dialog
                 open={dialog}
                 onClose={handleCloseDialog}
                 aria-labelledby="new-announcement-dialog"
             >
-                <NewAnnouncement handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
+                <NewAnnouncement onSnackbarOpen={handleSnackbarOpen} onSnackbarClose={handleSnackbarClose}  handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
             </Dialog>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose} TransitionComponent={TransitionLeft}>
+                <Alert onClose={handleAlertClose} severity={severity} sx={{ width: '100%' }} color={snackbarColor}>
+                    {message}
+                </Alert>
+            </Snackbar>
         </Box>
     </Box>
 );
@@ -129,7 +173,13 @@ const Announcements = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <AnnouncementList announcements={filteredAnnouncements} />
+                    <AnnouncementList
+                        onSnackbarOpen={handleSnackbarOpen}
+                        onSnackbarClose={handleSnackbarClose}
+                        announcements={filteredAnnouncements}
+                        onDelete={deleteAnnouncement}
+                        refetchAnnouncements={refetchAnnouncements}
+                    />
                 </Grid>
             </Grid>
         </Paper>

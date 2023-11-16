@@ -6,20 +6,23 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
 import useCreateAnnouncement from "../../hooks/announcements/useCreateAnnouncement";
-const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated} ) => {
+const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackbarOpen} ) => {
     const [title, setTitle] = useState('');
     const [announcement, setAnnouncement] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const {createAnnouncement, error} = useCreateAnnouncement();
     const handleSave = () => {
         console.log('handleSave called with:', title, announcement, selectedDate);
+        try {
             createAnnouncement(title, announcement, selectedDate,)
-        // TODO: Add mui snackbar instead of alert
-            alert('Announcement added successfully!');
+            // TODO: Add mui snackbar instead of alert
+            onSnackbarOpen('Announcement created successfully!', "success");
             onAnnouncementCreated();
             handleClose();
-        };
-
+        } catch (error) {
+            onSnackbarOpen('Announcement not created', "error");
+        }
+    };
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Paper elevation={3} style={{ padding: '20px', width: '500px' }}>
