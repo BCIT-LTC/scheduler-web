@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
 import useEditAnnouncement from "../../hooks/announcements/useEditAnnouncement";
 import dayjs from 'dayjs';
-const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, existingDate, handleClose, onAnnouncementEdited }) => {
+const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, existingDate, handleClose, onAnnouncementEdited, onSnackbarOpen }) => {
     const [title, setTitle] = useState(existingTitle || '');
     const [announcement, setAnnouncement] = useState(existingDescription || '');
     const [selectedDate, setSelectedDate] = useState(existingDate ? dayjs(existingDate) : null);
@@ -18,12 +18,13 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
         const successCallback = onAnnouncementEdited
 
         action(id, title, announcement, formattedDateForSave, () => {
-            alert('Announcement edited successfully!');
+            onSnackbarOpen('Announcement edited successfully!', "success");
             successCallback();
             handleClose();
         }, (error) => {
             console.log(error);
             // TODO: Handle error (e.g., show in UI)
+            onSnackbarOpen('Announcement not edited', "error");
         });
     };
 

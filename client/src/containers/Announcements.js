@@ -7,14 +7,33 @@ import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement
 import Dialog from '@mui/material/Dialog';
 import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 import {GlobalContext} from "../context/usercontext";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
+  const [snackbarColor, setSnackbarColor] = useState('success');
     const { user } = useContext(GlobalContext);
     const role = user.role;
     const handleOpenDialog = () => {
     setDialogue(true);
   }
-
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState('');
+    const [message, setMessage] = useState('');
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            setOpen(false);
+        }
+    }
+    const handleAlertClose = () => {
+        setOpen(false);
+    }
+    const handleSnackbarOpen = (message, severity) => {
+        setSeverity(severity);
+        setMessage(message);
+        setOpen(true);
+        setSnackbarColor(severity === 'success' ? 'info' : severity);
+    }
   const handleCloseDialog = () => {
     setDialogue(false);
   }
@@ -117,8 +136,13 @@ const Announcements = () => {
                 onClose={handleCloseDialog}
                 aria-labelledby="new-announcement-dialog"
             >
-                <NewAnnouncement handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
+                <NewAnnouncement onSnackbarOpen={handleSnackbarOpen} onSnackbarClose={handleSnackbarClose}  handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
             </Dialog>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleAlertClose} severity={severity} sx={{ width: '100%' }} color={snackbarColor}>
+                    {message}
+                </Alert>
+            </Snackbar>
         </Box>
     </Box>
 );
@@ -135,6 +159,8 @@ const Announcements = () => {
                 </Grid>
                 <Grid item xs={12} md={8}>
                     <AnnouncementList
+                        onSnackbarOpen={handleSnackbarOpen}
+                        onSnackbarClose={handleSnackbarClose}
                         announcements={filteredAnnouncements}
                         onDelete={deleteAnnouncement}
                         refetchAnnouncements={refetchAnnouncements}
