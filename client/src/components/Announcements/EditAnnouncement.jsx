@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -7,6 +7,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
 import useEditAnnouncement from "../../hooks/announcements/useEditAnnouncement";
 import dayjs from 'dayjs';
+import Typography from '@mui/material/Typography'
+import { Box } from '@mui/system';
+
 const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, existingDate, handleClose, onAnnouncementEdited, onSnackbarOpen }) => {
     const [title, setTitle] = useState(existingTitle || '');
     const [announcement, setAnnouncement] = useState(existingDescription || '');
@@ -26,6 +29,7 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
             // TODO: Handle error (e.g., show in UI)
             onSnackbarOpen('Announcement not edited', "error");
         });
+    };
     const isMobile = () => window.innerWidth <= 767;
         // Handle window resize to update mobile view
     useEffect(() => {
@@ -45,8 +49,7 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
         window.removeEventListener('resize', handleResize);
         };
     }, []);
-    };
-
+    
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         {isMobile() ? (
