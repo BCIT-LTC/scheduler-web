@@ -26,25 +26,49 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
             // TODO: Handle error (e.g., show in UI)
             onSnackbarOpen('Announcement not edited', "error");
         });
+    const isMobile = () => window.innerWidth <= 767;
+        // Handle window resize to update mobile view
+    useEffect(() => {
+        const handleResize = () => {
+        if (isMobile()) {
+            // Handle mobile view
+        } else {
+            // Handle desktop view
+        }
+        };
+
+        // Attach the event listener
+        window.addEventListener('resize', handleResize);
+
+        // Clean up the event listener on component unmount
+        return () => {
+        window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Paper elevation={3} style={{ padding: '20px', width: '500px' }}>
+        {isMobile() ? (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'flex-start', alignItems: 'center', padding:"5px"}}>
+            <Typography variant="h5" component="div" marginBottom={'20px'} marginTop={'20px'}>
+                Edit Announcements
+            </Typography>
+            <Box>
                 <TextField
                     fullWidth
                     label="Title"
                     variant="outlined"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    style={{ marginBottom: '15px' }}
+                    style={{ marginBottom: '15px'}}
                 />
                 <TextField
                     fullWidth
                     label="Announcement"
                     variant="outlined"
                     multiline
-                    rows={4}
+                    rows={10}
                     value={announcement}
                     onChange={e => setAnnouncement(e.target.value)}
                     style={{ marginBottom: '15px' }}
@@ -56,16 +80,62 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
                     renderInput={(params) => <TextField {...params} variant="outlined" />}
                     style={{ marginBottom: '15px' }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #0e0007', width: '30%', marginTop: '2%', paddingTop: '2%'}}>
-                    <Button variant="outlined" color="primary" onClick={handleClose} style={{marginRight: '5px'}}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '30%',
+                    paddingTop: '10px', // Add space between the content and buttons
+                }}>
+                    <Button variant="outlined" color="primary" onClick={handleClose} style={{ marginRight: '5px' }}>
                         CANCEL
                     </Button>
                     <Button variant="contained" color="primary" onClick={handleSave}>
                         SAVE
                     </Button>
                 </div>
-            </Paper>
-        </LocalizationProvider>
+            </Box>
+        </div>
+        ) : (
+        <Paper elevation={3} style={{ padding: '20px', width: '500px' }}>
+        <Typography variant="h5" component="div" marginBottom={'20px'} marginTop={'20px'}>
+            Edit Announcements
+        </Typography>
+            <TextField
+                fullWidth
+                label="Title"
+                variant="outlined"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                style={{ marginBottom: '15px' }}
+            />
+            <TextField
+                fullWidth
+                label="Announcement"
+                variant="outlined"
+                multiline
+                rows={4}
+                value={announcement}
+                onChange={e => setAnnouncement(e.target.value)}
+                style={{ marginBottom: '15px' }}
+            />
+            <DatePicker
+                label="Date"
+                value={selectedDate}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                renderInput={(params) => <TextField {...params} variant="outlined" />}
+                style={{ marginBottom: '15px' }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #0e0007', width: '30%', marginTop: '2%', paddingTop: '2%'}}>
+                <Button variant="outlined" color="primary" onClick={handleClose} style={{marginRight: '5px'}}>
+                    CANCEL
+                </Button>
+                <Button variant="contained" color="primary" onClick={handleSave}>
+                    SAVE
+                </Button>
+            </div>
+        </Paper>
+        )}
+    </LocalizationProvider>
     );
 };
 

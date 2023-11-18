@@ -77,7 +77,7 @@ const BottomNavigationBar = ({ onFilterChange }) => {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
           showLabels
@@ -140,7 +140,7 @@ const Table = ({ filter }) => {
       setIsEditModalOpen(true);
     }
   };
-
+  
   return (
     <Box sx={{ height: 400, width: '100%', padding: '0em 1em' }}>
       <Typography variant="h5" component="div" sx={{ flexGrow: 1, padding: '1.3em 0em' }}>
@@ -154,7 +154,7 @@ const Table = ({ filter }) => {
         )}
       </Box>
 
-      <DataGrid
+      <DataGrid sx={{width:'100%'}}
         rows={filteredRows}
         columns={columns}
         initialState={{
@@ -205,11 +205,12 @@ const UsersTable = () => {
   const [filter, setFilter] = useState('all');
   const [showBottomNav, setShowBottomNav] = useState(window.innerWidth <= 767);
 
+  const isMobile = () => window.innerWidth <= 767;
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth <= 767;
-      setShowBottomNav(isMobile);
-      if (!isMobile) {
+      const isMobileVar = window.innerWidth <= 767;
+      setShowBottomNav(isMobileVar);
+      if (!isMobileVar) {
         // If not mobile, hide the bottom navigation bar and show the sidebar
         setFilter('all'); // Reset the filter to 'all'
       }
@@ -235,7 +236,7 @@ const UsersTable = () => {
       {!showBottomNav && (
         <SideBar onFilter={applyFilter} />
       )}
-        <Table filter={filter} />
+        <Table filter={filter} sx={{ flex: 1, height: '100%' }} />
       </Box>
     </div>
   );

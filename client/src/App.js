@@ -4,7 +4,7 @@ import ProtectedLayout from "./containers/ProtectedLayout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Announcements from "./containers/Announcements";
 import RoleManagement from "./containers/RoleManagement";
-import ProtectedRoute from "./containers/ProtectedRoute";
+import ProtectedRoute from "./containers/Protectedroute";
 
 function App() {
 
