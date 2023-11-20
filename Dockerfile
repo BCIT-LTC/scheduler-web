@@ -10,13 +10,11 @@ FROM node:19.4.0 AS frontend-builder
 WORKDIR /app
 
 COPY ./client/package.json ./
-
 RUN npm install
 
-COPY ./client ./
+COPY ./client .
 
 RUN npm run build
-
 
 ## Release
 FROM node:19.4.0-alpine AS release
@@ -27,7 +25,6 @@ ENV VERSION=${VERSION:-0.0.0}
 
 WORKDIR /app
 
-COPY --from=frontend-builder /app/build ./client/build/
 
 RUN apk --update add \
     curl \
@@ -41,8 +38,11 @@ COPY ./middleware ./middleware/
 COPY ./routes ./routes/
 COPY ./app.js ./
 COPY ./logger.js ./
+COPY ./saml ./saml/
 
 RUN npm install
+
+COPY --from=frontend-builder /app/build ./client/build/
 
 # Copy and run init script
 COPY docker-entrypoint.sh /usr/local/bin
@@ -50,6 +50,6 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 CMD ["npm", "run", "prod"]

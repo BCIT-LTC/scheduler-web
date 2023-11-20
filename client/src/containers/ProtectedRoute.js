@@ -7,14 +7,14 @@ export default function ProtectedRoute() {
 
     if (!globalcontext.isLoggedIn) {
         // If the user is not logged in, redirect to login
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/login" replace />
     }
 
     if (globalcontext.user.role && (globalcontext.user.role !== "admin" && globalcontext.user.role !== "instructor")) {
         // If the user's role is not allowed, redirect to home
-        return <Navigate to="/home" replace />;
+        return <Navigate to="/home" replace />
     }
 
     // User is logged in and has an allowed role, render children
-    return <Outlet />;
-};
+    return <Outlet />
+}
