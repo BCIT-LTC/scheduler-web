@@ -37,6 +37,7 @@
     "winston": "^3.10.0"
   },
   "devDependencies": {
+    "jsdoc": "^4.0.2",
     "nodemon": "^2.0.22"
   },
   "nodemonConfig": {
