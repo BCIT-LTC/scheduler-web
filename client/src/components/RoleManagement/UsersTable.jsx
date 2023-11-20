@@ -1,13 +1,6 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -19,6 +12,17 @@ import { useState } from 'react';
 import { mockDataUser } from '../../tests/mock-data-user';
 import  EditUserModal  from './EditSingle.jsx'
 import  EditMultiModal  from './EditMultiple.jsx'
+
+
+//for mobile
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { useEffect } from 'react';
+import Paper from '@mui/material/Paper';
+import  GroupsIcon  from '@mui/icons-material/Groups';
+import  SchoolIcon  from '@mui/icons-material/School';
+import  AdminPanelSettingsIcon  from '@mui/icons-material/AdminPanelSettings';
+
 import useGetUsersList from '../../hooks/users/useGetUsersList';
 import { GlobalContext } from '../../context/usercontext.js'
 import { useContext } from 'react';
@@ -64,6 +68,30 @@ const SideBar = ({ onFilter }) => {
   )
 }
 
+const BottomNavigationBar = ({ onFilterChange }) => {
+  const [value, setValue] = useState('allUsers'); // Default filter value
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    onFilterChange(newValue); // Notify the parent component about the selected filter
+  };
+
+  return (
+    <Box>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={handleChange}
+        >
+          <BottomNavigationAction label="All Users" value="allUsers" icon={<GroupsIcon />} />
+          <BottomNavigationAction label="Instructors" value="instructors" icon={<SchoolIcon />} />
+          <BottomNavigationAction label="Admin" value="admins" icon={<AdminPanelSettingsIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
+  );
+};
 const Table = ({ filter }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]); //Track selected users
@@ -112,7 +140,7 @@ const Table = ({ filter }) => {
       setIsEditModalOpen(true);
     }
   };
-
+  
   return (
     <Box sx={{ height: 400, width: '100%', padding: '0em 1em' }}>
       <Typography variant="h5" component="div" sx={{ flexGrow: 1, padding: '1.3em 0em' }}>
@@ -126,7 +154,7 @@ const Table = ({ filter }) => {
         )}
       </Box>
 
-      <DataGrid
+      <DataGrid sx={{width:'100%'}}
         rows={filteredRows}
         columns={columns}
         initialState={{
@@ -175,19 +203,43 @@ const Table = ({ filter }) => {
 
 const UsersTable = () => {
   const [filter, setFilter] = useState('all');
+  const [showBottomNav, setShowBottomNav] = useState(window.innerWidth <= 767);
+
+  const isMobile = () => window.innerWidth <= 767;
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobileVar = window.innerWidth <= 767;
+      setShowBottomNav(isMobileVar);
+      if (!isMobileVar) {
+        // If not mobile, hide the bottom navigation bar and show the sidebar
+        setFilter('all'); // Reset the filter to 'all'
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const applyFilter = (filterValue) => {
     setFilter(filterValue);
   };
 
   return (
-   <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Box sx={{ width: '100%', display: 'flex' }}>
+      {showBottomNav && (
+        <BottomNavigationBar onFilterChange={applyFilter} />
+      )}
+      {!showBottomNav && (
         <SideBar onFilter={applyFilter} />
-        <Table filter={filter} />
+      )}
+        <Table filter={filter} sx={{ flex: 1, height: '100%' }} />
       </Box>
     </div>
-  )
+  );
 }
 
-export default UsersTable ;
+export default UsersTable;

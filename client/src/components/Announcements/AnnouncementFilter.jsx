@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, FormGroup, FormControlLabel, Checkbox, Typography, TextField, InputAdornment } from '@mui/material';
 import { LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,6 +17,26 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
     SE41025: false,
     SE12339: false,
   });
+
+  const isMobile = () => window.innerWidth <= 767;
+    // Handle window resize to update mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      if (isMobile()) {
+        // Handle mobile view
+      } else {
+        // Handle desktop view
+      }
+    };
+
+    // Attach the event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleRoomChange = (event) => {
     const newSelectedRooms = {
@@ -65,38 +85,44 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
             }}
             />
         </Box>
-        <Box sx={filterStyles.roomSection}>
-          <Typography variant="subtitle1" gutterBottom>
+        {isMobile() ? (
+          <p></p>
+        ): (
+        <>
+          <Box sx={filterStyles.roomSection}>
+            <Typography variant="subtitle1" gutterBottom>
               Room
-          </Typography>
-          <FormGroup>
-            <FormControlLabel
+            </Typography>
+            <FormGroup>
+              <FormControlLabel
                 control={<Checkbox checked={selectedRooms.SE41025} onChange={handleRoomChange} name="SE41025" />}
                 label="SE4-1025"
-            />
-            <FormControlLabel
+              />
+              <FormControlLabel
                 control={<Checkbox checked={selectedRooms.SE12339} onChange={handleRoomChange} name="SE12339" />}
                 label="SE12-339"
-            />
-          </FormGroup>
-        </Box>
-        <Box sx={filterStyles.dateSection}>
-          <Typography variant="subtitle1" gutterBottom>
-              Filter by date
-          </Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <StaticDatePicker
-                  displayStaticWrapperAs="desktop"
-                  openTo="day"
-                  value={selectedDate}
-                  onChange={(newValue) => {
-                      setSelectedDate(newValue);
-                      onFilterChange('date', newValue ? newValue.format('YYYY-MM-DD') : null);
-                  }}
-                  renderInput={(params) => <div />} // This hides the input field
               />
-          </LocalizationProvider>
-        </Box>
+            </FormGroup>
+          </Box>
+          <Box sx={filterStyles.dateSection}>
+            <Typography variant="subtitle1" gutterBottom>
+              Filter by date
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <StaticDatePicker
+                displayStaticWrapperAs="desktop"
+                openTo="day"
+                value={selectedDate}
+                onChange={(newValue) => {
+                  setSelectedDate(newValue);
+                  onFilterChange('date', newValue ? newValue.format('YYYY-MM-DD') : null);
+                }}
+                renderInput={(params) => <div />} // This hides the input field
+              />
+            </LocalizationProvider>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
