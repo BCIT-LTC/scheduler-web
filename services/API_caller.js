@@ -1,4 +1,13 @@
-
+/**
+ * This file contains the function used to call APIs on the serverside.
+ * It works in conjunction with the client side API routes.
+ *
+ * @param path
+ * @param type
+ * @param req
+ * @param queryParams
+ * @returns {Promise<{data: {error}, status: number}>}
+ */
 async function callAPI(path, type, req, queryParams = {}) {
     let status;
     let data;
