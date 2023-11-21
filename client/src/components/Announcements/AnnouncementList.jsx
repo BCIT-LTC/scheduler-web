@@ -91,7 +91,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
     <Box sx={{ maxWidth: '800px', margin: 'auto', padding: '24px' }}>
       {announcements.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((announcement, index) => (
         <AnnouncementCard
-          {/* These values are returned by the API call as is */}
+          // {/* These values are returned by the API call as is */}
           key={announcement.announcements_id || index}
           id={announcement.announcements_id}
           title={announcement.title}
