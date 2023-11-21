@@ -21,11 +21,20 @@ import NewAnnouncement from '../components/Announcements/NewAnnouncement';
 import {GlobalContext} from "../context/usercontext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+
+/**
+ * Announcements page aka announcement container
+ *
+ * @returns {Element}
+ * @constructor
+ */
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
   const [snackbarColor, setSnackbarColor] = useState('success');
     const { user } = useContext(GlobalContext);
     const role = user.role;
+
+    // Transition for snackbar
     function TransitionLeft(props) {
         return <Slide {...props} direction="left"/>;
     }
@@ -49,7 +58,8 @@ const Announcements = () => {
         setOpen(true);
         setSnackbarColor(severity === 'success' ? 'info' : severity);
     }
-  const handleCloseDialog = () => {
+// used for both edit and create
+    const handleCloseDialog = () => {
     setDialogue(false);
   }
   const [filters, setFilters] = useState({
@@ -153,6 +163,7 @@ const Announcements = () => {
             >
                 <NewAnnouncement onSnackbarOpen={handleSnackbarOpen} onSnackbarClose={handleSnackbarClose}  handleClose={handleCloseDialog} onAnnouncementCreated={onAnnouncementCreated} />
             </Dialog>
+            {/*The Snackbar uses an Alert for better UX*/}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose} TransitionComponent={TransitionLeft}>
                 <Alert onClose={handleAlertClose} severity={severity} sx={{ width: '100%' }} color={snackbarColor}>
                     {message}

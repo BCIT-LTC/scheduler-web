@@ -5,11 +5,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
 
+// Filter styles for mobile view
 const filterStyles = {
     searchSection: { mb: 2 },
     roomSection: { mb: 2 },
     dateSection: { mb: 2 },
   };
+
+/**
+ * Announcement filter component
+ *
+ * @param onSearchChange
+ * @param onFilterChange
+ * @returns {Element}
+ * @constructor
+ */
 const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [searchText, setSearchText] = useState('');
@@ -18,6 +28,7 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
     SE12339: false,
   });
 
+    // Check if the window is mobile view
   const isMobile = () => window.innerWidth <= 767;
     // Handle window resize to update mobile view
   useEffect(() => {
@@ -38,6 +49,11 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
     };
   }, []);
 
+    /**
+     * Handle room checkbox change
+     *
+     * @param event
+     */
   const handleRoomChange = (event) => {
     const newSelectedRooms = {
       ...selectedRooms,
@@ -47,6 +63,11 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
     onFilterChange('rooms', Object.keys(newSelectedRooms).filter(key => newSelectedRooms[key]));
   };
 
+    /**
+     * Handle search text change
+     *
+     * @param event
+     */
   const handleSearchChange = (event) => {
     const newValue = event.target.value;
     setSearchText(newValue);
@@ -85,6 +106,7 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
             }}
             />
         </Box>
+        {/*Switching to mobile view*/}
         {isMobile() ? (
           <p></p>
         ): (

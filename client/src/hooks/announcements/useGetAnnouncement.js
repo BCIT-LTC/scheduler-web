@@ -1,11 +1,25 @@
 import { useEffect, useState, useCallback } from 'react';
 
+/**
+ * Custom hook to get announcements
+ * This hook is used in the Announcements container
+ * It makes a GET request to the server to get announcements
+ *
+ * @returns {{isLoading: boolean, error: unknown, announcements: *[], refetchAnnouncements: ((function(): void)|*)}}
+ */
 const useGetAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    /**
+     * Function to make a GET request to the client side route to get announcements
+     *
+     * @type {(function(): void)|*}
+     */
     const fetchAnnouncements = useCallback(() => {
+
+        // Getting the jwt token from the cookie
         const getCookie = (name) => {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);

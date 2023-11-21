@@ -10,35 +10,46 @@ import dayjs from 'dayjs';
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system';
 
+/**
+ * Edit announcement component
+ *
+ * @param id
+ * @param existingTitle
+ * @param existingDescription
+ * @param existingDate
+ * @param handleClose
+ * @param onAnnouncementEdited
+ * @param onSnackbarOpen
+ * @returns {Element}
+ * @constructor
+ */
 const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, existingDate, handleClose, onAnnouncementEdited, onSnackbarOpen }) => {
     const [title, setTitle] = useState(existingTitle || '');
     const [announcement, setAnnouncement] = useState(existingDescription || '');
     const [selectedDate, setSelectedDate] = useState(existingDate ? dayjs(existingDate) : null);
     const { editAnnouncement } = useEditAnnouncement();
+
+    // Calling the useEditAnnouncement hook to make the API call
     const handleSave = () => {
         const formattedDateForSave = selectedDate ? dayjs(selectedDate).toISOString() : null;
         const action = editAnnouncement
         const successCallback = onAnnouncementEdited
 
+        // This could benefit from better error handling
         action(id, title, announcement, formattedDateForSave, () => {
             onSnackbarOpen('Announcement edited successfully!', "success");
             successCallback();
             handleClose();
         }, (error) => {
-            console.log(error);
-            // TODO: Handle error (e.g., show in UI)
+            console.log("Announcement not edited" + error)
             onSnackbarOpen('Announcement not edited', "error");
         });
     };
+    // Check if the window is mobile view
     const isMobile = () => window.innerWidth <= 767;
-        // Handle window resize to update mobile view
-    useEffect(() => {
+            useEffect(() => {
         const handleResize = () => {
-        if (isMobile()) {
-            // Handle mobile view
-        } else {
-            // Handle desktop view
-        }
+        if (isMobile()) {} else {}
         };
 
         // Attach the event listener
@@ -57,6 +68,7 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
             <Typography variant="h5" component="div" marginBottom={'20px'} marginTop={'20px'}>
                 Edit Announcements
             </Typography>
+            {/*Could refactor this box and make it into a separate component*/}
             <Box>
                 <TextField
                     fullWidth

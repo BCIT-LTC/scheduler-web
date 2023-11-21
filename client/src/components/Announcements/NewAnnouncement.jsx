@@ -30,9 +30,7 @@ const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackb
     useEffect(() => {
         const handleResize = () => {
         if (isMobile()) {
-            // Handle mobile view
         } else {
-            // Handle desktop view
         }
         };
 

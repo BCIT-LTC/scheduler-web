@@ -7,12 +7,13 @@ import dayjs from "dayjs";
 import {GlobalContext} from "../../context/usercontext";
 /**
  * Announcement card component
+ *
  * @param id
  * @param title
  * @param date
  * @param description
- * @param onDelete
- * @param onEdit
+ * @param onDelete passed from AnnouncementList
+ * @param onEdit passed from AnnouncementList
  * @returns {Element}
  * @constructor
  */
@@ -47,7 +48,16 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
   );
 }
 
-
+/**
+ * Announcement list component
+ *
+ * @param announcements
+ * @param onDelete passed from Announcements container
+ * @param refetchAnnouncements
+ * @param onSnackbarOpen
+ * @returns {Element}
+ * @constructor
+ */
 function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSnackbarOpen }) {
   const [page, setPage] = useState(1);
   const [editAnnouncement, setEditAnnouncement] = useState(null);
@@ -56,6 +66,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
   const handleChange = (event, value) => {
     setPage(value);
   };
+  // Delete announcement
   const handleDelete = (id) => {
     onDelete(id, () => {
         onSnackbarOpen('Announcement deleted successfully!', "success");
@@ -65,6 +76,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
         onSnackbarOpen('Announcement not deleted', "error");
     });
   }
+    // Edit announcement
   const handleEdit = (id) => {
       const announcementToEdit = announcements.find(announcement => announcement.announcements_id === id);
       setEditAnnouncement(announcementToEdit);
@@ -79,6 +91,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
     <Box sx={{ maxWidth: '800px', margin: 'auto', padding: '24px' }}>
       {announcements.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((announcement, index) => (
         <AnnouncementCard
+          {/* These values are returned by the API call as is */}
           key={announcement.announcements_id || index}
           id={announcement.announcements_id}
           title={announcement.title}
@@ -88,7 +101,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
             onEdit={handleEdit}
         />
       ))}
-        {/*maybe good maybe shit*/}
+        {/*This is the dialog that the edit announcement component is rendered in*/}
         {isEditDialogOpen && editAnnouncement && (
             <Dialog open={isEditDialogOpen} onClose={handleEditClose}>
                 <EditAnnouncementComponent
