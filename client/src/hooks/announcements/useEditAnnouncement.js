@@ -31,7 +31,7 @@ const useEditAnnouncement = () => {
         };
         const jwtToken = getCookie('jwt');
 
-        fetch(`http://localhost:9000/api/announcement`, {
+        fetch(`/api/announcement`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

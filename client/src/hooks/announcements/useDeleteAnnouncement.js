@@ -27,7 +27,7 @@ const useDeleteAnnouncements = () => {
             if (parts.length === 2) return parts.pop().split(';').shift();
         };
         const jwtToken = getCookie('jwt');
-        fetch(`http://localhost:9000/api/announcement`, {
+        fetch(`/api/announcement`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

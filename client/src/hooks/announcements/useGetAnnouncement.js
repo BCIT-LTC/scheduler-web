@@ -28,7 +28,7 @@ const useGetAnnouncements = () => {
         const jwtToken = getCookie('jwt');
 
         setIsLoading(true);
-        fetch(`http://localhost:9000/api/announcement`, {
+        fetch(`/api/announcement`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

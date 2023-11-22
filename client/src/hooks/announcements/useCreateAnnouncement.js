@@ -32,7 +32,7 @@ const useCreateAnnouncement = () => {
 
         const jwtToken = getCookie('jwt');
 
-        fetch(`http://localhost:9000/api/announcement`, {
+        fetch(`/api/announcement`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
