@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: routers/authorization</title>
+    <title>JSDoc: Source: services/API_caller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,175 +17,67 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: routers/authorization</h1>
+    <h1 class="page-title">Source: services/API_caller.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Express router providing authorization related routes</div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-        <h3 class="subsection-title">Requires</h3>
-
-        <ul>
-            <li>module:express</li>
-        </ul>
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-
-        <dl>
-            <dt><a href="module-routers_authorization-usersRouter.html">usersRouter</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="~express"><span class="type-signature">(inner, constant) </span>express<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    express module
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This file contains the function used to call APIs on the serverside.
+ * It works in conjunction with the client side API routes.
+ *
+ * @param path
+ * @param type
+ * @param req
+ * @param queryParams
+ * @returns {Promise&lt;{data: {error}, status: number}>}
+ */
+async function callAPI(path, type, req, queryParams = {}) {
+    let status;
+    let data;
+    let response;
+    try {
+        const url = new URL(process.env.API_URL + path);
+        Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
+
+        const requestOptions = {
+            method: type,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': req.headers.authorization,
+            },
+        };
+
+        if (type.toLowerCase() !== 'get') {
+            requestOptions.body = JSON.stringify(req.body);
+        }
+
+        response = await fetch(url, requestOptions);
+        const text = await response.text();
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Failed to parse as JSON:', text);
+            throw e; // Rethrow the parsing error
+        }
+
+        status = response.status;
+    } catch (error) {
+        console.log(error.message);
+        status = 500;
+        data = { error: error.message };
+    }
+    return { status: status, data: data };
+}
+
+module.exports = callAPI;
+</code></pre>
+        </article>
+    </section>
 
 
 
