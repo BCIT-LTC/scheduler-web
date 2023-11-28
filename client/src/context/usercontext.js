@@ -16,6 +16,7 @@ export default function ContextProvider({ children }) {
         user = jwtDecode(jwt);
         isLoggedIn = true;
     }
+    console.log("user: ", user)
     // Create a state to store the user and the isLoggedIn status
     const [Usercontext, setUsercontext] = useState(
         {
