@@ -4,7 +4,7 @@ describe('ApiRequests', () => {
   let apiRequests;
 
   beforeEach(() => {
-    apiRequests = new ApiRequests();
+    apiRequests = new ApiRequests("https://scheduler-api.ltc.bcit.ca/api/", "auth_token");
   });
 
   afterEach(() => {
