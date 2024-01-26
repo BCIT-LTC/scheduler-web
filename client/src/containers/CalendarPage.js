@@ -5,10 +5,11 @@ import {
   Paper
 } from '@mui/material';
 
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
 
 let event = [
   {
@@ -20,8 +21,7 @@ let event = [
     },
     description: 'Lecture'
   }
-  // more events ...
-]
+];
 
 
 /**
@@ -32,15 +32,15 @@ const CalendarPage = () => {
 
   let handleEventClick = (clickInfo) => {
     console.log(clickInfo.event);
-  }
+  };
 
   let handleDateSelect = (selectInfo) => {
     // let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
+    let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect() // clear date selection
+    calendarApi.unselect(); // clear date selection
 
-    console.log(selectInfo)
+    console.log(selectInfo);
 
     // if (title) {
     //   calendarApi.addEvent({
@@ -51,20 +51,20 @@ const CalendarPage = () => {
     //     allDay: selectInfo.allDay
     //   })
     // }
-  }
+  };
 
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2 }}>
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay listWeek'
           }}
-          initialView="dayGridMonth"
+          initialView="timeGridWeek"
           weekends={false}
           editable={true}
           selectable={true}
@@ -73,11 +73,13 @@ const CalendarPage = () => {
           events={event}
           eventClick={handleEventClick}
           select={handleDateSelect}
+          nowIndicator={true}
+          slotMinTime="08:00:00"
+          slotMaxTime="17:00:00"
         />
       </Paper>
     </Container>
   );
-}
+};
 
 export default CalendarPage;
-
