@@ -8,6 +8,8 @@ This project is a collaboration between the following people:
 - Arvin Rolos - LTC
 - Kyle Hunter - LTC
 
+- Stanley Chow - ISSP Winter 2024
+
 - Hareem Fatima - ISSP Winter 2023
 - Sumeet Minhas - ISSP Winter 2023
 - Kyla Van-Eyden - ISSP Winter 2023
