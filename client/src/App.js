@@ -4,11 +4,12 @@ import ProtectedLayout from "./containers/ProtectedLayout";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Announcements from "./containers/Announcements";
 import RoleManagement from "./containers/RoleManagement";
+import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 
 function App() {
 
-// Role-based route protection component
+  // Role-based route protection component
   return (
     <>
       <Routes>
@@ -26,10 +27,10 @@ function App() {
             element={
               <ProtectedLayout />
             }>
-            <Route path="calendar" element={<div>calendar page</div>} />
-            <Route path="announcements" element={<Announcements/>} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="announcements" element={<Announcements />} />
             <Route path="openlab" element={<div>schedule openlab</div>} />
-            <Route element={<ProtectedRoute/>}>
+            <Route element={<ProtectedRoute />}>
               <Route path="rolemanagement" element={<RoleManagement />} />
             </Route>
             <Route path="" element={<Navigate to="/home/calendar" replace />} />

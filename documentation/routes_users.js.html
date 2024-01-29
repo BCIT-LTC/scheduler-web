@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: routers/authorization</title>
+    <title>JSDoc: Source: routes/users.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,175 +17,77 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: routers/authorization</h1>
+    <h1 class="page-title">Source: routes/users.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Express router providing authorization related routes</div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-        <h3 class="subsection-title">Requires</h3>
-
-        <ul>
-            <li>module:express</li>
-        </ul>
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-
-        <dl>
-            <dt><a href="module-routers_authorization-usersRouter.html">usersRouter</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="~express"><span class="type-signature">(inner, constant) </span>express<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    express module
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const express = require('express');
+const router = express.Router();
+const ApiRequests = require('../services/api_requests');
+
+/**
+ * Route to make sure the API db is storing the user
+ * @name get/users
+ * @function
+ * @memberof module:routers/users~usersRouter
+ * @inner
+ * @return {Object} list of all users
+ */
+router.get("/users", (req, res) => {
+
+    const api_requests = new ApiRequests("users", req.headers.authorization);
+    let data = api_requests.get();
+    data.then((data) => {  // data is the response from the API
+        console.log(data);
+    })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    res.status(200).json({ users: "users" });
+});
+
+
+router.param('user_id', function (req, res, next, id) {
+    // sample user, would actually fetch from API
+    req.user = {
+        id: id,
+        name: 'TJ'
+    }
+    next()
+})
+
+router.route('/user/:user_id')
+    .all(function (req, res, next) {
+        // runs for all HTTP verbs first
+        // think of it as route specific middleware!
+        next()
+    })
+    //get user
+    .get(function (req, res, next) {
+        res.json(req.user)
+    })
+    .put(function (req, res, next) {
+        // just an example of maybe updating the user
+        req.user.name = req.params.name
+        // save user ... etc
+        res.json(req.user)
+    })
+    .post(function (req, res, next) {
+        next(new Error('not implemented'))
+    })
+    .delete(function (req, res, next) {
+        next(new Error('not implemented'))
+    })
+
+module.exports = router;</code></pre>
+        </article>
+    </section>
 
 
 
