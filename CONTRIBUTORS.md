@@ -10,6 +10,7 @@ This project is a collaboration between the following people:
 
 - Stanley Chow - ISSP Winter 2024
 - Brandon Chan - ISSP Winter 2024
+- Buck Sin - ISSP Winter 2024
 
 - Hareem Fatima - ISSP Winter 2023
 - Sumeet Minhas - ISSP Winter 2023
