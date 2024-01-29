@@ -1,91 +1,85 @@
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import PopUp from '../components/PopUp';
-import CalendarDay from '../components/CalendarDay';
-import React, {useState, useEffect, useContext, useRef} from 'react';
-import {GlobalContext} from '../context';
-import {fetchCalendar} from '../utils/fetchFunctions';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { GlobalContext } from "../context/usercontext";
+import {
+  Container,
+  Paper
+} from '@mui/material';
+
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
+
+let event = [
+  {
+    title: 'BCH237',
+    start: '2023-11-23T10:30:00',
+    end: '2023-11-24T11:30:00',
+    extendedProps: {
+      department: 'BioChemistry'
+    },
+    description: 'Lecture'
+  }
+];
+
 
 /**
  *
  * @returns {JSX.Element} - Calendar Page
  */
-export default function CalendarPage() {
-  const Context = useContext(GlobalContext);
-  const [month, setMonth] = useState(new Date());
-  const [filteredSheetData, setFilteredSheetData] = useState([]);
-  const matchedDates = useRef({});
+const CalendarPage = () => {
 
-  // Fetches calendar data based on the selected month
-  async function fetchData() {
-    const response = await fetchCalendar(
-      month.getMonth() + 1,
-      month.getFullYear()
-    );
-    setFilteredSheetData(response.results);
-    matchedDates.current = {};
-  }
+  let handleEventClick = (clickInfo) => {
+    console.log(clickInfo.event);
+  };
 
-  useEffect(() => {
-    // Disables the calendar month button to prevent usage
-    const calendarMonthLabel = document.querySelector(
-      '.react-calendar__navigation button.react-calendar__navigation__label'
-    );
-    calendarMonthLabel.setAttribute('tabindex', -1);
-    calendarMonthLabel.style.pointerEvents = 'none';
-  }, []);
+  let handleDateSelect = (selectInfo) => {
+    // let title = prompt('Please enter a new title for your event')
+    let calendarApi = selectInfo.view.calendar;
 
-  useEffect(() => {
-    fetchData();
-  }, [month]);
+    calendarApi.unselect(); // clear date selection
 
-  // Handles the change of active start date (month change)
-  function handleActiveStartDateChange({activeStartDate}) {
-    setMonth(activeStartDate);
-  }
+    console.log(selectInfo);
+
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: createEventId(),
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     allDay: selectInfo.allDay
+    //   })
+    // }
+  };
+
 
   return (
-    <div className="App">
-      <Calendar
-        onActiveStartDateChange={handleActiveStartDateChange}
-        value={month}
-        onClickDay={(date, event) => {
-          let matchingDays = [];
-          if (filteredSheetData && filteredSheetData.length > 0) {
-            matchingDays = filteredSheetData.filter((openLab) => {
-              return date.getDate() === new Date(openLab.date).getUTCDate();
-            });
-            if (matchingDays.length > 0) {
-              matchedDates.current = {
-                ...matchedDates.current,
-                [date.toISOString()]: matchingDays,
-              };
-            }
-          }
-          if (matchingDays) {
-            Context.setSelectedDay(matchingDays);
-          }
-          Context.setPopup(!Context.state.popupOpen);
-        }}
-        showNeighboringMonth={false}
-        tileClassName="tile"
-        tileContent={({date, view}) => {
-          let matchingDays = [];
-          if (filteredSheetData && filteredSheetData.length > 0) {
-            matchingDays = filteredSheetData.filter((openLab) => {
-              return date.getDate() === new Date(openLab.date).getUTCDate();
-            });
-            if (matchingDays.length > 0) {
-              matchedDates.current = {
-                ...matchedDates.current,
-                [date.toISOString()]: matchingDays,
-              };
-            }
-          }
-          return <CalendarDay date={date} data={matchingDays} />;
-        }}
-      />
-      <PopUp />
-    </div>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2 }}>
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay listWeek'
+          }}
+          initialView="timeGridWeek"
+          weekends={false}
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          events={event}
+          eventClick={handleEventClick}
+          select={handleDateSelect}
+          nowIndicator={true}
+          slotMinTime="08:00:00"
+          slotMaxTime="17:00:00"
+        />
+      </Paper>
+    </Container>
   );
-}
+};
+
+export default CalendarPage;
