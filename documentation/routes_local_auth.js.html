@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: routers/authorization</title>
+    <title>JSDoc: Source: routes/local_auth.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,175 +17,78 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: routers/authorization</h1>
+    <h1 class="page-title">Source: routes/local_auth.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Express router providing authorization related routes</div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-        <h3 class="subsection-title">Requires</h3>
-
-        <ul>
-            <li>module:express</li>
-        </ul>
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-
-        <dl>
-            <dt><a href="module-routers_authorization-usersRouter.html">usersRouter</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="~express"><span class="type-signature">(inner, constant) </span>express<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    express module
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_check_authorization.js.html">routes/check_authorization.js</a>, <a href="routes_check_authorization.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Express router providing local login routes
+ * @module routers/locallogin
+ * @requires express
+ */
+
+/**
+ * express module
+ * @const
+ */
+const express = require('express');
+
+/**
+ * Express router to mount user related functions on.
+ * @type {object}
+ * @const
+ * @namespace localloginrRouter
+ */
+const router = express.Router();
+
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+
+
+/**
+ * Login using a local account
+ * @name post/locallogin
+ * @function
+ * @memberof module:routers/locallogin~localloginRouter
+ * @inner
+ * @param {Object} req.body.email - username
+ * @param {Object} req.body.password - password for given username
+ * @return {Object} JWT cookie if success
+ */
+router.post('/', function (req, res) {
+    if (req.body.email === ADMIN_USERNAME &amp;&amp; req.body.password === ADMIN_PASSWORD) {
+        let email = req.body.email;
+        let first_name = 'admin';
+        let last_name = 'admin';
+        let role = 'admin';
+        let school = 'School of Health Sciences';
+        let program = 'Bachelor of Science in Nursing';
+        let jwtToken = jwt.sign({ 
+            email, 
+            first_name, 
+            last_name, 
+            role, 
+            school,
+            program
+        }, 
+            process.env.JWT_AUTH_SIGNING_KEY);
+        res.cookie('jwt', jwtToken, { httpOnly: false });
+        res.sendStatus(200);
+    } else {
+        return res.sendStatus(401);
+    }
+});
+
+module.exports = router;</code></pre>
+        </article>
+    </section>
 
 
 
