@@ -1,5 +1,8 @@
-// Description: This file contains the class ApiRequests. This class is used to make requests to the API.
-
+/**
+ * This is a description of the MyClass constructor function.
+ * @class
+ * @classdesc This file contains the class ApiRequests. This class is used to make requests to the API.
+ */
 module.exports = class ApiRequests {
     constructor(path, auth_token, body) {
         if (path === undefined) {
@@ -19,7 +22,12 @@ module.exports = class ApiRequests {
         };
     }
 
-    // used to get records
+    /**
+     * This file contains the function used to call APIs on the serverside.
+     * It works in conjunction with the client side API routes.
+     *
+     * @returns {<{data: {error}, status: number}>}
+     */
     async get() {
         this.fetchoptions.method = "GET";
         let data;

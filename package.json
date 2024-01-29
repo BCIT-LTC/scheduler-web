@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "prod": "NODE_ENV=production node app.js"
+    "prod": "NODE_ENV=production node app.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "winston": "^3.10.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "jsdoc": "^4.0.2",
     "nodemon": "^2.0.22"
   },
