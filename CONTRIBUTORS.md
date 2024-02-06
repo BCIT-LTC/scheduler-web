@@ -8,11 +8,6 @@ This project is a collaboration between the following people:
 - Arvin Rolos - LTC
 - Kyle Hunter - LTC
 
-- Stanley Chow - ISSP Winter 2024
-- Brandon Chan - ISSP Winter 2024
-- Buck Sin - ISSP Winter 2024
-- Lester Shun - ISSP Winter 2024
-
 - Hareem Fatima - ISSP Winter 2023
 - Sumeet Minhas - ISSP Winter 2023
 - Kyla Van-Eyden - ISSP Winter 2023
@@ -34,3 +29,8 @@ This project is a collaboration between the following people:
 - Amin Davari - ISSP Fall 2023
 - Kyla Van-Eyden - ISSP Fall 2023
 - Karl Cue - ISSP Fall 2023
+
+- Stanley Chow - ISSP Winter 2024
+- Brandon Chan - ISSP Winter 2024
+- Buck Sin - ISSP Winter 2024
+- Lester Shun - ISSP Winter 2024
