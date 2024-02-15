@@ -27,7 +27,7 @@ const router = express.Router();
  * @inner
  * @return {Object} boolean of if the user is admin
  */
-router.post("", async (req, res, next) => {
+router.post("/authorize", async (req, res, next) => {
 
     let response;
     const url = new URL(process.env.API_URL + "authorize");
@@ -55,7 +55,8 @@ router.post("", async (req, res, next) => {
                     role,
                     school,
                     program,
-                    authorizationChecked: true,
+                    authorization_checked: true,
+                    is_logged_in: true
                 }, process.env.JWT_AUTH_SIGNING_KEY);
 
                 res.cookie('jwt', jwtToken, { httpOnly: false, sameSite: 'none', secure: true });
@@ -82,6 +83,34 @@ router.post("", async (req, res, next) => {
     }
 });
 
+
+/**
+ * Route to get the anonymous token
+ * @name get/auth/anonymous
+ * @function
+ * @memberof module:routers/users~usersRouter
+ * @inner
+ * @return {Object} anonymous cookie to the browser
+ */
+router.post("/anonymous", (req, res) => {
+    try {
+        let jwtToken = jwt.sign({
+            email: "anonymous",
+            first_name: "anonymous",
+            last_name: "anonymous",
+            role: "anonymous",
+            school: "anonymous",
+            program: "anonymous",
+            authorization_checked: false,
+            is_logged_in: false
+        }, process.env.JWT_AUTH_SIGNING_KEY);
+        
+        res.cookie('jwt', jwtToken, { httpOnly: false, sameSite: 'none', secure: true });
+        res.redirect('/');
+    } catch (error) {
+        return res.status(500).json({ error: "Error retrieving anonymous token: " + error.message });
+    }
+});
 
 module.exports = router;
 
