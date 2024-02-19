@@ -5,7 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 export default function ProtectedRoute() {
     const globalcontext = useContext(GlobalContext);
 
-    if (!globalcontext.isLoggedIn) {
+    if (!globalcontext.user.is_logged_in) {
         // If the user is not logged in, redirect to login
         return <Navigate to="/login" replace />
     }

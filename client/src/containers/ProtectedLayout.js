@@ -33,7 +33,7 @@ export default function ProtectedLayout() {
     const [Draweropen, setDraweropen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    if (!globalcontext.isLoggedIn) {
+    if (!globalcontext.user.is_logged_in) {
         return <Navigate to="/login" />;
     }
 
