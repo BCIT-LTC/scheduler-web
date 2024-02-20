@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const jwt = require("jsonwebtoken");
 
 /**
  * Route to serve the client application. Upon landing on the index route, the client is assigned a default JWT token.
