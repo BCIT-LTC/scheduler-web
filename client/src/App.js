@@ -8,7 +8,6 @@ import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 
 function App() {
-
   // Role-based route protection component
   return (
     <>
@@ -20,23 +19,21 @@ function App() {
           <Route path="unauthorized" element={<div>unauthorized</div>} />
           <Route path="" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="calendar" element={<CalendarPage />} />
 
           {/* private routes */}
-          <Route
-            path="home"
-            element={
-              <ProtectedLayout />
-            }>
-            <Route path="calendar" element={<CalendarPage />} />
+          <Route path="home" element={<ProtectedLayout />}>
             <Route path="announcements" element={<Announcements />} />
             <Route path="openlab" element={<div>schedule openlab</div>} />
             <Route element={<ProtectedRoute />}>
               <Route path="rolemanagement" element={<RoleManagement />} />
             </Route>
             <Route path="" element={<Navigate to="/home/calendar" replace />} />
-            <Route path="*" element={<Navigate to="/home/calendar" replace />} />
+            <Route
+              path="*"
+              element={<Navigate to="/home/calendar" replace />}
+            />
           </Route>
-
         </Route>
       </Routes>
     </>
