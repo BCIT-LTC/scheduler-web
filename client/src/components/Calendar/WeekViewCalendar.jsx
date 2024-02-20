@@ -1,13 +1,21 @@
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import listPlugin from "@fullcalendar/list";
 
 const calendar = new Calendar(calendarEl, {
-  plugins: [dayGridPlugin],
-  initialView: "dayGridWeek",
+  plugins: [dayGridPlugin, listPlugin],
+  initialView: "dayGrid3day",
+  views: {
+    dayGrid3Day: {
+      type : "dayGrid",
+      duration: { days: 3 },
+      buttonText: "3 day",
+    }
+  },
   headerToolbar: {
     left: "prev,next",
     center: "title",
-    right: "dayGridWeek,dayGridDay", // user can switch between the two
+    right: "dayGridMonth,dayGridWeek", // user can switch between the two
   },
 });
 
