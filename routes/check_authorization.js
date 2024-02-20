@@ -27,7 +27,7 @@ const router = express.Router();
  * @inner
  * @return {Object} boolean of if the user is admin
  */
-router.post("/authorize", async (req, res, next) => {
+router.post("", async (req, res, next) => {
 
     let response;
     const url = new URL(process.env.API_URL + "authorize");
