@@ -18,7 +18,6 @@ stages:
   - review:publish
   - review:cleanup
 
-
 # Project initialization
 #
 #   - a project access token is required; if it doesn't exist it is created on the first run
@@ -26,7 +25,6 @@ stages:
 #   stage: get info
 #   extends:
 #     - ".project_init"
-
 
 # Determine if a new git tag and GitLab release should be created
 #
@@ -36,7 +34,6 @@ determine version:
     - ".determine_version"
     - ".determine_version_rules"
 
-
 # Determine target environment, deployment namespace, ingress/app url, and tags
 #
 get info:
@@ -44,14 +41,12 @@ get info:
   extends:
     - ".get_info"
 
-
 # Build image and push to project registry
 #
 build image:
   stage: build
   extends:
     - ".build_image"
-
 
 # Configure environments for "latest" and "stable"
 #
@@ -65,7 +60,6 @@ environment:stable:
   extends:
     - ".environment:stable"
 
-
 # For `review` environments only: verify the required namespace exists
 #
 verify namespace:
@@ -75,7 +69,6 @@ verify namespace:
   extends:
     - ".verify_namespace"
     - ".review_rules"
-
 
 # For `review` environments only: verify the required TLS Ingress secret exists
 #
@@ -88,7 +81,6 @@ verify secrets:
     - ".verify_secrets"
     - ".review_rules"
 
-
 # For `review` environments only: build a kubernetes configuration image and push to the project registry
 #
 build review config image:
@@ -96,7 +88,6 @@ build review config image:
   extends:
     - ".build_review_config_image"
     - ".review_rules"
-
 
 # For `review` environments only: verify the required `deploy-vars` ConfigMap exists
 #
@@ -106,7 +97,6 @@ apply review configmap:
     - ".apply_review_configmap"
     - ".review_rules"
 
-
 # For `review` environments only: deploy project for review.
 #
 review:
@@ -114,7 +104,6 @@ review:
   extends:
     - ".review"
     - ".review_rules"
-
 
 # For `review` environments only: gracefully remove `review` environment after 1 week.
 #
@@ -124,19 +113,17 @@ stop review:
     - ".stop_review"
     - ".stop_review_rules"
 
-
 # Default pipeline configuration values (other global variables are set in GitLab Admin > CI/CD )
 #
 variables:
-
-  # If the app URL is not the same as the project name, change this to the app URL. 
+  # If the app URL is not the same as the project name, change this to the app URL.
   # APP_URL: "site.ltc.bcit.ca"
 
   # If GENERIC_DEPLOYMENT is set to anything but "true", the pipeline expects this
   #   project to have a `deploy/` folder. See https://infrastructure-documentation.ltc.bcit.ca/.
   #
   # GENERIC_DEPLOYMENT: "true"
- 
+
   # Deploy this app into a common namespace
   #
   # COMMON_NAMESPACE: ""
@@ -149,6 +136,10 @@ variables:
   #
   PIPELINE_DEBUG: "true"
 
+  # This project uses authentication
+  #   Test configuration by connecting to Keycloak (https://keycloak.ltc.bcit.ca)
+  #
+  KEYCLOAK_ENABLED: "true"
 
 # Include common pipeline scripts
 #
@@ -164,21 +155,18 @@ include:
   # - template: Jobs/Secret-Detection.gitlab-ci.yml
   # - template: Jobs/SAST.gitlab-ci.yml
 
-
 # Specify which GitLab Runner should pick up pipeline jobs
 #
 default:
   tags:
     - utility
 
-
-# Enable pipeline job caching. Uncomment and configure paths to use 
+# Enable pipeline job caching. Uncomment and configure paths to use
 #
 cache:
   key: $CI_COMMIT_REF_SLUG
   # paths:
   #   - ./node_modules
-
 
 # # Configure Static Application Security Test scanning
 # #
@@ -186,7 +174,6 @@ cache:
 #   stage: test
 #   extends:
 #     - ".sast_rules"
-
 
 # Configure jobs for GitLab merge request pipelines
 #
