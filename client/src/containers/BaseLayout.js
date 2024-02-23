@@ -148,7 +148,7 @@ export default function BaseLayout() {
                 open={Draweropen}
                 onClose={(ev, reason) => setDraweropen(false)}
             >
-                {globalcontext.isLoggedIn ? <List>
+                <List>
                     <ListItem disablePadding
                         onClick={() => { 
                             window.location.href = "/announcements" }}
@@ -166,7 +166,7 @@ export default function BaseLayout() {
                             <ListItemText primary={"Announcements"} />
                         </ListItemButton>
                     </ListItem>
-                </List> : null}
+                </List>
 
 
                 <List>

@@ -23,9 +23,9 @@ function App() {
             <Route path="unauthorized" element={<div>unauthorized</div>} />
             <Route path="" element={<Navigate to="/calendar" replace />} />
             <Route path="*" element={<Navigate to="/calendar" replace />} />
+            <Route path="announcements" element={<Announcements />} />
             <Route element={<ProtectedRoute />}>
               <Route path="openlab" element={<div>schedule openlab</div>} />
-              <Route path="announcements" element={<Announcements />} />
               <Route element={<PrivilegedRoute />}>
                 <Route path="rolemanagement" element={<RoleManagement />} />
               </Route>
