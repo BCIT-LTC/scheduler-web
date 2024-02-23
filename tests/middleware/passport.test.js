@@ -1,39 +1,46 @@
 const jwt = require('jsonwebtoken');
-const saml = require('passport-saml');
-jest.mock('jsonwebtoken');
-jest.mock('passport-saml');
+const passport = require('../../middleware/passport');
 
-describe('samlStrategy used by the passport', () => {
-  it('should return a jwtToken with correct values', done => {
-    // Mock jwt.sign to return a predefined token
-    jwt.sign.mockReturnValue('mockToken');
+// Import your samlStrategy
+const samlStrategy = passport._strategies.samlStrategy;
 
-    // Mock saml.Strategy
-    saml.Strategy.mockImplementation((config, callback) => {
-      // Call the callback with a predefined profile
-      callback(null, {
-        email: 'test@example.com',
-        first_name: 'Test',
-        last_name: 'User',
-        role: 'testRole',
-        school: 'testSchool',
-        program: 'testProgram'
-      }, (err, user) => {
-        // Decode the token
-        const decoded = jwt.decode(user.token);
+// Mock profile data
+const mockProfile = {
+    email: 'test@example.com',
+    first_name: 'John',
+    last_name: 'Doe',
+    role: 'user',
+    school: 'Example School',
+    program: 'Example Program'
+};
 
-        // Check if the fields exist and have correct values
-        expect(decoded).toHaveProperty('email', 'test@example.com');
-        expect(decoded).toHaveProperty('first_name', 'Test');
-        expect(decoded).toHaveProperty('last_name', 'User');
-        expect(decoded).toHaveProperty('role', 'testRole');
-        expect(decoded).toHaveProperty('school', 'testSchool');
-        expect(decoded).toHaveProperty('program', 'testProgram');
-        expect(decoded).toHaveProperty('authorization_checked', false);
-        expect(decoded).toHaveProperty('is_logged_in', true);
+// Mock done function
+const mockDone = jest.fn();
 
-        done();
-      });
+// Spy on jwt.sign to verify it's called with the expected arguments
+jest.spyOn(jwt, 'sign');
+
+describe('samlStrategy', () => {
+    it('should generate JWT token', async () => {
+        // Call the samlStrategy callback function with the mock profile and done function
+        await samlStrategy._verify(mockProfile, mockDone);
+
+        // Assert that the done function was called
+        expect(mockDone).toHaveBeenCalled();
+
+        // Assert that jwt.sign is called with the expected arguments
+        expect(jwt.sign).toHaveBeenCalledWith(
+            expect.objectContaining({
+                email: mockProfile.email,
+                first_name: mockProfile.first_name,
+                last_name: mockProfile.last_name,
+                role: mockProfile.role,
+                school: mockProfile.school,
+                program: mockProfile.program,
+                authorization_checked: false,
+                is_logged_in: true
+            }),
+            process.env.JWT_AUTH_SIGNING_KEY
+        );
     });
-  });
 });
