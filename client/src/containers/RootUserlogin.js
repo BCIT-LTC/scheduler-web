@@ -37,7 +37,7 @@ export default function RootUserlogin() {
     const globalcontext = useContext(GlobalContext);
 
     if (globalcontext.isLoggedIn) {
-        return <Navigate to="/home" />;
+        return <Navigate to="/" />;
     }
 
     const handleSubmit = async (e) => {
