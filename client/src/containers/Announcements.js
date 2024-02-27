@@ -32,7 +32,10 @@ const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
   const [snackbarColor, setSnackbarColor] = useState('success');
     const { user } = useContext(GlobalContext);
-    const role = user.role;
+    let role = "student";
+    if(user && user.role) {
+        role = user.role;
+    }
 
     // Transition for snackbar
     function TransitionLeft(props) {
