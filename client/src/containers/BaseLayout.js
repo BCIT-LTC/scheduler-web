@@ -209,7 +209,7 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
-                {globalcontext.isLoggedIn && (globalcontext.user.role === "admin" || globalcontext.user.role === "instructor") &&
+                {globalcontext.isLoggedIn && globalcontext.user.role === "admin" &&
                 <AdminArea/>}
             </Drawer>
             <Outlet />

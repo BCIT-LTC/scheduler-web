@@ -31,13 +31,13 @@ export default function NewEvent(
             room: "",
             recurring_event: false,
             start_time: dayjs(), //default start datetime are current time
-            end_time: dayjs(), 
-            recurrence_start_time: dayjs(), 
-            recurrence_end_time: dayjs(), 
+            end_time: dayjs(),
+            recurrence_start_time: dayjs(),
+            recurrence_end_time: dayjs(),
             recurrence_interval: 1,
             recurrence_days: [false, false, false, false, false],
-            recurrence_start_date: dayjs(), 
-            recurrence_end_date: dayjs(), 
+            recurrence_start_date: dayjs(),
+            recurrence_end_date: dayjs(),
             facilitator: "",
             description: "",
             holiday_closure_event: false
@@ -82,9 +82,9 @@ export default function NewEvent(
             {
                 ...formData,
                 [field]: formData[field]
-                .set('year', dateObject.year())
-                .set('month', dateObject.month())
-                .set('date', dateObject.date())
+                    .set('year', dateObject.year())
+                    .set('month', dateObject.month())
+                    .set('date', dateObject.date())
             })
     }
 
@@ -110,11 +110,22 @@ export default function NewEvent(
     //TODO: Implement the submit function
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log("formData: ", formData)
+        //remove the recurrence fields if the event is not recurring
+        const payload = { ...formData };
+        if (!payload.recurring_event) {
+            delete payload.recurrence_start_time;
+            delete payload.recurrence_end_time;
+            delete payload.recurrence_interval;
+            delete payload.recurrence_days;
+            delete payload.recurrence_start_date;
+            delete payload.recurrence_end_date;
+        }
+
+        console.log("formData payload: ", payload)
     }
 
     //TODO: Implement the cancel function
-    const onCancel = (e) => { console.log("formData: ", formData) }
+    const onCancel = (e) => { console.log("cancel new event form") }
 
     return (
         <>

@@ -5,7 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 export default function PrivilegedRoute() {
     const globalcontext = useContext(GlobalContext);
 
-    if (globalcontext.user.role && (globalcontext.user.role !== "admin" && globalcontext.user.role !== "instructor")) {
+    if (globalcontext.user.role && (globalcontext.user.role !== "admin")) {
         // If the user's role is not allowed, redirect to home
         return <Navigate to="/" replace />
     }
