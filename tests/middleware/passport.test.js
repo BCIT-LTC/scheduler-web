@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const passport = require('../../middleware/passport');
 
-// Import your samlStrategy
+// Import samlStrategy
 const samlStrategy = passport._strategies.samlStrategy;
 
 // Mock profile data
