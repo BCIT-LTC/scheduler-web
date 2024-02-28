@@ -95,5 +95,3 @@ app.listen(port, hostname, () => {
   // console.log(`Server on port ${port}`);
   logger.info(`Server on port ${port}`);
 });
-
-module.exports = app;
