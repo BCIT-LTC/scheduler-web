@@ -8,6 +8,7 @@ import RoleManagement from "./containers/RoleManagement";
 import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 import PrivilegedRoute from "./containers/PrivilegedRoute";
+import NewEvent from "./containers/NewEvent";
 
 function App() {
 
@@ -25,9 +26,10 @@ function App() {
             <Route path="*" element={<Navigate to="/calendar" replace />} />
             <Route path="announcements" element={<Announcements />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="openlab" element={<div>schedule openlab</div>} />
+              <Route path="openlab" element={<>schedule openlab</>} />
               <Route element={<PrivilegedRoute />}>
                 <Route path="rolemanagement" element={<RoleManagement />} />
+                <Route path="newevent" element={<NewEvent />} />
               </Route>
             </Route>
           </Route>

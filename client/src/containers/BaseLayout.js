@@ -26,6 +26,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, alpha, ThemeProvider } from '@mui/material/styles';
+import AdminArea from './AdminArea';
 
 import { GlobalContext } from '../context/usercontext';
 import logout from "./logout";
@@ -208,6 +209,8 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
+                {globalcontext.isLoggedIn && globalcontext.user.role === "admin" &&
+                <AdminArea/>}
             </Drawer>
             <Outlet />
         </Fragment >
