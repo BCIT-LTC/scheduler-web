@@ -89,7 +89,7 @@ app.use("/auth/authorize", check_authorization);
 app.use("/api", authentication_check, users, announcements, calendar, faq);
 
 app.use("/logout", auth);
-app.use("/", indexRoute);
+app.use("/*", indexRoute);
 
 app.listen(port, hostname, () => {
   // console.log(`Server on port ${port}`);

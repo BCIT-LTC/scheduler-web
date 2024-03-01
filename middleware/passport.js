@@ -45,7 +45,9 @@ var samlStrategy = new saml.Strategy({
         last_name, 
         role, 
         school,
-        program
+        program,
+        authorization_checked: false,
+        is_logged_in: true
     }, process.env.JWT_AUTH_SIGNING_KEY);
     // await fetch(`${process.env.API_URL}login`, {
     //     method: 'GET',
