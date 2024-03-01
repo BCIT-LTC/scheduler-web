@@ -90,7 +90,7 @@ export default function BaseLayout() {
 
 
 
-                        {globalcontext.isLoggedIn ?
+                        {globalcontext.user.is_logged_in ?
                             <>
                                 <Avatar
                                     onClick={userAvatarClick}
@@ -188,7 +188,7 @@ export default function BaseLayout() {
                     </ListItem>
                 </List>
 
-                {globalcontext.isLoggedIn ? <List>
+                {globalcontext.user.is_logged_in ? <List>
                     {globalcontext.user.role && (globalcontext.user.role === "admin" || globalcontext.user.role === "instructor") && (
                         <ListItem disablePadding
                             onClick={() => { window.location.href = "/rolemanagement" }}
