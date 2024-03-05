@@ -55,7 +55,8 @@ router.post("", async (req, res, next) => {
                     role,
                     school,
                     program,
-                    authorizationChecked: true,
+                    authorization_checked: true,
+                    is_logged_in: true
                 }, process.env.JWT_AUTH_SIGNING_KEY);
 
                 res.cookie('jwt', jwtToken, { httpOnly: false, sameSite: 'none', secure: true });
@@ -81,7 +82,6 @@ router.post("", async (req, res, next) => {
         return res.status(500).json({ error: "API unreachable: " + error.message });
     }
 });
-
 
 module.exports = router;
 

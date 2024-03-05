@@ -97,7 +97,7 @@ const Table = ({ filter }) => {
   const [selectedUsers, setSelectedUsers] = useState([]); //Track selected users
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSingleUserEdit, setIsSingleUserEdit] = useState(false);
-  const { user, isLoggedIn } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
 
   const searchTable = (event) => {
     const value = event.target.value.toLowerCase();

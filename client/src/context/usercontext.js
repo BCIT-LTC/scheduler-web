@@ -10,25 +10,25 @@ export default function ContextProvider({ children }) {
     // Check if the user is logged in
     let jwt = Cookies.get("jwt");
     let user = null;
-    let isLoggedIn = false;
 
-    if (jwt !== undefined) {
+    if (jwt === undefined) {
+        let default_jwt = Cookies.get("default_jwt");
+        user = jwtDecode(default_jwt);
+    } else {
         user = jwtDecode(jwt);
-        isLoggedIn = true;
     }
-    // Create a state to store the user and the isLoggedIn status
+    // Create a state to store the user context
     const [Usercontext, setUsercontext] = useState(
         {
-            user: user,
-            isLoggedIn: isLoggedIn
+            user: user
         }
     )
 
     useEffect(() => {
 
-        if (Usercontext.isLoggedIn) {
+        if (Usercontext.user.is_logged_in) {
             // Check if the user is authorized
-            if (!Usercontext.user.authorizationChecked) {
+            if (!Usercontext.user.authorization_checked) {
                 fetch(
                     "/auth/authorize",
                     {
@@ -53,8 +53,7 @@ export default function ContextProvider({ children }) {
                             let jwt = Cookies.get("jwt");
                             setUsercontext(
                                 {
-                                    user: jwtDecode(jwt),
-                                    isLoggedIn: true
+                                    user: jwtDecode(jwt)
                                 })
                         }
                     })

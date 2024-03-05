@@ -15,7 +15,7 @@
     /*  First child is the today section */
     .fc-header-toolbar> :nth-child(1) {
         order: 0;
-        flex: 0 0 calc(40% - 10px);
+        flex: 0 0 calc(30% - 10px);
     }
     /* Second child is the prev/title/next section */
     .fc-header-toolbar> :nth-child(2) {

@@ -15,8 +15,8 @@ export default function Login() {
 
   const globalcontext = useContext(GlobalContext);
 
-  if (globalcontext.isLoggedIn) {
-    return <Navigate to="/home" />;
+  if (globalcontext.user.is_logged_in) {
+    return <Navigate to="/" />;
   }
   
   return (
