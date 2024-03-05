@@ -11,7 +11,11 @@ module.exports = class ApiRequests {
     if (auth_token === undefined) {
       throw new Error("ApiRequest auth_token is undefined");
     }
-    this.url = new URL(process.env.API_URL + path);
+    if (process.env.API_URL === undefined) {
+        this.url = path;
+    } else {
+        this.url = new URL(process.env.API_URL + path);
+    }
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("Authorization", auth_token);
