@@ -1,0 +1,32 @@
+.fc-toolbar-chunk {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .fc-header-toolbar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .fc-header-toolbar>div {
+        flex: 0 0 calc(100% - 10px);
+        text-align: center;
+    }
+    /*  First child is the today section */
+    .fc-header-toolbar> :nth-child(1) {
+        order: 0;
+        flex: 0 0 calc(40% - 10px);
+    }
+    /* Second child is the prev/title/next section */
+    .fc-header-toolbar> :nth-child(2) {
+        order: 1;
+        font-size: x-small;
+        padding-top: 4%;
+        justify-content: center;
+    }
+    /* Third child is the month/week/day/list section */
+    .fc-header-toolbar> :nth-child(3) {
+        order: 0;
+        flex: 0 0 calc(50% - 10px);
+    }
+}
