@@ -1,6 +1,5 @@
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
-
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -10,10 +9,8 @@ import {
   Paper,
   Grid,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@mui/material';
-import '../../styles/Calendar.css';
-
 
 let event = [
   {
@@ -28,6 +25,7 @@ let event = [
 ];
 
 function CalendarComponent () {
+
   let handleEventClick = (clickInfo) => {
     console.log(clickInfo.event);
   };
@@ -64,7 +62,42 @@ function CalendarComponent () {
         
         <Grid container spacing={isMobile ? 2 : 4}>
       
-          <Grid item xs={12}>
+          <Grid item xs={12}
+           sx={{
+               
+            '.fc-toolbar-chunk': { 
+              display: 'flex'
+            },
+                
+            ...(isMobile && {
+              '.fc-header-toolbar': {
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',          
+              },
+              '.fc-header-toolbar>div': {
+                flex: '0 0 calc(100% - 10px)',
+                textAlign: 'center'
+              },
+              '.fc-header-toolbar> :nth-child(1)': {
+                order: '0',
+                flex: '0 0 calc(30% - 10px)',
+              },
+              '.fc-header-toolbar> :nth-child(2)': {
+                order: '1',
+                fontSize: 'x-small',
+                paddingTop: "4%",
+                display: 'flex',
+                justifyContent: 'space-between'
+              },
+              '.fc-header-toolbar> :nth-child(3)': {
+                order: '0',
+                flex: '0 0 calc(50% - 10px)'
+              }
+
+              })
+           }}
+          >
 
             {isMobile ? (
               <FullCalendar
@@ -74,6 +107,7 @@ function CalendarComponent () {
                 center: 'prev title next',
                   right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
               }}
+              
               initialView="timeGridWeek"
               weekends={true}
               editable={true}
@@ -86,6 +120,7 @@ function CalendarComponent () {
               nowIndicator={true}
               slotMinTime="08:00:00"
               slotMaxTime="17:00:00"
+
             />
             ) : (
 
@@ -117,6 +152,5 @@ function CalendarComponent () {
     </Container>
   )
 };
-
 
 export default CalendarComponent;
