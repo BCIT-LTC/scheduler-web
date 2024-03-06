@@ -56,7 +56,6 @@ function CalendarComponent () {
 
   return(
 
-    
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2 }}>
         
@@ -93,8 +92,17 @@ function CalendarComponent () {
               '.fc-header-toolbar> :nth-child(3)': {
                 order: '0',
                 flex: '0 0 calc(50% - 10px)'
+              },
+              '.fc-col-header-cell-cushion': {
+                fontSize: 'small'
+              },
+              '.fc-media-screen.fc-direction-ltr.fc-theme-standard': {
+              
+                height: '100vh',
+                maxHeight: '650px'
+              
               }
-
+              
               })
            }}
           >
