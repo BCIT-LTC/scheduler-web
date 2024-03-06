@@ -4,27 +4,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-require('dotenv').config()
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const port = 9000;
 const hostname = "0.0.0.0";
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
-const logger = require('./logger')(module);
+const logger = require("./logger")(module);
 
 const auth = require("./routes/auth");
 const check_authorization = require("./routes/check_authorization");
-const calendar = require("./routes/calendar");
-const faq = require("./routes/faq");
+const api = require("./routes/api");
 const indexRoute = require("./routes/indexRoute");
 const saml_auth = require("./routes/saml_auth");
 const local_auth = require("./routes/local_auth");
-const announcements = require("./routes/announcements");
-const users = require("./routes/users");
+// const announcements = require("./routes/announcements");
+// const users = require("./routes/users");
 
 const passport = require("./middleware/passport");
 const authentication_check = require("./middleware/authentication_check");
@@ -60,33 +59,29 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 
 // Define an API route for viewing the logs
-app.get('/log/', (req, res) => {
+app.get("/log/", (req, res) => {
   // Query the logger for the latest log entries
-  logger.query({ order: 'desc', limit: 100 },
-    (err, results) => {
-      if (err) {
-
-        // If an error occurs, send an
-        // error response
-        res.status(500).send({
-          error: 'Error retrieving logs'
-        });
-      } else {
-
-        // If successful, send the log 
-        // entries as a response
-        res.send(results);
-      }
-    });
+  logger.query({ order: "desc", limit: 100 }, (err, results) => {
+    if (err) {
+      // If an error occurs, send an
+      // error response
+      res.status(500).send({
+        error: "Error retrieving logs",
+      });
+    } else {
+      // If successful, send the log
+      // entries as a response
+      res.send(results);
+    }
+  });
 });
-
 
 app.use("/auth/login", saml_auth);
 app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/auth/authorize", check_authorization);
 
-app.use("/api", authentication_check, users, announcements, calendar, faq);
+app.use("/api", authentication_check, api);
 
 app.use("/logout", auth);
 app.use("/*", indexRoute);
