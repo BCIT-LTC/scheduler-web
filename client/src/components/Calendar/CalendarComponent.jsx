@@ -51,7 +51,7 @@ function CalendarComponent () {
 
   const theme = useTheme();
   
-  // calendar layout based on screen size
+  // calendar layout based on screen size (isMobile = true for screen widths below 600px)
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return(
