@@ -11,7 +11,6 @@ import PrivilegedRoute from "./containers/PrivilegedRoute";
 import NewEvent from "./containers/NewEvent";
 
 function App() {
-
   // Role-based route protection component
   return (
 
