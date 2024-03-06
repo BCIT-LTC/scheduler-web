@@ -27,6 +27,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, alpha, ThemeProvider } from '@mui/material/styles';
 import AdminArea from './AdminArea';
+import LoginModal from './LoginModal';
 
 import { GlobalContext } from '../context/usercontext';
 import logout from "./logout";
@@ -133,12 +134,7 @@ export default function BaseLayout() {
                                 </Menu>
                             </> :
                             <ThemeProvider theme={theme}>
-                                <form className="form" action="/auth/login" method="post">
-                                    <Button variant="contained" color="inversePrimary" type="submit">
-                                        Login
-                                    </Button>
-                                </form>
-
+                                <LoginModal />
                             </ThemeProvider>}
                     </Toolbar>
                 </AppBar>
@@ -209,7 +205,7 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
-                {globalcontext.isLoggedIn && globalcontext.user.role === "admin" &&
+                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" &&
                 <AdminArea/>}
             </Drawer>
             <Outlet />
