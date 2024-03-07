@@ -4,14 +4,20 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Icon from '@mui/material/Icon';
+import Link from '@mui/material/Link';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
+// Modal style
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: {
+    xs: '70%', 
+    sm: 400,
+    md: 400,
+  },
   bgcolor: 'background.paper',
   border: '0px',
   boxShadow: 24,
@@ -24,6 +30,7 @@ const style = {
   gap: 2
 };
 
+// Privacy statement style
 const privacy_style = {
     position: 'relative',
     width: '70%',
@@ -36,6 +43,10 @@ const privacy_style = {
     borderRadius: 1,
 };
 
+/**
+ * Login button that opens a modal with the privacy statement and a button for SAML login.
+ * @returns {JSX.Element} - LoginModal
+ */
 export default function LoginModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -59,7 +70,12 @@ export default function LoginModal() {
                     Privacy statement
                 </Typography>
                 <Typography>
-                    <p>This service has passed Privacy Impact Assessment BCIT-A29, and complies with BCIT policies 3501 and 3502.</p>
+                    <p>This service has passed {" "}
+                      <Link href="https://www.bcit.ca/information-access-privacy/" target="_blank" rel="noopener" underline="none">Privacy Impact Assessment BCIT-A29</Link>,
+                       and complies with BCIT policies {" "}
+                      <Link href="https://www.bcit.ca/files/pdf/policies/3501.pdf" target="_blank" rel="noopener" underline="none">3501</Link> and {" "}
+                      <Link href="https://www.bcit.ca/files/pdf/policies/3502.pdf" target="_blank" rel="noopener" underline="none">3502</Link>.
+                    </p>
 
                     <p>For more information, please contact the BCIT Privacy Office.</p>
 
