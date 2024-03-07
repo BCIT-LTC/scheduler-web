@@ -7,18 +7,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/Logout';
-import Button from '@mui/material/Button';
 
 import Drawer from '@mui/material/Drawer';
 import TodayIcon from '@mui/icons-material/Today';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import PersonIcon from '@mui/icons-material/Person';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -27,26 +20,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, alpha, ThemeProvider } from '@mui/material/styles';
 import AdminArea from './AdminArea';
+import LoginModal from './LoginModal';
+import StringAvatar from './StringAvatar';
 
 import { GlobalContext } from '../context/usercontext';
-import logout from "./logout";
 
 export default function BaseLayout() {
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const open = Boolean(anchorEl);
-    const userAvatarClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogout = () => {
-        logout();
-    };
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -92,53 +73,9 @@ export default function BaseLayout() {
 
 
                         {globalcontext.user.is_logged_in ?
-                            <>
-                                <Avatar
-                                    onClick={userAvatarClick}
-                                >
-                                    <PersonIcon />
-                                </Avatar>
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleClose}
-                                >
-                                    <List>
-                                        <ListItem
-                                            onClick={handleClose}
-                                        >
-                                            <ListItemText
-                                                primary={globalcontext.user.first_name + " " + globalcontext.user.last_name}
-                                                secondary={globalcontext.user.email}
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemText
-                                                primary="Role"
-                                                secondary={globalcontext.user.role}
-                                            />
-                                        </ListItem>
-                                        <Divider />
-                                        <MenuList>
-                                            <MenuItem
-                                                onClick={handleLogout}
-                                            >
-                                                <ListItemIcon>
-                                                    <LogoutIcon />
-                                                </ListItemIcon>
-                                                <ListItemText>Logout</ListItemText>
-                                            </MenuItem>
-                                        </MenuList>
-                                    </List>
-                                </Menu>
-                            </> :
+                            <StringAvatar /> :
                             <ThemeProvider theme={theme}>
-                                <form className="form" action="/auth/login" method="post">
-                                    <Button variant="contained" color="inversePrimary" type="submit">
-                                        Login
-                                    </Button>
-                                </form>
-
+                                <LoginModal />
                             </ThemeProvider>}
                     </Toolbar>
                 </AppBar>
@@ -209,7 +146,7 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
-                {globalcontext.isLoggedIn && globalcontext.user.role === "admin" &&
+                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" &&
                 <AdminArea/>}
             </Drawer>
             <Outlet />
