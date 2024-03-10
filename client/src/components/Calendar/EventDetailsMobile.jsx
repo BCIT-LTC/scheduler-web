@@ -3,8 +3,10 @@ import Card from '@mui/material/Card';
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-const dayjs = require('dayjs')
+import { GlobalContext } from '../../context/usercontext';
+import { useContext } from 'react';
 
+const dayjs = require('dayjs')
 
 const GridBox = styled(Box)({
     height: "1.5em",
@@ -16,6 +18,9 @@ const GridBox = styled(Box)({
 });
 
 function EventDetailsMobile({ event, handleClose, handleEditEvent, handleEditSeries}) {
+
+    const globalcontext = useContext(GlobalContext);
+
     return (
         <Box
             display="flex"
@@ -59,10 +64,10 @@ function EventDetailsMobile({ event, handleClose, handleEditEvent, handleEditSer
                         </p>
                     </Box>
                 </Box>
-                <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
                     {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}}>Edit Series</Button>}
                     <Button variant="contained" color="primary" sx={{margin: "0 15px"}}>Edit Event</Button>
-                </Box>
+                </Box>}
             </Card>
         </Box>
 

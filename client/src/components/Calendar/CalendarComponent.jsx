@@ -25,7 +25,6 @@ function CalendarComponent(events) {
   };
 
   let handleEventClickMobile = (e) => {
-    console.log(e.event);
     setShowEventDetails(true);
     setSelectedEvent(e.event);
   };
