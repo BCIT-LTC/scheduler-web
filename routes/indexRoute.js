@@ -18,14 +18,20 @@ const jwt = require("jsonwebtoken");
  */
 router.get('*', (req, res) => {
 
+  console.log("Serving client application");
+  
   try {
     let default_jwt_token = jwt.sign({
       authorization_checked: false,
       is_logged_in: false
     }, process.env.JWT_AUTH_SIGNING_KEY);
+
+    console.log("Default JWT token: ");
+    console.log(default_jwt_token);
     
     res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: true });
   } catch (error) {
+    console.log("Error retrieving anonymous token: " + error.message);
     return res.status(500).json({ error: "Error retrieving anonymous token: " + error.message });
   }
 
