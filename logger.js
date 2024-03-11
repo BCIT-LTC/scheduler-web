@@ -44,13 +44,13 @@ const getLabel = function(callingModule) {
 module.exports = function (callingModule) {
   return new winston.createLogger({
     transports: [
-            new winston.transports.File({
-              filename: 'combined.log',
-              format: combine(
-                timestamp(),
-                label({ label: getLabel(callingModule) }),
-                json())
-            }),
+            // new winston.transports.File({
+            //   filename: 'combined.log',
+            //   format: combine(
+            //     timestamp(),
+            //     label({ label: getLabel(callingModule) }),
+            //     json())
+            // }),
             new winston.transports.Console({
               format: combine(
                 timestamp(),
@@ -59,4 +59,7 @@ module.exports = function (callingModule) {
             })
           ]
   });
+
+
+
 };

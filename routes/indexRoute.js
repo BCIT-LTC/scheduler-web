@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const jwt = require("jsonwebtoken");
+const logger = require("./logger")(module);
 
 /**
  * Route to serve the client application. Upon landing on the index route, the client is assigned a default JWT token.
@@ -18,7 +19,7 @@ const jwt = require("jsonwebtoken");
  */
 router.get('*', (req, res) => {
 
-  console.log("Serving client application");
+  logger.info("Serving client application");
   
   try {
     let default_jwt_token = jwt.sign({
@@ -26,12 +27,12 @@ router.get('*', (req, res) => {
       is_logged_in: false
     }, process.env.JWT_AUTH_SIGNING_KEY);
 
-    console.log("Default JWT token: ");
-    console.log(default_jwt_token);
+    logger.info("Default JWT token: ");
+    logger.info(default_jwt_token);
     
     res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: false });
   } catch (error) {
-    console.log("Error retrieving anonymous token: " + error.message);
+    logger.error("Error retrieving anonymous token: " + error.message);
     return res.status(500).json({ error: "Error retrieving anonymous token: " + error.message });
   }
 
