@@ -29,7 +29,7 @@ router.get('*', (req, res) => {
     console.log("Default JWT token: ");
     console.log(default_jwt_token);
     
-    res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: true });
+    res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: false });
   } catch (error) {
     console.log("Error retrieving anonymous token: " + error.message);
     return res.status(500).json({ error: "Error retrieving anonymous token: " + error.message });
