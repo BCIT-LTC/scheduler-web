@@ -26,9 +26,6 @@ router.get('*', (req, res) => {
       authorization_checked: false,
       is_logged_in: false
     }, process.env.JWT_AUTH_SIGNING_KEY);
-
-    logger.info("Default JWT token: ");
-    logger.info(default_jwt_token);
     
     res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: false });
   } catch (error) {

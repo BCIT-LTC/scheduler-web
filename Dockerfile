@@ -52,4 +52,4 @@ EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "prod"]
