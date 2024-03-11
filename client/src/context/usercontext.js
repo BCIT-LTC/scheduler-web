@@ -11,12 +11,18 @@ export default function ContextProvider({ children }) {
     let jwt = Cookies.get("jwt");
     let user = null;
 
-    if (jwt === undefined) {
-        let default_jwt = Cookies.get("default_jwt");
-        user = jwtDecode(default_jwt);
-    } else {
-        user = jwtDecode(jwt);
+    try {
+        if (jwt === undefined) {
+            let default_jwt = Cookies.get("default_jwt");
+            user = jwtDecode(default_jwt);
+        } else {
+            user = jwtDecode(jwt);
+        }
+    }   
+    catch (error) {
+        console.log(error);
     }
+
     // Create a state to store the user context
     const [Usercontext, setUsercontext] = useState(
         {
