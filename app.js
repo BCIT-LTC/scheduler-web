@@ -26,6 +26,10 @@ const saml_auth = require("./routes/saml_auth");
 const passport = require("./middleware/passport");
 const authentication_check = require("./middleware/authentication_check");
 const app = express();
+app.use((req, res, next) => {
+  logger.info(`Received a ${req.method} request on ${req.url}`);
+  next();
+});
 app.use(cors());
 app.use(express.static("client/build"));
 app.use(bodyParser.json());
