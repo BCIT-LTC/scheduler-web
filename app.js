@@ -6,7 +6,6 @@
 
 require("dotenv").config();
 const express = require("express");
-const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
 const bodyParser = require("body-parser");
