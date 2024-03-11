@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const jwt = require("jsonwebtoken");
-const logger = require("./logger")(module);
+const logger = require("../logger")(module);
 
 /**
  * Route to serve the client application. Upon landing on the index route, the client is assigned a default JWT token.
