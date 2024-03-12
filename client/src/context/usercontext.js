@@ -21,6 +21,7 @@ export default function ContextProvider({ children }) {
     }   
     catch (error) {
         console.log(error);
+        window.location.href = "/calendar";
     }
 
     // Create a state to store the user context
