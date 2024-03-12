@@ -27,7 +27,7 @@ router.get('*', (req, res) => {
       is_logged_in: false
     }, process.env.JWT_AUTH_SIGNING_KEY);
     
-    res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'none', secure: false });
+    res.cookie('default_jwt', default_jwt_token, { httpOnly: false, sameSite: 'Strict', secure: false });
   } catch (error) {
     logger.error("Error retrieving anonymous token: " + error.message);
     return res.status(500).json({ error: "Error retrieving anonymous token: " + error.message });

@@ -32,7 +32,7 @@ function App() {
               </Route>
             </Route>
           </Route>
-          <Route path="" element={<Navigate to="/calendar" replace />} />
+          <Route path="" element={<Navigate to="/calendar" />} />
       </Routes>
     </>
   );
