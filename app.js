@@ -6,7 +6,6 @@
 
 require("dotenv").config();
 const express = require("express");
-const rateLimit = require("express-rate-limit");
 const cookieSession = require("cookie-session");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -16,12 +15,11 @@ const cookieParser = require("cookie-parser");
 
 const logger = require("./logger")(module);
 
-const auth = require("./routes/auth");
+const logout = require("./routes/logout");
 const check_authorization = require("./routes/check_authorization");
 const api = require("./routes/api");
 const indexRoute = require("./routes/indexRoute");
 const saml_auth = require("./routes/saml_auth");
-const local_auth = require("./routes/local_auth");
 // const announcements = require("./routes/announcements");
 // const users = require("./routes/users");
 
@@ -45,13 +43,6 @@ app.use(
     },
   })
 );
-
-const localLoginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -77,13 +68,12 @@ app.get("/log/", (req, res) => {
 });
 
 app.use("/auth/login", saml_auth);
-app.use("/auth/loginlocal", localLoginLimiter, local_auth);
 
 app.use("/auth/authorize", check_authorization);
 
 app.use("/api", authentication_check, api);
 
-app.use("/logout", auth);
+app.use("/logout", logout);
 app.use("/*", indexRoute);
 
 app.listen(port, hostname, () => {
