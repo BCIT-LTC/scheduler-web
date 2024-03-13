@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { GlobalContext } from "../context/usercontext";
 import CalendarComponent from "../components/Calendar/CalendarComponent";
 import useGetEvents from "../hooks/events/useGetEvent";
-import EventDetails from '../components/Calendar/EventDetailsMobile';
 const dayjs = require('dayjs')
 
 /**

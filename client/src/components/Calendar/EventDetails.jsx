@@ -17,7 +17,7 @@ const GridBox = styled(Box)({
     color: "#666666",
 });
 
-function EventDetailsMobile({ event, handleClose, handleEditEvent, handleEditSeries}) {
+function EventDetails({ event, handleClose, isMobile, handleEditEvent, handleEditSeries}) {
 
     const globalcontext = useContext(GlobalContext);
 
@@ -74,4 +74,4 @@ function EventDetailsMobile({ event, handleClose, handleEditEvent, handleEditSer
     );
 }
 
-export default EventDetailsMobile;
+export default EventDetails;

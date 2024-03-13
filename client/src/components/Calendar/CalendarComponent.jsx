@@ -12,7 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import EventDetails from './EventDetailsMobile';
+import EventDetails from './EventDetails';
 
 
 function CalendarComponent(events) {
@@ -20,11 +20,7 @@ function CalendarComponent(events) {
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  let handleEventClick = (clickInfo) => {
-    console.log(clickInfo.event);
-  };
-
-  let handleEventClickMobile = (e) => {
+  let handleEventClick = (e) => {
     setShowEventDetails(true);
     setSelectedEvent(e.event);
   };
@@ -123,13 +119,18 @@ function CalendarComponent(events) {
                   selectMirror={true}
                   dayMaxEvents={true}
                   events={events}
-                  eventClick={handleEventClickMobile}
+                  eventClick={handleEventClick}
                   select={handleDateSelect}
                   nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="17:00:00"
                 />
-                {showEventDetails ? <EventDetails event={selectedEvent} handleClose={()=>{setShowEventDetails(false)}}/> : null}
+                {showEventDetails ?
+                  <EventDetails
+                    event={selectedEvent}
+                    isMobile={isMobile}
+                    handleClose={() => { setShowEventDetails(false) }}
+                  /> : null}
               </>
 
             ) : (
