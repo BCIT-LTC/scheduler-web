@@ -17,7 +17,7 @@ services:
       - -c
       - |
         npm install
-        npm start
+        npm run dev
     environment:
       # api-config
       - API_URL=http://host.docker.internal:8000/api/
@@ -26,10 +26,6 @@ services:
       - APP_URL=http://localhost:9000/
       - SAML_IDENTITY_PROVIDER_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
       - SAML_ISSUER=localhost
-
-      # admin-credentials
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=password123
 
       # auth-signing-key
       - JWT_AUTH_SIGNING_KEY=insecureT0kenSigningKey
@@ -49,37 +45,37 @@ services:
       start_period: 40s
     networks:
       - openlab-scheduler-network
-    depends_on:
-      frontend-builder:
-        condition: service_completed_successfully
+    # depends_on:
+    #   frontend-builder:
+    #     condition: service_completed_successfully
 
-  idp:
-    image: kenchan0130/simplesamlphp
-    ports:
-      - "8080:8080"
-    environment:
-      - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
-      - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback
-      - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost:9000/auth/logout/callback
-    volumes:
-      - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
+  # idp:
+  #   image: kenchan0130/simplesamlphp
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
+  #     - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback
+  #     - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost:9000/auth/logout/callback
+  #   volumes:
+  #     - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
 
-      # mount saml-idp-certificate
-      - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
-    networks:
-      - openlab-scheduler-network
+  #     # mount saml-idp-certificate
+  #     - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
+  #   networks:
+  #     - openlab-scheduler-network
 
-  frontend-builder:
-    image: node:19.4.0
-    command:
-      - /bin/sh
-      - -c
-      - |
-        npm install
-        npm run build
-    working_dir: /app
-    volumes:
-      - ./client:/app
+  # frontend-builder:
+  #   image: node:19.4.0
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       npm install
+  #       npm run build
+  #   working_dir: /app
+  #   volumes:
+  #     - ./client:/app
 
   # jsdoc_builder:
   #   image: node:21-alpine
