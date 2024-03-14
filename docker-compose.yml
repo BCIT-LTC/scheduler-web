@@ -49,21 +49,21 @@ services:
     #   frontend-builder:
     #     condition: service_completed_successfully
 
-  # idp:
-  #   image: kenchan0130/simplesamlphp
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
-  #     - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback
-  #     - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost:9000/auth/logout/callback
-  #   volumes:
-  #     - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
+  idp:
+    image: kenchan0130/simplesamlphp
+    ports:
+      - "8080:8080"
+    environment:
+      - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
+      - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback
+      - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost:9000/auth/logout/callback
+    volumes:
+      - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
 
-  #     # mount saml-idp-certificate
-  #     - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
-  #   networks:
-  #     - openlab-scheduler-network
+      # mount saml-idp-certificate
+      - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
+    networks:
+      - openlab-scheduler-network
 
   # frontend-builder:
   #   image: node:19.4.0
