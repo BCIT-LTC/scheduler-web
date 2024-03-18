@@ -1,10 +1,11 @@
-const passport = require('passport');
-var saml = require('passport-saml');
-var fs = require('fs');
+const passport = require("passport");
+var saml = require("passport-saml");
+var fs = require("fs");
 const jwt = require("jsonwebtoken");
-const SAML_CALLBACK_URL = process.env.APP_URL + 'auth/login/callback';
+const SAML_CALLBACK_URL = process.env.APP_URL + "auth/login/callback";
 
-var samlStrategy = new saml.Strategy({
+var samlStrategy = new saml.Strategy(
+  {
     // config options here
     callbackUrl: SAML_CALLBACK_URL,
     entryPoint: process.env.SAML_IDENTITY_PROVIDER_URL,
@@ -19,12 +20,13 @@ var samlStrategy = new saml.Strategy({
     // identifierFormat: null,
     // privateKey: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),
     // decryptionPvk: fs.readFileSync(__dirname + '/certs/saml.pem', 'utf8'),//optional private key that will be used to attempt to decrypt any encrypted assertions that are received
-    // cert: fs.readFileSync('saml/certs/idp.crt', 'utf-8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses, 
+    // cert: fs.readFileSync('saml/certs/idp.crt', 'utf-8'),//the IDP's public signing certificate used to validate the signatures of the incoming SAML Responses,
     // validateInResponseTo: false,
     // disableRequestedAuthnContext: true
-}, async (profile, done) => {
+  },
+  async (profile, done) => {
     console.log("profile info: ");
-    console.log(profile)
+    console.log(profile);
     console.log("---------------------------");
     console.log("email:", profile.email);
     console.log("first_name:", profile.first_name);
@@ -33,22 +35,26 @@ var samlStrategy = new saml.Strategy({
     console.log("school:", profile.school);
     console.log("program:", profile.program);
 
-    let email = profile.email
-    let first_name = profile.first_name
-    let last_name = profile.last_name
-    let role = profile.role
-    let school = profile.school
-    let program = profile.program
-    let jwtToken = jwt.sign({
-        email, 
-        first_name, 
-        last_name, 
-        role, 
+    let email = profile.email;
+    let first_name = profile.first_name;
+    let last_name = profile.last_name;
+    let saml_role = profile.role;
+    let school = profile.school;
+    let program = profile.program;
+    let jwtToken = jwt.sign(
+      {
+        email,
+        first_name,
+        last_name,
+        saml_role,
+        app_role,
         school,
         program,
         authorization_checked: false,
-        is_logged_in: true
-    }, process.env.JWT_AUTH_SIGNING_KEY);
+        is_logged_in: true,
+      },
+      process.env.JWT_AUTH_SIGNING_KEY
+    );
     // await fetch(`${process.env.API_URL}login`, {
     //     method: 'GET',
     //     headers: {
@@ -67,17 +73,17 @@ var samlStrategy = new saml.Strategy({
     //     console.log(jwtToken)
     // });
     return done(null, { token: jwtToken });
-});
+  }
+);
 
-passport.use("samlStrategy", samlStrategy)
+passport.use("samlStrategy", samlStrategy);
 
 passport.serializeUser((user, done) => {
-    done(null, user);
+  done(null, user);
 });
 
 passport.deserializeUser(async (user, done) => {
-    done(null, user);
+  done(null, user);
 });
-
 
 module.exports = passport;
