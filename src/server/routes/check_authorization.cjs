@@ -8,7 +8,6 @@
  * @const
  */
 const express = require("express");
-const { connect } = require("./indexRoute");
 const jwt = require("jsonwebtoken");
 
 /**

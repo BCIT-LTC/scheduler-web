@@ -6,7 +6,7 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { GlobalContext } from '../../context/usercontext';
 import { useContext } from 'react';
 
-const dayjs = require('dayjs')
+import dayjs from 'dayjs';
 
 const GridBox = styled(Box)({
     height: "1.5em",
