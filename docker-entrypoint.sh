@@ -9,8 +9,8 @@ set -e
 
 # Verify that the minimally required environment variables are set.
 #
-if [ -z "${ADMIN_USERNAME}" ] || [ -z "${ADMIN_PASSWORD}" ] || [ -z "${JWT_AUTH_SIGNING_KEY}" ]; then
-    printf "environment variables are not set.\n\t You need to specify ADMIN_USERNAME, ADMIN_PASSWORD, and JWT_AUTH_SIGNING_KEY\n"
+if [ -z "${JWT_AUTH_SIGNING_KEY}" ]; then
+    printf "environment variables are not set.\n\t You need to specify JWT_AUTH_SIGNING_KEY\n"
     exit 1
 fi
 
