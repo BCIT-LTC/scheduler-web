@@ -17,22 +17,21 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<BaseLayout />}>
-            <Route path="calendar" element={<CalendarPage />} />
-            <Route path="login" index element={<Login />} />
-            <Route path="rootuserlogin" index element={<RootUserLogin />} />
-            <Route path="unauthorized" element={<div>unauthorized</div>} />
-            <Route path="" element={<Navigate to="/calendar" replace />} />
-            <Route path="*" element={<Navigate to="/calendar" replace />} />
-            <Route path="announcements" element={<Announcements />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="openlab" element={<>schedule openlab</>} />
-              <Route element={<PrivilegedRoute />}>
-                <Route path="rolemanagement" element={<RoleManagement />} />
-                <Route path="newevent" element={<NewEvent />} />
-              </Route>
+          <Route path="calendar" element={<CalendarPage />} />
+          <Route path="login" index element={<Login />} />
+          <Route path="rootuserlogin" index element={<RootUserLogin />} />
+          <Route path="unauthorized" element={<div>unauthorized</div>} />
+          <Route path="announcements" element={<Announcements />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="openlab" element={<>schedule openlab</>} />
+            <Route element={<PrivilegedRoute />}>
+              <Route path="rolemanagement" element={<RoleManagement />} />
+              <Route path="newevent" element={<NewEvent />} />
             </Route>
           </Route>
-          <Route path="" element={<Navigate to="/calendar" replace />} />
+          <Route path="" element={<Navigate to="/calendar" />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
       </Routes>
     </>
   );
