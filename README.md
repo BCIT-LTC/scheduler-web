@@ -22,22 +22,8 @@ With Docker:
 1. In the root of the project, run `docker compose up`
 1. This may take a long time, be patient
 1. Open `http://localhost:9000` to see the webpage
+1. Changes to the code will hot reload and be reflected in the webpage or express server 
 
-### Live Preview
-
-If you want to view changes without taking down the Docker containers:
-
-1. Run `npm run dev` in `/client`
-1. You may need to `npm install`
-
-If you run into an error that says `"can't find file \r\n"`, go to the `docker-entrypoint.sh` file and change the End of Line sequence from `CRLF` to `LF` (in the bottom right)
-
-### Credentials for LOCAL login
-
-> Role = Admin
-
-- Username: `admin`
-- Password: `password123`
 
 ### Credentials for SAML-based login
 
