@@ -58,6 +58,7 @@ const parseEventsForCalendar = (events) => {
           created: event.created,
           last_modified: event.last_modified,
           recurring: true,
+          unparsedEventData:{...event},
         }
       };
     }
@@ -76,6 +77,7 @@ const parseEventsForCalendar = (events) => {
           created: event.created,
           last_modified: event.last_modified,
           recurring: false,
+          unparsedEventData:{...event},
         }
       };
     }
