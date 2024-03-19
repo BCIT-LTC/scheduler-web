@@ -19,6 +19,9 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 /**
  * Event Form Page
@@ -95,7 +98,7 @@ export default function EventForm() {
         end_time: defaultValues.end_time ? dayjs(defaultValues.end_time) : dayjs(),
         recurrence_start_time: defaultValues.start_time ? dayjs(defaultValues.start_time) : dayjs(),
         recurrence_end_time: defaultValues.end_time ? dayjs(defaultValues.end_time) : dayjs(),
-        recurrence_interval: defaultValues.recurrence_frequency_weeks,
+        recurrence_frequency_weeks: defaultValues.recurrence_frequency_weeks,
         recurrence_days: defaultValues.recurrence_days || [],
         recurrence_start_date: defaultValues.start_date ? dayjs(defaultValues.start_date) : dayjs(),
         recurrence_end_date: defaultValues.end_date ? dayjs(defaultValues.end_date) : dayjs(),
@@ -103,6 +106,12 @@ export default function EventForm() {
         description: defaultValues.description || "",
         holiday_closure_event: defaultValues.holiday_closure_event || false
     });
+
+    const [seriesConfirmationOpen, setSeriesConfirmationOpen] = useState(false);
+
+    const handleClose = () => {
+        setSeriesConfirmationOpen(false);
+    };
 
     const handleFormChange = (e) => {
         switch (e.target.type) {
@@ -157,12 +166,19 @@ export default function EventForm() {
         if (!payload.recurring_event) {
             delete payload.recurrence_start_time;
             delete payload.recurrence_end_time;
-            delete payload.recurrence_interval;
+            delete payload.recurrence_frequency_weeks;
             delete payload.recurrence_days;
             delete payload.recurrence_start_date;
             delete payload.recurrence_end_date;
         }
 
+        if (editMode && editSeriesMode && !seriesConfirmationOpen) {
+            setSeriesConfirmationOpen(true);
+            return;
+        }
+        if(seriesConfirmationOpen) {
+            setSeriesConfirmationOpen(false);
+        }
         console.log("formData payload: ", payload)
     }
 
@@ -255,17 +271,17 @@ export default function EventForm() {
                                         <FormControl sx={{ flexGrow: 1, margin: '10px 0' }}>
                                             <div style={{ display: "flex", alignItems: "center" }}>Recur every
                                                 <TextField
-                                                    name="recurrence_interval"
+                                                    name="recurrence_frequency_weeks"
                                                     type="number"
                                                     size="small"
-                                                    value={formData.recurrence_interval}
+                                                    value={formData.recurrence_frequency_weeks}
                                                     onChange={(e) => {
                                                         var value = parseInt(e.target.value, 10);
                                                         const max = 52;
                                                         const min = 1;
                                                         if (value > max) value = max;
                                                         if (value < min) value = min;
-                                                        setFormData({ ...formData, recurrence_interval: value })
+                                                        setFormData({ ...formData, recurrence_frequency_weeks: value })
                                                     }}
                                                     sx={{ margin: '0 10px', width: "70px", textAlign: "center" }}
                                                 />
@@ -462,7 +478,28 @@ export default function EventForm() {
                         </CardActions>
                     </CardContent>
                 </Card>
+                <Modal
+                    open={seriesConfirmationOpen}
+                    onClose={handleClose}
+                >
+                    <Box sx={{ height: '100%', width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <Card sx={{ zIndex: "100", width: "70%", p: 2, boxShadow: 1, borderRadius: 2, position: "absolute", border: "3px red solid" }}>
+                            <DisabledByDefaultIcon onClick={handleClose} sx={{ position: "absolute", top: "10px", right: "10px", color: "grey", height: "30px", width: "30px" }} />
+                            <Box display="flex" justifyContent="center" color="red">
+                                <h2>WARNING</h2>
+                            </Box>
+                            <Box display="flex" justifyContent="center" sx={{ border: "black dashed 1px", padding: "10px" }}>
+                                    <p>Updating this event series will <span style={{fontWeight: 600}}>replace ALL</span> existing events within the series. Are you sure you want to proceed?</p>
+                            </Box>
+                            <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                                <Button variant="outlined" sx={{ margin: "0 15px" }} onClick={() => {setSeriesConfirmationOpen(false)}}>Cancel</Button>
+                                <Button variant="contained" color="primary" sx={{ margin: "0 15px" }} onClick={onSubmit}>Save</Button>
+                            </Box>
+                        </Card>
+                    </Box>
+                </Modal>
             </Box>
+
         </form>
     )
 }
