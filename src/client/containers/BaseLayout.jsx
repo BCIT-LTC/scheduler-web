@@ -127,7 +127,7 @@ export default function BaseLayout() {
                 </List>
 
                 {globalcontext.user.is_logged_in ? <List>
-                    {globalcontext.user.role && (globalcontext.user.role === "admin" || globalcontext.user.role === "instructor") && (
+                    {globalcontext.user.app_role && (globalcontext.user.app_role === "admin" || globalcontext.user.app_role === "instructor") && (
                         <ListItem disablePadding
                             onClick={() => { window.location.href = "/rolemanagement" }}
                         >
@@ -146,7 +146,7 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
-                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" &&
+                {globalcontext.user.is_logged_in && (globalcontext.user.app_role === "admin") &&
                 <AdminArea/>}
             </Drawer>
             <Outlet />

@@ -212,7 +212,7 @@ export default function EventForm() {
                             label="Room"
                             required
                             name="location"
-                            value={formData.location}
+                            value={formData.location || roomOptions[0]}
                             onChange={(e) => { setFormData({ ...formData, location: e.target.value }) }}
                             sx={{ flexGrow: 1, margin: '10px 0' }}
                         >

@@ -70,7 +70,7 @@ function EventDetails({ event, handleClose, isMobile }) {
                         </p>
                     </Box>
                 </Box>
-                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                {globalcontext.user.is_logged_in && globalcontext.user.app_role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
                     {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(true)}}>Edit Series</Button>}
                     <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(false)}}>Edit Event</Button>
                 </Box>}

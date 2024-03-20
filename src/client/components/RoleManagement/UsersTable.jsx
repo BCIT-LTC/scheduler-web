@@ -149,7 +149,7 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable}/>
-        {user.role === 'admin' && (
+        {user.app_role === 'admin' && (
           <Button onClick = {handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
         )}
       </Box>
