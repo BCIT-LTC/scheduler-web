@@ -44,6 +44,35 @@ function CalendarComponent(events) {
     // }
   };
 
+  let previousDayEl = null;
+
+  let handleDateClick = (clickInfo) => {
+    let calendarApi = clickInfo.view.calendar;
+
+    // Reset background color of previously clicked date
+    if (previousDayEl) {
+        previousDayEl.style.borderColor = '#ddd';
+        previousDayEl.style.borderWidth = '1px';
+        //previousDayEl.style.boxShadow = '';
+
+        previousDayEl.style.outline = ''; // Reset outline
+    }
+
+    // Change background color of the newly clicked date
+    //clickInfo.dayEl.style.borderStyle = 'solid';
+    clickInfo.dayEl.style.borderColor = 'blue';
+    clickInfo.dayEl.style.borderWidth = '5px';
+   // clickInfo.dayE1.style.boxShadow = '0 0 0 5px red';
+
+    //clickInfo.dayE1.style.outline = '2px solid red';
+
+
+    // Store reference to the currently clicked date element
+    previousDayEl = clickInfo.dayEl;
+
+    console.log(clickInfo);
+  }
+
   const theme = useTheme();
 
   // calendar layout based on screen size (isMobile = true for screen widths below 600px)
@@ -62,6 +91,11 @@ function CalendarComponent(events) {
               '.fc-toolbar-chunk': {
                 display: 'flex'
               },
+              '.fc table': {
+                borderCollapse: 'separate',
+                borderSpacing: '0 !important'
+              },
+              
 
               ...(isMobile && {
                 '.fc-header-toolbar': {
@@ -121,6 +155,7 @@ function CalendarComponent(events) {
                   events={events}
                   eventClick={handleEventClick}
                   select={handleDateSelect}
+                  dateClick={handleDateClick}
                   nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="17:00:00"
@@ -151,6 +186,7 @@ function CalendarComponent(events) {
                 events={events}
                 eventClick={handleEventClick}
                 select={handleDateSelect}
+                dateClick={handleDateClick}
                 nowIndicator={true}
                 slotMinTime="08:00:00"
                 slotMaxTime="17:00:00"
