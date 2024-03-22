@@ -61,10 +61,10 @@ function CalendarComponent(events) {
     // Change background color of the newly clicked date
     //clickInfo.dayEl.style.borderStyle = 'solid';
     clickInfo.dayEl.style.borderColor = 'blue';
-    clickInfo.dayEl.style.borderWidth = '5px';
-   // clickInfo.dayE1.style.boxShadow = '0 0 0 5px red';
+    clickInfo.dayEl.style.borderWidth = '1px';
+   // clickInfo.dayEl.style.boxShadow = '0 0 0 5px red';
 
-    //clickInfo.dayE1.style.outline = '2px solid red';
+    //clickInfo.dayEl.style.outline = '2px solid red';
 
 
     // Store reference to the currently clicked date element
@@ -93,9 +93,10 @@ function CalendarComponent(events) {
               },
               '.fc table': {
                 borderCollapse: 'separate',
-                borderSpacing: '0 !important'
+                borderSpacing: '0 !important',
+               
               },
-              
+        
 
               ...(isMobile && {
                 '.fc-header-toolbar': {
