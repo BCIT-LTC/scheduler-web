@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { useState, useContext } from "react"
+import { useState, useEffect } from "react"
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -15,52 +16,102 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-
+import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 /**
- * New Event Page
+ * Event Form Page
  * 
- * @returns {JSX.Element} - New Event Page
+ * @returns {JSX.Element} - Event Form Page
  */
-export default function NewEvent(
-    {
-        roomOptions = ["SE12-316", "SE12-200", "NW4-328"],
-        defaultValues = {
-            event_name: "",
-            room: "",
-            recurring_event: false,
-            start_time: dayjs(), //default start datetime are current time
-            end_time: dayjs(),
-            recurrence_start_time: dayjs(),
-            recurrence_end_time: dayjs(),
-            recurrence_interval: 1,
-            recurrence_days: [false, false, false, false, false],
-            recurrence_start_date: dayjs(),
-            recurrence_end_date: dayjs(),
-            facilitator: "",
-            description: "",
-            holiday_closure_event: false
+export default function EventForm() {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    //converts the recurrence days array to a boolean array
+    const initRecurrenceDays = (recurrence_days) => {
+        let days = [];
+        for (let i = 0; i < 7; i++) {
+            days.push(false);
+        }
+        recurrence_days.forEach((day) => {
+            switch (day) {
+                case 'Monday':
+                    days[0] = true;
+                    break;
+                case 'Tuesday':
+                    days[1] = true;
+                    break;
+                case 'Wednesday':
+                    days[2] = true;
+                    break;
+                case 'Thursday':
+                    days[3] = true;
+                    break;
+                case 'Friday':
+                    days[4] = true;
+                    break;
+                case 'Saturday':
+                    days[5] = true;
+                    break;
+                case 'Sunday':
+                    days[6] = true;
+                    break;
+                default:
+                    break;
+            }
+        });
+        return days;
+    }
+
+    //hardcoded room options for location select
+    const roomOptions = ["SE12-316", "SE12-200", "NW4-328", "NW4-3086"];
+
+    let defaultValues = {};
+
+    //for editing events, the event data is passed as state
+    if (location.state) {
+        defaultValues = { ...location.state };
+        if (Array.isArray(defaultValues.recurrence_days)) {
+            defaultValues.recurrence_days = initRecurrenceDays(defaultValues.recurrence_days);
         }
     }
-) {
+
+    //form edit mode state, will be set to true if the event data is passed as state
+    const [editMode, setEditMode] = useState(defaultValues.id ? true : false);
+
+    //form recurrence mode state, will be set to false for new events
+    const [editSeriesMode, setEditSerieseMode] = useState(defaultValues.editSeries ? true : false);
+
     //form data state is set to default values
     const [formData, setFormData] = useState({
-        event_name: defaultValues.event_name,
-        room: defaultValues.room,
-        recurring_event: defaultValues.recurring_event,
-        start_time: defaultValues.start_time,
-        end_time: defaultValues.end_time,
-        recurrence_start_time: defaultValues.recurrence_start_time,
-        recurrence_end_time: defaultValues.recurrence_end_time,
-        recurrence_interval: defaultValues.recurrence_interval,
-        recurrence_days: defaultValues.recurrence_days,
-        recurrence_start_date: defaultValues.recurrence_start_date,
-        recurrence_end_date: defaultValues.recurrence_end_date,
-        facilitator: defaultValues.facilitator,
-        description: defaultValues.description,
-        holiday_closure_event: defaultValues.holiday_closure_event
+        id: defaultValues.id,
+        event_name: defaultValues.summary || defaultValues.series_title || "",
+        location: defaultValues.location,
+        recurring_event: editSeriesMode,
+        start_time: defaultValues.start_time ? dayjs(defaultValues.start_time) : dayjs(),
+        end_time: defaultValues.end_time ? dayjs(defaultValues.end_time) : dayjs(),
+        recurrence_start_time: defaultValues.start_time ? dayjs(defaultValues.start_time) : dayjs(),
+        recurrence_end_time: defaultValues.end_time ? dayjs(defaultValues.end_time) : dayjs(),
+        recurrence_frequency_weeks: defaultValues.recurrence_frequency_weeks,
+        recurrence_days: defaultValues.recurrence_days || [],
+        recurrence_start_date: defaultValues.start_date ? dayjs(defaultValues.start_date) : dayjs(),
+        recurrence_end_date: defaultValues.end_date ? dayjs(defaultValues.end_date) : dayjs(),
+        facilitator: defaultValues.facilitator || "",
+        description: defaultValues.description || "",
+        holiday_closure_event: defaultValues.holiday_closure_event || false
     });
+
+    const [seriesConfirmationOpen, setSeriesConfirmationOpen] = useState(false);
+
+    const handleClose = () => {
+        setSeriesConfirmationOpen(false);
+    };
 
     const handleFormChange = (e) => {
         switch (e.target.type) {
@@ -115,29 +166,43 @@ export default function NewEvent(
         if (!payload.recurring_event) {
             delete payload.recurrence_start_time;
             delete payload.recurrence_end_time;
-            delete payload.recurrence_interval;
+            delete payload.recurrence_frequency_weeks;
             delete payload.recurrence_days;
             delete payload.recurrence_start_date;
             delete payload.recurrence_end_date;
         }
 
+        if (editMode && editSeriesMode && !seriesConfirmationOpen) {
+            setSeriesConfirmationOpen(true);
+            return;
+        }
+        if(seriesConfirmationOpen) {
+            setSeriesConfirmationOpen(false);
+        }
         console.log("formData payload: ", payload)
     }
 
-    //TODO: Implement the cancel function
-    const onCancel = (e) => { console.log("cancel new event form") }
+    const onCancel = (e) => {
+        navigate(-1);
+    }
+
+    //TODO: Implement the delete function
+    const onDelete = (e) => { console.log("delete event") }
+
+
 
     return (
-        <>
-            <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
+            <Box sx={{ width: '100%', height: '100%', display: "flex", justifyContent: "center" }}>
                 <Card sx={{ flexGrow: 1, maxWidth: '500px', minWidth: '300px' }} >
                     <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', }}>
-                        <label style={{ fontSize: "1.2em" }}>New Event</label>
+                        <label style={{ fontSize: "1.2em" }}>{editMode ? 'Edit Event' : 'New Event'}</label>
                         <TextField
                             label="Event Name"
                             variant="outlined"
                             required
                             name="event_name"
+                            value={formData.event_name}
                             inputProps={{ maxLength: 50 }}
                             onChange={handleFormChange}
                             sx={{ flexGrow: 1, margin: '10px 0' }}
@@ -146,9 +211,9 @@ export default function NewEvent(
                             select
                             label="Room"
                             required
-                            name="room"
-                            defaultValue=""
-                            onChange={(e) => { setFormData({ ...formData, room: e.target.value }) }}
+                            name="location"
+                            value={formData.location || roomOptions[0]}
+                            onChange={(e) => { setFormData({ ...formData, location: e.target.value }) }}
                             sx={{ flexGrow: 1, margin: '10px 0' }}
                         >
                             {roomOptions.map((room, index) => {
@@ -156,14 +221,13 @@ export default function NewEvent(
                             })}
                         </TextField>
 
-                        <FormControlLabel control={<Checkbox
+                        {!editMode && <FormControlLabel control={<Checkbox
                             name="recurring_event"
                             checked={formData.recurring_event}
                             onChange={handleFormChange}
                         />}
                             label="Recurring Event">
-                        </FormControlLabel>
-
+                        </FormControlLabel>}
                         {
                             //if recurring event is checked, show the recurring event options
                             formData.recurring_event ?
@@ -207,17 +271,17 @@ export default function NewEvent(
                                         <FormControl sx={{ flexGrow: 1, margin: '10px 0' }}>
                                             <div style={{ display: "flex", alignItems: "center" }}>Recur every
                                                 <TextField
-                                                    name="recurrence_interval"
+                                                    name="recurrence_frequency_weeks"
                                                     type="number"
                                                     size="small"
-                                                    value={formData.recurrence_interval}
+                                                    value={formData.recurrence_frequency_weeks}
                                                     onChange={(e) => {
                                                         var value = parseInt(e.target.value, 10);
                                                         const max = 52;
                                                         const min = 1;
                                                         if (value > max) value = max;
                                                         if (value < min) value = min;
-                                                        setFormData({ ...formData, recurrence_interval: value })
+                                                        setFormData({ ...formData, recurrence_frequency_weeks: value })
                                                     }}
                                                     sx={{ margin: '0 10px', width: "70px", textAlign: "center" }}
                                                 />
@@ -384,6 +448,7 @@ export default function NewEvent(
                             label="Facilitator"
                             variant="outlined"
                             inputProps={{ maxLength: 50 }}
+                            value={formData.facilitator}
                             onChange={handleFormChange}
                             sx={{ flexGrow: 1, margin: '10px 0' }}
                         />
@@ -394,6 +459,7 @@ export default function NewEvent(
                             multiline
                             minRows={2}
                             maxRows={4}
+                            value={formData.description}
                             inputProps={{ maxLength: 200 }}
                             onChange={handleFormChange}
                             sx={{ flexGrow: 1, margin: '10px 0' }}
@@ -407,11 +473,33 @@ export default function NewEvent(
                             label="Holiday/Closure Event" />
                         <CardActions sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-around', marginTop: '10px' }}>
                             <Button onClick={onCancel} variant="outlined" color="warning" size="normal">CANCEL</Button>
+                            {editMode && <Button onClick={onDelete} variant="contained" color="error" size="normal">Delete</Button>}
                             <Button type="submit" variant="contained" color="primary" size="normal">SAVE</Button>
                         </CardActions>
                     </CardContent>
                 </Card>
-            </form>
-        </ >
+                <Modal
+                    open={seriesConfirmationOpen}
+                    onClose={handleClose}
+                >
+                    <Box sx={{ height: '100%', width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <Card sx={{ zIndex: "100", width: "70%", p: 2, boxShadow: 1, borderRadius: 2, position: "absolute", border: "3px red solid" }}>
+                            <DisabledByDefaultIcon onClick={handleClose} sx={{ position: "absolute", top: "10px", right: "10px", color: "grey", height: "30px", width: "30px" }} />
+                            <Box display="flex" justifyContent="center" color="red">
+                                <h2>WARNING</h2>
+                            </Box>
+                            <Box display="flex" justifyContent="center" sx={{ border: "black dashed 1px", padding: "10px" }}>
+                                    <p>Updating this event series will <span style={{fontWeight: 600}}>replace ALL</span> existing events within the series. Are you sure you want to proceed?</p>
+                            </Box>
+                            <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                                <Button variant="outlined" sx={{ margin: "0 15px" }} onClick={() => {setSeriesConfirmationOpen(false)}}>Cancel</Button>
+                                <Button variant="contained" color="primary" sx={{ margin: "0 15px" }} onClick={onSubmit}>Save</Button>
+                            </Box>
+                        </Card>
+                    </Box>
+                </Modal>
+            </Box>
+
+        </form>
     )
 }

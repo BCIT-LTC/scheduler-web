@@ -27,7 +27,7 @@ export default function AdminArea() {
         <List>
             <ListItem disablePadding
                 onClick={() => { 
-                    window.location.href = "/newevent" }}
+                    window.location.href = "/eventform" }}
             >
                 <ListItemButton
                     size="large"

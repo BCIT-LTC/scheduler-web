@@ -6,7 +6,7 @@ import RoleManagement from "./containers/RoleManagement";
 import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 import PrivilegedRoute from "./containers/PrivilegedRoute";
-import NewEvent from "./containers/NewEvent";
+import EventForm from "./containers/EventForm";
 
 function App() {
   // Role-based route protection component
@@ -23,7 +23,7 @@ function App() {
             <Route path="openlab" element={<>schedule openlab</>} />
             <Route element={<PrivilegedRoute />}>
               <Route path="rolemanagement" element={<RoleManagement />} />
-              <Route path="newevent" element={<NewEvent />} />
+              <Route path="eventform" element={<EventForm />} />
             </Route>
           </Route>
           <Route path="" element={<Navigate to="/calendar" />} />

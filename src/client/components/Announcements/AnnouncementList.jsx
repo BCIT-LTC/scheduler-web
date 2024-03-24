@@ -19,7 +19,7 @@ import {GlobalContext} from "../../context/usercontext";
  */
 function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
     const { user } = useContext(GlobalContext);
-    const role = user.role;
+    const role = user.app_role;
     const formattedDate = dayjs(date).format('YYYY/MM/DD');
     return (
     <Card style={{ marginBottom: '24px', boxShadow: '0 3px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
