@@ -4,8 +4,8 @@ import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { GlobalContext } from '../../context/usercontext';
-import { useContext } from 'react';
-
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 const GridBox = styled(Box)({
@@ -17,9 +17,15 @@ const GridBox = styled(Box)({
     color: "#666666",
 });
 
-function EventDetails({ event, handleClose, isMobile, handleEditEvent, handleEditSeries}) {
+function EventDetails({ event, handleClose, isMobile }) {
 
     const globalcontext = useContext(GlobalContext);
+    const navigate = useNavigate();
+
+    const handleClickEditEvent = (editSeries) => {
+        console.log("bsin expentded props: ", event.extendedProps);
+        navigate("/eventform", {state: {...event.extendedProps.unparsedEventData, editSeries: editSeries}});
+    }
 
     return (
         <Box
@@ -64,9 +70,9 @@ function EventDetails({ event, handleClose, isMobile, handleEditEvent, handleEdi
                         </p>
                     </Box>
                 </Box>
-                {globalcontext.user.is_logged_in && globalcontext.user.role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
-                    {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}}>Edit Series</Button>}
-                    <Button variant="contained" color="primary" sx={{margin: "0 15px"}}>Edit Event</Button>
+                {globalcontext.user.is_logged_in && globalcontext.user.app_role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                    {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(true)}}>Edit Series</Button>}
+                    <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(false)}}>Edit Event</Button>
                 </Box>}
             </Card>
         </Box>

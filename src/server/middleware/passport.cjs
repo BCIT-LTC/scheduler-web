@@ -32,6 +32,7 @@ var samlStrategy = new saml.Strategy(
     console.log("first_name:", profile.first_name);
     console.log("last_name:", profile.last_name);
     console.log("role:", profile.role);
+    console.log("app_role:", profile.app_role);
     console.log("school:", profile.school);
     console.log("program:", profile.program);
 
@@ -39,6 +40,7 @@ var samlStrategy = new saml.Strategy(
     let first_name = profile.first_name;
     let last_name = profile.last_name;
     let saml_role = profile.role;
+    let app_role = profile.app_role || "";
     let school = profile.school;
     let program = profile.program;
     let jwtToken = jwt.sign(
