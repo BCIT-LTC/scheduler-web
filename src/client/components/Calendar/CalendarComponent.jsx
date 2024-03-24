@@ -53,24 +53,33 @@ function CalendarComponent(events) {
     if (previousDayEl) {
         previousDayEl.style.borderColor = '#ddd';
         previousDayEl.style.borderWidth = '1px';
-        //previousDayEl.style.boxShadow = '';
-
-        previousDayEl.style.outline = ''; // Reset outline
     }
 
     // Change background color of the newly clicked date
-    //clickInfo.dayEl.style.borderStyle = 'solid';
     clickInfo.dayEl.style.borderColor = 'blue';
     clickInfo.dayEl.style.borderWidth = '1px';
-   // clickInfo.dayEl.style.boxShadow = '0 0 0 5px red';
-
-    //clickInfo.dayEl.style.outline = '2px solid red';
-
 
     // Store reference to the currently clicked date element
     previousDayEl = clickInfo.dayEl;
 
-    console.log(clickInfo);
+
+    // Get the clicked date
+    let clickedDate = new Date(clickInfo.date);
+    clickedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
+
+
+    // Retrieve events for the clicked date
+    let events = calendarApi.getEvents();
+    let eventsOnClickedDate = [];
+
+    for (let i = 0; i < events.length; i++) {
+      let eventStart = events[i].start.toDateString();
+    
+      if (eventStart === clickedDate.toDateString()) {
+        eventsOnClickedDate.push(events[i]);
+      }
+    }
+
   }
 
   const theme = useTheme();
