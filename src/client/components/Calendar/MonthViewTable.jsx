@@ -32,6 +32,9 @@ const MonthViewTable = ({ events }) => {
 
     if (events.length > 0 ) { 
 
+        let sortedEvents = [...events].sort((a, b) => {
+            return new Date(a.start) - new Date(b.start);
+        });
     
         return (
             <TableContainer sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -44,7 +47,7 @@ const MonthViewTable = ({ events }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {events.map((event, index) => (
+                        {sortedEvents.map((event, index) => (
                             <TableRow key={index}>
                                 <TableCell className="event-dot-cell" sx={{ 
                                     display: 'flex',
