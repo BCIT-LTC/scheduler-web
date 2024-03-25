@@ -258,10 +258,12 @@ function CalendarComponent(events) {
       
       {showMonthViewTable && monthViewTableEvents.length > 0 ? ( <> 
         <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2, marginTop: 2, textAlign: 'center' }}>
-        <div>
-      <MonthViewTable events={monthViewTableEvents} sx={{ display: 'flex', justifyContent: 'center' }} />
-      </div>
-      </Paper>
+          <Grid container justifyContent="center" alignItems="center">
+            <Grid>
+              <MonthViewTable events={monthViewTableEvents}  />
+            </Grid>
+          </Grid>
+        </Paper>
        </> ) : null}
       
       

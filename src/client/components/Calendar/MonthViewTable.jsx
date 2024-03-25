@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, useMediaQuery, useTheme } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, useMediaQuery, useTheme, Grid } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
     
@@ -9,10 +9,14 @@ const MonthViewTable = ({ events }) => {
     // Ref to store the FullCalendar dot element
     const dotRef = useRef(null);
 
-    // Function to render the event dot within TableCell
     const renderEventDot = () => {
-        return <div ref={dotRef} className="fc-daygrid-event-dot" />;
+        return (
+            <Grid ref={dotRef} item className={`fc-daygrid-event-dot`} sx={{
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+            }}/>
+        );
     };
+
 
     // Effect to move the dot element to the correct TableCell
     useEffect(() => {
@@ -40,7 +44,16 @@ const MonthViewTable = ({ events }) => {
                     <TableBody>
                         {events.map((event, index) => (
                             <TableRow key={index}>
-                                <TableCell className="event-dot-cell" sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>
+                                <TableCell className="event-dot-cell" sx={{ 
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    fontSize: isMobile ? 'x-small' : 'medium',
+                                ...(index === 0 && {
+                                    /* The first event dot appears blue, all others will appear red to highlight overlap */
+                                    '.fc-daygrid-event-dot': {
+                                        border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #00f'
+                                    }
+                                }), }}>
                                     {renderEventDot()}
                                     {event.title}
                                 </TableCell>
