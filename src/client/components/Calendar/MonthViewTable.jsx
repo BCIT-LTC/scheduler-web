@@ -1,37 +1,36 @@
 import React from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
     
     if (events.length > 0 ) { 
-  return (
-    <div>
-     
-      <table>
-        <thead>
-          <tr>
-            <th>Activity</th>
-            <th>Time</th>
-            <th>Room</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event, index) => (
-            <tr key={index}>
-              <td>{event.title}</td>
-              <td>{event.start.toLocaleTimeString()}</td>
-              <td>{event.extendedProps?.location}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-          }
-          else {
-              return (
-                  null
-              )
-          }
+        return (
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Activity</TableCell>
+                            <TableCell>Time</TableCell>
+                            <TableCell>Room</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {events.map((event, index) => (
+                            <TableRow key={index}>
+                                <TableCell sx={{ fontSize: 'x-small' }}>{event.title}</TableCell>
+                                <TableCell sx={{ fontSize: 'x-small' }}>
+                                    {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
+                                </TableCell>
+                                <TableCell sx={{ fontSize: 'x-small' }}>{event.extendedProps?.location}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        );
+    } else {
+        return null;
+    }
 };
 
 export default MonthViewTable;

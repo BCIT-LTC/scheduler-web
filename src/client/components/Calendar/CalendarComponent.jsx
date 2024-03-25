@@ -192,8 +192,6 @@ function CalendarComponent(events) {
                     isMobile={isMobile}
                     handleClose={() => { setShowEventDetails(false) }}
                   /> : null}
-
-{/* {showMonthViewTable ? ( <> <MonthViewTable events={monthViewTableEvents} /> </> ) : null} */}
               </>
 
 
@@ -227,10 +225,12 @@ function CalendarComponent(events) {
       </Paper>
 
       
-      {showMonthViewTable ? ( <> 
-        {/* <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2 }}> */}
+      {showMonthViewTable && monthViewTableEvents.length > 0 ? ( <> 
+        <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2, marginTop: 2, textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
       <MonthViewTable events={monthViewTableEvents} />
-      {/* </Paper> */}
+      </div>
+      </Paper>
        </> ) : null}
       
       
