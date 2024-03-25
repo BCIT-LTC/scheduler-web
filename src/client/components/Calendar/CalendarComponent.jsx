@@ -13,12 +13,18 @@ import {
   useTheme,
 } from '@mui/material';
 import EventDetails from './EventDetails';
+import MonthViewTable from './MonthViewTable';
+
 
 
 function CalendarComponent(events) {
 
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const [showMonthViewTable, setShowMonthViewTable] = useState(false);
+  const [monthViewTableEvents, setMonthViewTableEvents] = useState(null);
+
 
   let handleEventClick = (e) => {
     setShowEventDetails(true);
@@ -47,6 +53,9 @@ function CalendarComponent(events) {
   let previousDayEl = null;
 
   let handleDateClick = (clickInfo) => {
+
+   setShowMonthViewTable(true);
+
     let calendarApi = clickInfo.view.calendar;
 
     // Reset background color of previously clicked date
@@ -74,12 +83,14 @@ function CalendarComponent(events) {
 
     for (let i = 0; i < events.length; i++) {
       let eventStart = events[i].start.toDateString();
-    
+      
       if (eventStart === clickedDate.toDateString()) {
         eventsOnClickedDate.push(events[i]);
       }
     }
 
+    setMonthViewTableEvents(eventsOnClickedDate);
+    
   }
 
   const theme = useTheme();
@@ -176,6 +187,8 @@ function CalendarComponent(events) {
                     isMobile={isMobile}
                     handleClose={() => { setShowEventDetails(false) }}
                   /> : null}
+
+                {showMonthViewTable ? <MonthViewTable events={monthViewTableEvents} /> : null}
               </>
 
             ) : (
