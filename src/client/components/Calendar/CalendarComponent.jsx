@@ -124,7 +124,7 @@ function CalendarComponent(events) {
                 borderSpacing: '0 !important',
                
               },
-              '.fc-daygrid-day-events > :nth-child(2) .fc-daygrid-event-dot': {
+              '.fc-daygrid-day-events > :nth-of-type(n+2) .fc-daygrid-event-dot': {
                 border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
               },
             
@@ -139,18 +139,18 @@ function CalendarComponent(events) {
                   flex: '0 0 calc(100% - 10px)',
                   textAlign: 'center'
                 },
-                '.fc-header-toolbar> :nth-child(1)': {
+                '.fc-header-toolbar> :nth-of-type(1)': {
                   order: '0',
                   flex: '0 0 calc(30% - 10px)',
                 },
-                '.fc-header-toolbar> :nth-child(2)': {
+                '.fc-header-toolbar> :nth-of-type(2)': {
                   order: '1',
                   fontSize: 'x-small',
                   paddingTop: "4%",
                   display: 'flex',
                   justifyContent: 'space-between'
                 },
-                '.fc-header-toolbar> :nth-child(3)': {
+                '.fc-header-toolbar> :nth-of-type(3)': {
                   order: '0',
                   flex: '0 0 calc(50% - 10px)'
                 },

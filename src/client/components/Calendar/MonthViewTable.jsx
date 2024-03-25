@@ -31,6 +31,8 @@ const MonthViewTable = ({ events }) => {
     }, [events]);
 
     if (events.length > 0 ) { 
+
+    
         return (
             <TableContainer sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Table>
