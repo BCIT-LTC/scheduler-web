@@ -100,35 +100,7 @@ function CalendarComponent(events) {
     setMonthViewTableEvents(eventsOnClickedDate);
     
   }
-
-  let handleEventDidMount = (info) => {
-    // Call handleEventRender after the event has been mounted to the DOM
-    handleEventRender(info);
-  };
-
-  let firstEventDotByDay = {};
-
-  let handleEventRender = (info) => {
-
-    const dot = info.el.querySelector('.fc-daygrid-event-dot');
-    const eventStart = info.event.start.toDateString();
-
-    if (!firstEventDotByDay[eventStart]) {
-      // This is the first event dot for the day, keep it blue
-      dot.style.border = 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #3788d8';
-      firstEventDotByDay[eventStart] = true;
-    } else {
-      // This is not the first event dot for the day, make it red
-      dot.style.border = 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00';
-    }
-  };
-
-  let handleDatesSet = (arg) => {
-    // Reset the firstEventDotByDay object when the month changes, otherwise the dots will be colored incorrectly
-    firstEventDotByDay = {};
-  };
   
-
   const theme = useTheme();
 
   // calendar layout based on screen size (isMobile = true for screen widths below 600px)
@@ -152,7 +124,10 @@ function CalendarComponent(events) {
                 borderSpacing: '0 !important',
                
               },
-        
+              '.fc-daygrid-day-events > :nth-child(2) .fc-daygrid-event-dot': {
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+              },
+            
 
               ...(isMobile && {
                 '.fc-header-toolbar': {
@@ -215,8 +190,6 @@ function CalendarComponent(events) {
                   nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="17:00:00"
-                  eventDidMount={handleEventDidMount}
-                  datesSet={handleDatesSet}
                 />
                 {showEventDetails ?
                   <EventDetails
@@ -248,9 +221,6 @@ function CalendarComponent(events) {
                 nowIndicator={true}
                 slotMinTime="08:00:00"
                 slotMaxTime="17:00:00"
-                eventDidMount={handleEventDidMount}
-                datesSet={handleDatesSet}
-                
               />
             )
             }
