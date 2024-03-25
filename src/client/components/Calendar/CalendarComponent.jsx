@@ -71,8 +71,11 @@ function CalendarComponent(events) {
   
 
     // Change background color of the newly clicked date
-    newDayEl.style.borderColor = 'blue';
-    newDayEl.style.borderWidth = '1px';
+    if (clickInfo.view.type === 'dayGridMonth') {
+      newDayEl.style.borderColor = 'blue';
+      newDayEl.style.borderWidth = '1px';
+    }
+    
 
  
     setPreviousDayEl(newDayEl);
