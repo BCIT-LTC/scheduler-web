@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, useMediaQuery, useTheme, Grid } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery, useTheme, Grid } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
     
@@ -35,10 +35,10 @@ const MonthViewTable = ({ events }) => {
             <TableContainer sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Table>
                     <TableHead>
-                        <TableRow>
-                            <TableCell>Activity</TableCell>
-                            <TableCell>Time</TableCell>
-                            <TableCell>Room</TableCell>
+                        <TableRow sx={{ textAlign: 'center' }}>
+                            <TableCell align='center'>Activity</TableCell>
+                            <TableCell align='center'>Time</TableCell>
+                            <TableCell align='center'>Room</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -47,20 +47,21 @@ const MonthViewTable = ({ events }) => {
                                 <TableCell className="event-dot-cell" sx={{ 
                                     display: 'flex',
                                     flexDirection: 'row',
+                                    alignItems: 'center',
+                                    textAlign: 'center',
                                     fontSize: isMobile ? 'x-small' : 'medium',
                                 ...(index === 0 && {
                                     /* The first event dot appears blue, all others will appear red to highlight overlap */
                                     '.fc-daygrid-event-dot': {
                                         border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #00f'
                                     }
-                                }), }}>
-                                    {renderEventDot()}
-                                    {event.title}
+                                }), }} align='center'>
+                                    {renderEventDot()}&nbsp;{event.title}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>
                                     {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>{event.extendedProps?.location}</TableCell>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>{event.extendedProps?.location}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
