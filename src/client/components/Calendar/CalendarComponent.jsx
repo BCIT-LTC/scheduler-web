@@ -161,7 +161,9 @@ function CalendarComponent(events) {
 
                   height: '100vh',
                   maxHeight: '650px'
-
+                },
+                '.fc-event-time, .fc-event-title': {
+                  display: 'none'
                 }
               })
             }}
@@ -190,6 +192,8 @@ function CalendarComponent(events) {
                   nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="17:00:00"
+                  
+
                 />
                 {showEventDetails ?
                   <EventDetails
