@@ -1,11 +1,14 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, useMediaQuery, useTheme } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
     
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    
     if (events.length > 0 ) { 
         return (
-            <TableContainer>
+            <TableContainer sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -17,11 +20,12 @@ const MonthViewTable = ({ events }) => {
                     <TableBody>
                         {events.map((event, index) => (
                             <TableRow key={index}>
-                                <TableCell sx={{ fontSize: 'x-small' }}>{event.title}</TableCell>
-                                <TableCell sx={{ fontSize: 'x-small' }}>
+    
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>{event.title}</TableCell>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>
                                     {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: 'x-small' }}>{event.extendedProps?.location}</TableCell>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }}>{event.extendedProps?.location}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
