@@ -53,7 +53,7 @@ const MonthViewTable = ({ events }) => {
                                 ...(index === 0 && {
                                     /* The first event dot appears blue, all others will appear red to highlight overlap */
                                     '.fc-daygrid-event-dot': {
-                                        border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #00f'
+                                        border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #3788d8'
                                     }
                                 }), }} align='center'>
                                     {renderEventDot()}&nbsp;{event.title}

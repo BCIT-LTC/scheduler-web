@@ -112,7 +112,7 @@ function CalendarComponent(events) {
 
     if (!firstEventDotByDay[eventStart]) {
       // This is the first event dot for the day, keep it blue
-      dot.style.border = 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #00f';
+      dot.style.border = 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #3788d8';
       firstEventDotByDay[eventStart] = true;
     } else {
       // This is not the first event dot for the day, make it red
