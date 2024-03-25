@@ -36,9 +36,9 @@ const MonthViewTable = ({ events }) => {
                 <Table>
                     <TableHead>
                         <TableRow sx={{ textAlign: 'center' }}>
-                            <TableCell align='center'>Activity</TableCell>
-                            <TableCell align='center'>Time</TableCell>
-                            <TableCell align='center'>Room</TableCell>
+                            <TableCell sx={{ fontSize: isMobile ? 'medium' : 'x-large' }} align='center'>Activity</TableCell>
+                            <TableCell sx={{ fontSize: isMobile ? 'medium' : 'x-large' }} align='center'>Time</TableCell>
+                            <TableCell sx={{ fontSize: isMobile ? 'medium' : 'x-large' }} align='center'>Room</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
