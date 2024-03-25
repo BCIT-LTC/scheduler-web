@@ -1,6 +1,8 @@
 import React from 'react';
 
 const MonthViewTable = ({ events }) => {
+    
+    if (events.length > 0 ) { 
   return (
     <div>
      
@@ -24,6 +26,12 @@ const MonthViewTable = ({ events }) => {
       </table>
     </div>
   );
+          }
+          else {
+              return (
+                  null
+              )
+          }
 };
 
 export default MonthViewTable;

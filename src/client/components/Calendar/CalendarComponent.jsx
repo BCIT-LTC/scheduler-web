@@ -25,6 +25,7 @@ function CalendarComponent(events) {
   const [showMonthViewTable, setShowMonthViewTable] = useState(false);
   const [monthViewTableEvents, setMonthViewTableEvents] = useState(null);
 
+  const [previousDayEl, setPreviousDayEl] = useState(null);
 
   let handleEventClick = (e) => {
     setShowEventDetails(true);
@@ -50,27 +51,31 @@ function CalendarComponent(events) {
     // }
   };
 
-  let previousDayEl = null;
+  //let previousDayEl = null;
 
   let handleDateClick = (clickInfo) => {
 
-   setShowMonthViewTable(true);
+    setShowMonthViewTable(true);
 
     let calendarApi = clickInfo.view.calendar;
 
+    // Store reference to the currently clicked date element
+    let newDayEl = clickInfo.dayEl;
+    
+
     // Reset background color of previously clicked date
-    if (previousDayEl) {
+    if (previousDayEl !== null && previousDayEl !== newDayEl) {
         previousDayEl.style.borderColor = '#ddd';
         previousDayEl.style.borderWidth = '1px';
     }
+  
 
     // Change background color of the newly clicked date
-    clickInfo.dayEl.style.borderColor = 'blue';
-    clickInfo.dayEl.style.borderWidth = '1px';
+    newDayEl.style.borderColor = 'blue';
+    newDayEl.style.borderWidth = '1px';
 
-    // Store reference to the currently clicked date element
-    previousDayEl = clickInfo.dayEl;
-
+ 
+    setPreviousDayEl(newDayEl);
 
     // Get the clicked date
     let clickedDate = new Date(clickInfo.date);
@@ -188,8 +193,9 @@ function CalendarComponent(events) {
                     handleClose={() => { setShowEventDetails(false) }}
                   /> : null}
 
-                {showMonthViewTable ? <MonthViewTable events={monthViewTableEvents} /> : null}
+{/* {showMonthViewTable ? ( <> <MonthViewTable events={monthViewTableEvents} /> </> ) : null} */}
               </>
+
 
             ) : (
 
@@ -219,6 +225,15 @@ function CalendarComponent(events) {
           </Grid>
         </Grid>
       </Paper>
+
+      
+      {showMonthViewTable ? ( <> 
+        {/* <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2 }}> */}
+      <MonthViewTable events={monthViewTableEvents} />
+      {/* </Paper> */}
+       </> ) : null}
+      
+      
     </Container>
   )
 };
