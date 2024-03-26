@@ -22,10 +22,15 @@ function CalendarComponent(events) {
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
+  // Holds state of whether to show the month view table below the calendar in month view
   const [showMonthViewTable, setShowMonthViewTable] = useState(false);
   const [monthViewTableEvents, setMonthViewTableEvents] = useState(null);
 
+  // Holds state of the previously selected date element for unhighlighting in the month view
   const [previousDayEl, setPreviousDayEl] = useState(null);
+
+  // Holds state of whether the calendar is in month view to hide event time and title
+  const [monthView, setMonthView] = useState(false);
 
   let handleEventClick = (e) => {
     setShowEventDetails(true);
@@ -68,7 +73,6 @@ function CalendarComponent(events) {
         previousDayEl.style.borderColor = '#ddd';
         previousDayEl.style.borderWidth = '1px';
     }
-  
 
     // Change background color of the newly clicked date
     if (clickInfo.view.type === 'dayGridMonth') {
@@ -76,14 +80,11 @@ function CalendarComponent(events) {
       newDayEl.style.borderWidth = '1px';
     }
     
-
- 
     setPreviousDayEl(newDayEl);
 
     // Get the clicked date
     let clickedDate = new Date(clickInfo.date);
     clickedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
-
 
     // Retrieve events for the clicked date
     let events = calendarApi.getEvents();
@@ -96,11 +97,23 @@ function CalendarComponent(events) {
         eventsOnClickedDate.push(events[i]);
       }
     }
-
     setMonthViewTableEvents(eventsOnClickedDate);
-    
   }
-  
+
+  let handleViewUnmount = (view) => {
+
+    if (view.view.type === 'dayGridMonth') {
+      setMonthView(false);
+    }
+  }
+
+  let handleViewMount = (view) => {
+    
+    if (view.view.type === 'dayGridMonth') {
+      setMonthView(true);      
+    }
+  }
+
   const theme = useTheme();
 
   // calendar layout based on screen size (isMobile = true for screen widths below 600px)
@@ -162,9 +175,12 @@ function CalendarComponent(events) {
                   height: '100vh',
                   maxHeight: '650px'
                 },
-                '.fc-event-time, .fc-event-title': {
-                  display: 'none'
-                }
+          
+                ...(monthView && {
+                  '.fc-event-time, .fc-event-title': {
+                    display: 'none'
+                  }
+                })
               })
             }}
           >
@@ -192,8 +208,9 @@ function CalendarComponent(events) {
                   nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="17:00:00"
-                  
-
+                  allDaySlot={false}
+                  viewDidMount={handleViewMount}
+                  viewWillUnmount={handleViewUnmount}
                 />
                 {showEventDetails ?
                   <EventDetails
@@ -225,6 +242,7 @@ function CalendarComponent(events) {
                 nowIndicator={true}
                 slotMinTime="08:00:00"
                 slotMaxTime="17:00:00"
+                allDaySlot={false}
               />
             )
             }
@@ -242,8 +260,6 @@ function CalendarComponent(events) {
           </Grid>
         </Paper>
        </> ) : null}
-      
-      
     </Container>
   )
 };
