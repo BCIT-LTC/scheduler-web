@@ -144,7 +144,24 @@ function CalendarComponent(events) {
                 whiteSpace: 'normal',
                 overflowWrap: 'break-word',
               },
-            
+              '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main-frame': {
+                backgroundColor: '#f00',
+              },
+              '.fc-list-day fc-day .fc-list-event-dot': {
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+        
+              },
+              // '.fc-list-event-dot': {
+              //   border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+        
+              // },
+              '.fc-list-event-dot-container > .fc-list-event-dot': {
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+            },
+              'fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event': { 
+                backgroundColor: '#f00',
+              },
+              
 
               ...(isMobile && {
                 '.fc-header-toolbar': {
