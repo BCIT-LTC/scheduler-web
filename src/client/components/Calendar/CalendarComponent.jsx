@@ -140,6 +140,10 @@ function CalendarComponent(events) {
               '.fc-daygrid-day-events > :nth-of-type(n+2) .fc-daygrid-event-dot': {
                 border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
               },
+              '.fc-event, .fc-event-time': {
+                whiteSpace: 'normal',
+                overflowWrap: 'break-word',
+              },
             
 
               ...(isMobile && {
@@ -172,8 +176,8 @@ function CalendarComponent(events) {
                 },
                 '.fc-media-screen.fc-direction-ltr.fc-theme-standard': {
 
-                  height: '100vh',
-                  maxHeight: '650px'
+                  // height: '100vh',
+                  // maxHeight: '650px'
                 },
           
                 ...(monthView && {
@@ -188,6 +192,7 @@ function CalendarComponent(events) {
             {isMobile ? (
               <>
                 <FullCalendar
+                  height="auto"
                   plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
                   headerToolbar={{
                     left: 'today',
@@ -223,6 +228,7 @@ function CalendarComponent(events) {
             ) : (
 
               <FullCalendar
+                height="auto"
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
                 headerToolbar={{
                   left: 'today prev next',
