@@ -23,8 +23,10 @@ module.exports = class ApiRequests {
       method: method,
       headers: headers,
       mode: "cors",
-      body: body,
     };
+    if (['POST', 'PUT', 'DELETE'].includes(method)) {
+      this.fetchoptions.body = body;
+    }
   }
 
   /**
@@ -37,8 +39,13 @@ module.exports = class ApiRequests {
   async all() {
     let data;
     try {
+      console.log("URL: " +  this.url);
+      console.log("OPTIONS METHOD: " + this.fetchoptions.method);
+      console.log("OPTIONS HEADERS: ", Object.fromEntries(this.fetchoptions.headers.entries()));
+      console.log("OPTIONS MODE: " + this.fetchoptions.mode);
       let response = await fetch(this.url, this.fetchoptions);
       data = await response.json();
+      console.log("DATA2: " + data.status);
       return data;
     } catch (error) {
       console.log(error);

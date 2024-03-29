@@ -87,11 +87,11 @@ const parseEventsForCalendar = (events) => {
 const CalendarPage = () => {
   // get events from the API
   const events = useGetEvents();
-
+  console.log(events);
   return (
 
     <React.Fragment>
-      <CalendarComponent events={parseEventsForCalendar(events)} />
+      <CalendarComponent events={events} />
     </React.Fragment>
 
   );

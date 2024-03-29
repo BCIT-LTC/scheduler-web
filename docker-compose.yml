@@ -20,7 +20,7 @@ services:
         npm run dev
     environment:
       # api-config
-      - API_URL=http://host.docker.internal:8000/api/
+      - API_URL=http://localhost:8000
 
       # local saml-config
       - APP_URL=http://localhost:9000/
