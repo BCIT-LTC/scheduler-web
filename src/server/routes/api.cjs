@@ -33,9 +33,9 @@ router.all("/*", async (req, res) => {
   );
   console.log("API Requests: ", api_requests);
   try {
-    let data = api_requests.all();
-    console.log("Data: ", data);
-    res.status(data.status).json(data);
+    let data = await api_requests.all();
+    console.log("route /* data returned from api_requests.all(): ", data);
+    res.status(200).send(data);
   } catch (error) {
     console.log("Error in API call: ", error);
     return error;
