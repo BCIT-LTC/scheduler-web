@@ -6,7 +6,6 @@
 module.exports = class ApiRequests {
   constructor(path, auth_token, method, body) {
 
-    console.log("PATH: " + path);
     if (path === undefined) {
       throw new Error("ApiRequests path is undefined");
     }
@@ -44,16 +43,8 @@ module.exports = class ApiRequests {
   async all() {
     let data;
     try {
-      console.log(".all() URL: " +  this.url);
-      console.log(".all() OPTIONS METHOD: " + this.fetchoptions.method);
-      console.log(".all() OPTIONS HEADERS: ", Object.fromEntries(this.fetchoptions.headers.entries()));
-      console.log(".all() OPTIONS MODE: " + this.fetchoptions.mode);
       let response = await fetch(this.url, this.fetchoptions);
-      console.log(".all() response.status: " + response.status);
-
       data = await response.json();
-
-      console.log(".all() data: ", data);
       return data;
     } catch (error) {
       console.log(error);
