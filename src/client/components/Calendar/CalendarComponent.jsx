@@ -138,12 +138,14 @@ function CalendarComponent(events) {
                
               },
               '.fc-daygrid-day-events > :nth-of-type(n+2) .fc-daygrid-event-dot': {
-                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00',
               },
               '.fc-event, .fc-event-time': {
                 whiteSpace: 'normal',
                 overflowWrap: 'break-word',
               },
+
+              // Overlapping events in week view appear red
               '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main-frame': {
                 backgroundColor: '#f00',
               },
