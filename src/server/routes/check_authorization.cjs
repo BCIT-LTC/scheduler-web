@@ -41,7 +41,6 @@ router.post("", async (req, res, next) => {
     response
       .json()
       .then((data) => {
-        if (response.status === 200) {
           let email = data.email;
           let first_name = data.first_name;
           let last_name = data.last_name;
@@ -70,12 +69,6 @@ router.post("", async (req, res, next) => {
             secure: true,
           });
           res.redirect("/");
-        } else {
-          throw {
-            http_code: response.status,
-            msg: data.error,
-          };
-        }
       })
       .catch((error) => {
         switch (error.http_code) {
