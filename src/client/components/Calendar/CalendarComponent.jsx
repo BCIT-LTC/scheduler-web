@@ -147,18 +147,14 @@ function CalendarComponent(events) {
               '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main-frame': {
                 backgroundColor: '#f00',
               },
-              '.fc-list-day fc-day .fc-list-event-dot': {
-                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
-        
-              },
-              // '.fc-list-event-dot': {
-              //   border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
-        
-              // },
-              '.fc-list-event-dot-container > .fc-list-event-dot': {
-                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
-            },
-              'fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event': { 
+          
+              // Sibling based selector for overlapping events on a day in list view to appear red
+              '.fc-list-day + .fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event + .fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event .fc-list-event-time + .fc-list-event-graphic .fc-list-event-dot': {
+                border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00',
+
+                // red event dot dimensions need adjustments to match the blue dots
+                width: '1.33px', 
+                height: '1.33px', 
                 backgroundColor: '#f00',
               },
               
