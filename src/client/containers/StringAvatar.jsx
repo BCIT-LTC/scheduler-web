@@ -71,7 +71,7 @@ export default function StringAvatar() {
 
     return (
         <>
-            <Avatar {...stringAvatar(globalcontext.user.first_name.toUpperCase() + " " + globalcontext.user.last_name.toUpperCase())} 
+            <Avatar {...stringAvatar(globalcontext.user.first_name?.toUpperCase() + " " + globalcontext.user.last_name?.toUpperCase())} 
                 onClick={userAvatarClick}/>
             <Menu
                 anchorEl={anchorEl}
