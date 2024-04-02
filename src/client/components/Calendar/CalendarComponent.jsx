@@ -146,8 +146,9 @@ function CalendarComponent(events) {
               },
 
               // Overlapping events in week view appear red
-              '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main-frame': {
+              '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main': {
                 backgroundColor: '#f00',
+              
               },
           
               // Sibling based selector for overlapping events on a day in list view to appear red
