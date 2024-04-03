@@ -13,12 +13,11 @@ module.exports = class ApiRequests {
       throw new Error("ApiRequest auth_token is undefined");
     }
     if (process.env.API_URL === undefined) {
-        this.url = path;
+      throw new Error("Scheduler-API endpoint not defined");
     } else {
-        if(path.substring(0, 5) === "/api/") {
-            path = path.substring(5);
-        }
-        this.url = new URL(process.env.API_URL + path);
+      let api_url = new URL(process.env.API_URL);
+      let api_hostWithPort = api_url.protocol + '//' + api_url.hostname + (api_url.port ? ':' + api_url.port : '');
+      this.url = new URL(path, api_hostWithPort);
     }
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
