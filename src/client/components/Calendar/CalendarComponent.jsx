@@ -101,17 +101,18 @@ function CalendarComponent(events) {
   }
 
   let handleViewUnmount = (view) => {
-
+    
     if (view.view.type === 'dayGridMonth') {
       setMonthView(false);
       setShowMonthViewTable(false);
+     
     }
   }
 
   let handleViewMount = (view) => {
-    
+  
     if (view.view.type === 'dayGridMonth') {
-      setMonthView(true);      
+      setMonthView(true);     
     }
   }
 
@@ -266,6 +267,8 @@ function CalendarComponent(events) {
                 slotMinTime="08:00:00"
                 slotMaxTime="17:00:00"
                 allDaySlot={false}
+                viewDidMount={handleViewMount}
+                viewWillUnmount={handleViewUnmount}
               />
             )
             }
