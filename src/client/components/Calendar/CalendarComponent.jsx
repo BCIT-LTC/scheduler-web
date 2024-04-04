@@ -104,6 +104,7 @@ function CalendarComponent(events) {
 
     if (view.view.type === 'dayGridMonth') {
       setMonthView(false);
+      setShowMonthViewTable(false);
     }
   }
 
