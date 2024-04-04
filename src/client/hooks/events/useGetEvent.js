@@ -3,27 +3,57 @@
 // Currently, it returns dummy data
 const useGetEvents = () => {
 
-    const dummyEvents = [
-        {
+    const dummyEvents = [{
             id: 1,
-            summary: 'Open Lab',
-            start_time: '2024-03-01T08:30:00',
-            end_time: '2024-03-01T11:30:00',
+            summary: 'CPR Training',
+            start_time: '2024-03-01T12:30:00',
+            end_time: '2024-03-01T14:30:00',
             is_holiday: false,
             location: 'NW4-3086',
-            description: 'Open Lab',
+            description: 'CPR Training',
             facilitator: 'Jasica Munday',
             status: 'CONFIRMED',
             announcement: 'announcement text',
             series_id: null,
-            created: '2024-01-07T09:32:12',
-            last_modified: '2024-01-08T08:12:34'
+            created: '2024-01-08T09:32:12',
+            last_modified: '2024-01-09T08:12:34'
         },
+        {
+            id: 2,
+            summary: 'CPR Training',
+            start_time: '2024-03-04T12:30:00',
+            end_time: '2024-03-04T14:30:00',
+            is_holiday: false,
+            location: 'NW4-3086',
+            description: 'CPR Training',
+            facilitator: 'Jasica Munday',
+            status: 'CONFIRMED',
+            announcement: 'announcement text',
+            series_id: null,
+            created: '2024-01-08T09:32:12',
+            last_modified: '2024-01-09T08:12:34'
+        },
+        {
+            id: 3,
+            summary: 'CPR Training',
+            start_time: '2024-03-05T12:30:00',
+            end_time: '2024-03-05T14:30:00',
+            is_holiday: false,
+            location: 'NW4-3086',
+            description: 'CPR Training',
+            facilitator: 'Jasica Munday',
+            status: 'CONFIRMED',
+            announcement: 'announcement text',
+            series_id: null,
+            created: '2024-01-08T09:32:12',
+            last_modified: '2024-01-09T08:12:34'
+        },
+
         {
             id: 1,
             series_title: 'Open Lab',
-            start_time: '2024-03-01T14:30:00',
-            end_time: '2024-03-01T16:30:00',
+            start_time: '2024-03-01T08:30:00',
+            end_time: '2024-03-01T14:30:00',
             start_date: '2024-03-01T14:30:00',
             end_date: '2024-03-11T16:30:00',
             recurrence_frequency_weeks: 1,
