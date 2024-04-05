@@ -5,6 +5,7 @@
  */
 module.exports = class ApiRequests {
   constructor(path, auth_token, method, body) {
+
     if (path === undefined) {
       throw new Error("ApiRequests path is undefined");
     }
@@ -12,9 +13,10 @@ module.exports = class ApiRequests {
       throw new Error("ApiRequest auth_token is undefined");
     }
     if (process.env.API_URL === undefined) {
-        this.url = path;
+      throw new Error("Scheduler-API endpoint not defined");
     } else {
-        this.url = new URL(process.env.API_URL + path);
+      let api_url = new URL(process.env.API_URL);
+      this.url = new URL(path, api_url.href);
     }
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -23,8 +25,10 @@ module.exports = class ApiRequests {
       method: method,
       headers: headers,
       mode: "cors",
-      body: body,
     };
+    if (['POST', 'PUT', 'DELETE'].includes(method)) {
+      this.fetchoptions.body = body;
+    }
   }
 
   /**
