@@ -70,7 +70,7 @@ export default function EventForm() {
     }
 
     //hardcoded room options for location select
-    const roomOptions = ["SE12-316", "SE12-200", "NW4-328", "NW4-3086"];
+    const roomOptions = ["3086", "3087"];
 
     let defaultValues = {};
 
