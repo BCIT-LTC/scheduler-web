@@ -5,10 +5,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - openlab-scheduler.ltc.bcit.ca
+        - openlab.ltc.bcit.ca
       secretName: star-ltc-bcit-ca
   rules:
-    - host: openlab-scheduler.ltc.bcit.ca
+    - host: openlab.ltc.bcit.ca
       http:
         paths:
           - path: /
