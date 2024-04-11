@@ -7,10 +7,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import Badge from '@mui/material/Badge';
 
 import Drawer from '@mui/material/Drawer';
 import TodayIcon from '@mui/icons-material/Today';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 
 import List from '@mui/material/List';
@@ -22,12 +24,46 @@ import { createTheme, alpha, ThemeProvider } from '@mui/material/styles';
 import AdminArea from './AdminArea';
 import LoginModal from './LoginModal';
 import StringAvatar from './StringAvatar';
-
+import useGetAnnouncements from '../hooks/announcements/useGetAnnouncement';
+import AnnouncementAlert from '../components/Announcements/AnnouncementAlert';
 import { GlobalContext } from '../context/usercontext';
 
 export default function BaseLayout() {
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
+    const [announcementsNum, setAnnouncementsNum] = useState(-1);
+    let announcementsData = null;
+
+    //check if the current page is the home page
+    const isHomePage = window.location.pathname === "/calendar";
+
+    //get announcements if on the home page
+    if(isHomePage && !announcementsData) {
+        announcementsData = useGetAnnouncements().announcements;
+    }
+
+    //checks for undismissed notifications and displays one as alert
+    const selectAnnouncementToDisplay = () => {
+        const undismissed = announcementsData.filter((announcement) => {
+            const cacheKey = `Openlab-${announcement.id}-${announcement.posted_date}`;
+            return !localStorage.getItem(cacheKey);
+        }).sort((a, b) => new Date(b.posted_date) - new Date(a.posted_date));
+
+        const num = undismissed.length;
+        if (num !== announcementsNum) setAnnouncementsNum(num);
+        //if there are no undismissed announcements, return null
+        if (num === 0) return null;
+
+        const cacheKey = `Openlab-${undismissed[0].id}-${undismissed[0].posted_date}`;
+        return <AnnouncementAlert
+            title={undismissed[0].title}
+            message={undismissed[0].description}
+            cacheKey={cacheKey}
+            onDismiss={() => {
+                localStorage.setItem(cacheKey, JSON.stringify(true));
+                setAnnouncementsNum(num - 1);
+            }} />;
+    }
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -35,7 +71,6 @@ export default function BaseLayout() {
         }
         setDraweropen(open);
     };
-
 
     //create a button theme for the login button
     const greyBase = '#EEEEEE';
@@ -69,9 +104,19 @@ export default function BaseLayout() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             Welcome to OpenLabs
                         </Typography>
-
-
-
+                        {isHomePage && <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 1 }}
+                            onClick={() => { 
+                                window.location.href = "/announcements" }}
+                        >
+                            <Badge badgeContent={announcementsNum} color="warning">
+                                <NotificationsIcon />
+                            </Badge>
+                        </IconButton>}
                         {globalcontext.user.is_logged_in ?
                             <StringAvatar /> :
                             <ThemeProvider theme={theme}>
@@ -80,7 +125,7 @@ export default function BaseLayout() {
                     </Toolbar>
                 </AppBar>
             </Box>
-
+            {isHomePage ? selectAnnouncementToDisplay() : null}
             <Drawer
                 anchor='left'
                 open={Draweropen}
@@ -88,8 +133,9 @@ export default function BaseLayout() {
             >
                 <List>
                     <ListItem disablePadding
-                        onClick={() => { 
-                            window.location.href = "/announcements" }}
+                        onClick={() => {
+                            window.location.href = "/announcements"
+                        }}
                     >
                         <ListItemButton
                             size="large"
@@ -147,7 +193,7 @@ export default function BaseLayout() {
                     )}
                 </List> : null}
                 {globalcontext.user.is_logged_in && (globalcontext.user.app_role === "admin") &&
-                <AdminArea/>}
+                    <AdminArea />}
             </Drawer>
             <Outlet />
         </Fragment >
