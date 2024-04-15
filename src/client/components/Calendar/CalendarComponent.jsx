@@ -60,44 +60,46 @@ function CalendarComponent(events) {
 
   let handleDateClick = (clickInfo) => {
 
-    setShowMonthViewTable(true);
-
-    let calendarApi = clickInfo.view.calendar;
-
-    // Store reference to the currently clicked date element
-    let newDayEl = clickInfo.dayEl;
-    
-
-    // Reset background color of previously clicked date
-    if (previousDayEl !== null && previousDayEl !== newDayEl) {
-        previousDayEl.style.borderColor = '#ddd';
-        previousDayEl.style.borderWidth = '1px';
-    }
-
-    // Change background color of the newly clicked date
     if (clickInfo.view.type === 'dayGridMonth') {
-      newDayEl.style.borderColor = 'blue';
-      newDayEl.style.borderWidth = '1px';
-    }
-    
-    setPreviousDayEl(newDayEl);
 
-    // Get the clicked date
-    let clickedDate = new Date(clickInfo.date);
-    clickedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
+      setShowMonthViewTable(true);
 
-    // Retrieve events for the clicked date
-    let events = calendarApi.getEvents();
-    let eventsOnClickedDate = [];
+      let calendarApi = clickInfo.view.calendar;
 
-    for (let i = 0; i < events.length; i++) {
-      let eventStart = events[i].start.toDateString();
+      // Store reference to the currently clicked date element
+      let newDayEl = clickInfo.dayEl;
       
-      if (eventStart === clickedDate.toDateString()) {
-        eventsOnClickedDate.push(events[i]);
+
+      // Reset background color of previously clicked date
+      if (previousDayEl !== null && previousDayEl !== newDayEl) {
+          previousDayEl.style.borderColor = '#ddd';
+          previousDayEl.style.borderWidth = '1px';
       }
+      
+      // Change background color of the newly clicked date
+      newDayEl.style.borderColor = '#00f';
+      newDayEl.style.borderWidth = '1px';
+      
+      
+      setPreviousDayEl(newDayEl);
+
+      // Get the clicked date
+      let clickedDate = new Date(clickInfo.date);
+      clickedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
+
+      // Retrieve events for the clicked date
+      let events = calendarApi.getEvents();
+      let eventsOnClickedDate = [];
+
+      for (let i = 0; i < events.length; i++) {
+        let eventStart = events[i].start.toDateString();
+        
+        if (eventStart === clickedDate.toDateString()) {
+          eventsOnClickedDate.push(events[i]);
+        }
+      }
+      setMonthViewTableEvents(eventsOnClickedDate);
     }
-    setMonthViewTableEvents(eventsOnClickedDate);
   }
 
   let handleViewUnmount = (view) => {
