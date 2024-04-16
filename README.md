@@ -43,3 +43,4 @@ With Docker:
 - Password: `student`
 
 To add/edit accounts for local users see ```/simplesaml/authsources.php```
+

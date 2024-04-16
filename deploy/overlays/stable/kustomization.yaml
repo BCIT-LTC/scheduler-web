@@ -48,6 +48,7 @@ configMapGenerator:
 # SAML config
 #
 # Alternate Keycloak SAML idP
-# - name: saml-config
-#   literals:
-#     - SAML_IDENTITY_PROVIDER_URL=https://latest--keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
+- name: saml-config
+  literals:
+    - SAML_IDENTITY_PROVIDER_URL=https://login.microsoftonline.com/8322cefd-0a4c-4e2c-bde5-b17933e7b00f/saml2
+    - SAML_ISSUER=https://sts.windows.net/8322cefd-0a4c-4e2c-bde5-b17933e7b00f/
