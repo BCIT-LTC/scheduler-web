@@ -51,5 +51,5 @@ configMapGenerator:
   - name: saml-config
     literals:
       - SAML_IDENTITY_PROVIDER_URL=https://login.microsoftonline.com/8322cefd-0a4c-4e2c-bde5-b17933e7b00f/saml2
-      - SAML_ISSUER=https://sts.windows.net/8322cefd-0a4c-4e2c-bde5-b17933e7b00f/
+      - SAML_ISSUER=https://openlab.ltc.bcit.ca
     behavior: replace
