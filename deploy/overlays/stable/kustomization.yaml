@@ -14,11 +14,11 @@ nameSuffix: -stable
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 1.3.2 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
+  version: 1.3.3 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
 images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
-    newTag: "1.3.2" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
+    newTag: "1.3.3" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-stable:tag"}
 patches:
   # Patches deployment with secrets
   - target:
