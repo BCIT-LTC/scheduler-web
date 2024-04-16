@@ -18,7 +18,7 @@ spec:
           image: scheduler-web
           env:
             - name: APP_URL
-              value: https://openlab-scheduler.ltc.bcit.ca/
+              value: https://openlab.ltc.bcit.ca/
           envFrom:
             - configMapRef:
                 name: elasticapm-config
