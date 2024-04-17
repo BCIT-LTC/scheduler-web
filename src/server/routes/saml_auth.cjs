@@ -27,6 +27,7 @@ const passport = require('passport');
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
     function (req, res) {
+        console.log(" initial login");
         res.cookie('jwt', req.user.token, { httpOnly: false });
         res.redirect('/');
     });
@@ -39,10 +40,13 @@ router.post('/',
  */
 router.post('/callback',
     function (req, res, next) {
+        console.log(" callback ");
+        console.log(req.body);
         next();
     },
     passport.authenticate('samlStrategy'),
     function (req, res) {
+        console.log(" callback saml login");
         res.cookie('jwt', req.user.token, { httpOnly: false });
         res.redirect('/');
     }
