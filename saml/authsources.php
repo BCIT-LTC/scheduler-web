@@ -13,25 +13,24 @@ $config = array(
             'first_name' => 'admin_firstname',
             'last_name' => 'admin_lastname',
             'role' => 'employee', 
-            'school' => 'School of Health Sciences',
-            'program' => 'Bachelor of Science in Nursing' 
+            'department' => 'School of Health Sciences',
+            'display_name' => 'admin_displayname'
         ),
         'instructor@bcit.ca:instructor' => array(
             'email' => 'instructor@bcit.ca',
             'first_name' => 'instructor_firstname',
             'last_name' => 'instructor_lastname',
             'role' => 'instructor', 
-            'school' => 'School of Health Sciences',
-            'program' => 'Bachelor of Science in Nursing' 
+            'department' => 'School of Health Sciences',
+            'display_name' => 'admin_displayname'
         ),
         'student@bcit.ca:student' => array(
             'email' => 'student@bcit.ca',
             'first_name' => 'student_firstname',
             'last_name' => 'student_lastname',
             'role' => 'student', 
-            'school' => 'School of Health Sciences',
-            'program' => 'Bachelor of Science in Nursing' 
+            'department' => 'School of Health Sciences',
+            'display_name' => 'admin_displayname'
         )
     ),
-
 );
