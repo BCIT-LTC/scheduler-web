@@ -49,7 +49,7 @@ const useGetEvents = () => {
                     startRecur: event.start_date,
                     endRecur: event.end_date,
                     extendedProps: {
-                        location: event.location,
+                        location_id: event.location_id,
                         description: event.description,
                         facilitator: event.facilitator,
                         announcement: event.announcement,
@@ -67,7 +67,7 @@ const useGetEvents = () => {
                     start: event.start_time,
                     end: event.end_time,
                     extendedProps: {
-                        location: event.location,
+                        location_id: event.location_id,
                         description: event.description,
                         facilitator: event.facilitator,
                         status: event.status,

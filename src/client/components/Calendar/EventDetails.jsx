@@ -17,13 +17,11 @@ const GridBox = styled(Box)({
     color: "#666666",
 });
 
-function EventDetails({ event, handleClose, isMobile }) {
+function EventDetails({ event, handleClose }) {
 
     const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
-
     const handleClickEditEvent = (editSeries) => {
-        console.log("bsin expentded props: ", event.extendedProps);
         navigate("/eventform", {state: {...event.extendedProps.unparsedEventData, editSeries: editSeries}});
     }
 
@@ -34,7 +32,7 @@ function EventDetails({ event, handleClose, isMobile }) {
             alignItems="center"
             sx={{ position: "absolute", top: "0", left: "0", height: "100vh", width: "100%" }}
         >
-            <Card sx={{ zIndex: "100", width: "70%", p: 2, boxShadow: 1, borderRadius: 2, position: "absolute", border: "3px #bd00ff solid" }}>
+            <Card sx={{ zIndex: "100", width: "70%", maxWidth: "600px", p: 2, boxShadow: 1, borderRadius: 2, position: "absolute", border: "3px #bd00ff solid" }}>
                 <DisabledByDefaultIcon onClick={handleClose} sx={{ position: "absolute", top: "10px", right: "10px", color: "grey", height: "30px", width: "30px" }} />
                 <Box display="flex" justifyContent="center">
                     <h2>{event.title}</h2>
@@ -56,7 +54,7 @@ function EventDetails({ event, handleClose, isMobile }) {
                         <p>Room</p><p>:</p>
                     </GridBox>
                     <GridBox gridColumn="span 8">
-                        <p>{event.extendedProps?.location}</p>
+                        <p>{event.extendedProps?.location_id}</p>
                     </GridBox>
                     <GridBox gridColumn="span 4">
                         <p>Facilitator</p><p>:</p>
@@ -64,11 +62,12 @@ function EventDetails({ event, handleClose, isMobile }) {
                     <GridBox gridColumn="span 8">
                         <p>{event.extendedProps?.facilitator}</p>
                     </GridBox>
-                    <Box gridColumn="span 12" sx={{ padding: "0", color: "#666666"}}>
-                        <p>
-                            {event.extendedProps?.description}
-                        </p>
-                    </Box>
+                    <GridBox gridColumn="span 4">
+                        <p>Description</p><p>:</p>
+                    </GridBox>
+                    <GridBox gridColumn="span 8">
+                        <p>{event.extendedProps?.description}</p>
+                    </GridBox>
                 </Box>
                 {globalcontext.user.is_logged_in && globalcontext.user.app_role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
                     {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(true)}}>Edit Series</Button>}

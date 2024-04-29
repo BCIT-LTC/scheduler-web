@@ -18,7 +18,6 @@ import MonthViewTable from './MonthViewTable';
 
 
 function CalendarComponent(events) {
-
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -68,19 +67,19 @@ function CalendarComponent(events) {
 
       // Store reference to the currently clicked date element
       let newDayEl = clickInfo.dayEl;
-      
+
 
       // Reset background color of previously clicked date
       if (previousDayEl !== null && previousDayEl !== newDayEl) {
-          previousDayEl.style.borderColor = '#ddd';
-          previousDayEl.style.borderWidth = '1px';
+        previousDayEl.style.borderColor = '#ddd';
+        previousDayEl.style.borderWidth = '1px';
       }
-      
+
       // Change background color of the newly clicked date
       newDayEl.style.borderColor = '#00f';
       newDayEl.style.borderWidth = '1px';
-      
-      
+
+
       setPreviousDayEl(newDayEl);
 
       // Get the clicked date
@@ -93,30 +92,30 @@ function CalendarComponent(events) {
 
       for (let i = 0; i < events.length; i++) {
         let eventStart = events[i].start.toDateString();
-        
+
         if (eventStart === clickedDate.toDateString()) {
           eventsOnClickedDate.push(events[i]);
         }
       }
       setMonthViewTableEvents(eventsOnClickedDate);
     }
-  }
+  };
 
   let handleViewUnmount = (view) => {
-    
+
     if (view.view.type === 'dayGridMonth') {
       setMonthView(false);
       setShowMonthViewTable(false);
-     
+
     }
-  }
+  };
 
   let handleViewMount = (view) => {
-  
+
     if (view.view.type === 'dayGridMonth') {
-      setMonthView(true);     
+      setMonthView(true);
     }
-  }
+  };
 
   const theme = useTheme();
 
@@ -132,6 +131,10 @@ function CalendarComponent(events) {
 
           <Grid item xs={12}
             sx={{
+              // change cursor to pointer on list style events
+              '.fc-list-event': {
+                cursor: 'pointer'
+              },
 
               '.fc-toolbar-chunk': {
                 display: 'flex'
@@ -139,7 +142,12 @@ function CalendarComponent(events) {
               '.fc table': {
                 borderCollapse: 'separate',
                 borderSpacing: '0 !important',
-               
+
+              },
+
+              // Center the date in the cell on month view
+              '.fc-daygrid-day-top': {
+                justifyContent: 'center'
               },
               '.fc-daygrid-day-events > :nth-of-type(n+2) .fc-daygrid-event-dot': {
                 border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00',
@@ -149,22 +157,27 @@ function CalendarComponent(events) {
                 overflowWrap: 'break-word',
               },
 
+              // Align event time and title in the same line
+              '.fc-direction-ltr .fc-daygrid-event.fc-event-end, .fc-direction-rtl .fc-daygrid-event.fc-event-start': {
+                alignItems: 'baseline'
+              },
+
               // Overlapping events in week view appear red
               '.fc-timegrid-col-events > :nth-of-type(n+2) .fc-event-main': {
                 backgroundColor: '#f00',
-              
+
               },
-          
+
               // Sibling based selector for overlapping events on a day in list view to appear red
               '.fc-list-day + .fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event + .fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event .fc-list-event-time + .fc-list-event-graphic .fc-list-event-dot': {
                 border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00',
 
                 // red event dot dimensions need adjustments to match the blue dots
-                width: '1.33px', 
-                height: '1.33px', 
+                width: '1.33px',
+                height: '1.33px',
                 backgroundColor: '#f00',
               },
-              
+
 
               ...(isMobile && {
                 '.fc-header-toolbar': {
@@ -199,97 +212,81 @@ function CalendarComponent(events) {
                   // height: '100vh',
                   // maxHeight: '650px'
                 },
-          
+
                 ...(monthView && {
                   '.fc-event-time, .fc-event-title': {
                     display: 'none'
-                  }
+                  },
+                  // Center the event dots in the cell on month view in mobile
+                  '.fc-daygrid-day-events': {
+                    display: 'flex',
+                    justifyContent: 'center',
+                  },
+                  // Hide the bottom border of the day cell in month view in mobile
+                  '.fc-daygrid-day-bottom': {
+                    display: 'none'
+                  },
                 })
               })
             }}
           >
 
-            {isMobile ? (
-              <>
-                <FullCalendar
-                  height="auto"
-                  plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-                  headerToolbar={{
-                    left: 'today',
-                    center: 'prev title next',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                  }}
 
-                  initialView="timeGridWeek"
-                  weekends={true}
-                  editable={true}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  events={events}
-                  eventClick={handleEventClick}
-                  select={handleDateSelect}
-                  dateClick={handleDateClick}
-                  nowIndicator={true}
-                  slotMinTime="08:00:00"
-                  slotMaxTime="17:00:00"
-                  allDaySlot={false}
-                  viewDidMount={handleViewMount}
-                  viewWillUnmount={handleViewUnmount}
-                />
-                {showEventDetails ?
-                  <EventDetails
-                    event={selectedEvent}
-                    isMobile={isMobile}
-                    handleClose={() => { setShowEventDetails(false) }}
-                  /> : null}
-              </>
+            <FullCalendar
+              height="auto"
+              plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+              views={{
+                dayGridThreeDays: {
+                  type: "timeGrid",
+                  duration: { days: 3 },
+                  buttonText: "day",
+                },
+              }}
+              headerToolbar={{
+                left: 'today',
+                center: 'prev title next',
+                right: 'dayGridMonth,timeGridWeek,dayGridThreeDays,listWeek'
+              }}
 
-            ) : (
+              initialView="timeGridWeek"
+              weekends={true}
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              events={events}
+              eventClick={handleEventClick}
+              select={handleDateSelect}
+              dateClick={handleDateClick}
+              nowIndicator={true}
+              slotMinTime="08:00:00"
+              slotMaxTime="17:00:00"
+              allDaySlot={false}
+              viewDidMount={handleViewMount}
+              viewWillUnmount={handleViewUnmount}
+            />
+            {showEventDetails ?
+              <EventDetails
+                event={selectedEvent}
+                handleClose={() => { setShowEventDetails(false); }}
+              /> : null}
 
-              <FullCalendar
-                height="auto"
-                plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-                headerToolbar={{
-                  left: 'today prev next',
-                  center: 'title',
-                  right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                }}
-                initialView="timeGridWeek"
-                weekends={true}
-                editable={true}
-                selectable={true}
-                selectMirror={true}
-                dayMaxEvents={true}
-                events={events}
-                eventClick={handleEventClick}
-                select={handleDateSelect}
-                dateClick={handleDateClick}
-                nowIndicator={true}
-                slotMinTime="08:00:00"
-                slotMaxTime="17:00:00"
-                allDaySlot={false}
-                viewDidMount={handleViewMount}
-                viewWillUnmount={handleViewUnmount}
-              />
-            )
-            }
           </Grid>
         </Grid>
       </Paper>
 
-      
-      {showMonthViewTable && monthViewTableEvents.length > 0 ? ( <> 
+
+      {showMonthViewTable && monthViewTableEvents.length > 0 ? (<>
         <Paper elevation={3} sx={{ p: 2, boxShadow: 1, borderRadius: 2, marginTop: 2, textAlign: 'center' }}>
           <Grid container justifyContent="center" alignItems="center">
             <Grid>
-              <MonthViewTable events={monthViewTableEvents}  />
+              <MonthViewTable events={monthViewTableEvents} />
             </Grid>
           </Grid>
         </Paper>
-       </> ) : null}
+      </>) : null}
     </Container>
-  )
+  );
 };
 
 export default CalendarComponent;

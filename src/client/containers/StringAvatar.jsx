@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext } from "react";
 import { GlobalContext } from '../context/usercontext';
 
 import Avatar from '@mui/material/Avatar';
@@ -38,15 +38,26 @@ function stringToColor(string) {
 
 /**
  * Helper function to take first and last initials of a name and create an avatar
- * @param {*} name - the name of the user
+ * @param {*} firstName - First name of the user
+ * @param {*} lastName - Last name of the user
  * @returns sx properties and children for the avatar
  */
-function stringAvatar(name) {
+function createAvatar(firstName, lastName) {
+    // uppercase full name including cases either first name or last name is not provided
+    let fname = firstName ? firstName : "";
+    let lname = lastName ? lastName : "";
+    let name = (fname + " " + lname)?.toUpperCase();
+    // get the first letter of the first name and last name if both or either are provided
+    let initials = name.split(" ").map((n) => n[0]).join("");
+    //  If both are empty/undefined, set it to "null" string
+    initials = initials.trim() ? initials : "null";
+
+
     return {
         sx: {
-        bgcolor: stringToColor(name),
+            bgcolor: stringToColor(name),
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: initials,
     };
 }
 
@@ -71,8 +82,8 @@ export default function StringAvatar() {
 
     return (
         <>
-            <Avatar {...stringAvatar(globalcontext.user.first_name?.toUpperCase() + " " + globalcontext.user.last_name?.toUpperCase())} 
-                onClick={userAvatarClick}/>
+            <Avatar {...createAvatar(globalcontext.user.first_name, globalcontext.user.last_name)}
+                onClick={userAvatarClick} />
             <Menu
                 anchorEl={anchorEl}
                 open={open}
@@ -84,7 +95,7 @@ export default function StringAvatar() {
                     >
                         <ListItemText
                             primary={globalcontext.user.first_name + " " + globalcontext.user.last_name}
-                            secondary={globalcontext.user.email}
+                            secondary={globalcontext.user.email ? globalcontext.user.email : "No email"}
                         />
                     </ListItem>
                     <Divider />
