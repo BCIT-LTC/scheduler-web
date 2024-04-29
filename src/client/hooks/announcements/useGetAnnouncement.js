@@ -34,18 +34,18 @@ const useGetAnnouncements = () => {
             {
                 id: 1,
                 title: 'Website Maintenance',
-                description: 'OpenLab Scheduler website will be down for maintenance on Sunday, March 3rd, 2024 from 00:00 to 06:00 PST.',
+                description: 'OpenLab Scheduler website will be down for maintenance on Sunday, May 5th, 2024 from 00:00 to 06:00 PST.',
                 posted_by: 'Jasica Munday',
-                posted_date: '2024-01-07T09:32:12',
-                last_modified: '2024-01-08T08:12:34'
+                posted_date: '2024-04-20T09:32:12',
+                last_modified: '2024-04-22T08:12:34'
             },
             {
                 id: 2,
-                title: 'Statutory Holiday: Good Friday',
-                description: 'BCIT will be closed on March 29th, 2024 for Statutory Holiday: Good Friday.',
+                title: 'Statutory Holiday: Victoria Day',
+                description: 'BCIT will be closed on May 20th, 2024 for Statutory Holiday: Victoria Day.',
                 posted_by: 'Jasica Munday',
-                posted_date: '2024-03-01T09:32:12',
-                last_modified: '2024-03-02T08:12:34'
+                posted_date: '2024-04-24T09:32:12',
+                last_modified: '2024-04-24T09:32:12'
             }
         ];
         setAnnouncements(dummyAnnouncements);

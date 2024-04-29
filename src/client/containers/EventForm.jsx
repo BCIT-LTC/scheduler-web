@@ -70,7 +70,7 @@ export default function EventForm() {
     }
 
     //hardcoded room options for location select
-    const roomOptions = ["3086", "3087"];
+    const roomOptions = ["NW4-3086", "NW4-3087", "SE12-428"];
 
     let defaultValues = {};
 
@@ -92,7 +92,7 @@ export default function EventForm() {
     const [formData, setFormData] = useState({
         id: defaultValues.id,
         event_name: defaultValues.summary || defaultValues.series_title || "",
-        location: defaultValues.location,
+        location_id: defaultValues.location_id,
         recurring_event: editSeriesMode,
         start_time: defaultValues.start_time ? dayjs(defaultValues.start_time) : dayjs(),
         end_time: defaultValues.end_time ? dayjs(defaultValues.end_time) : dayjs(),

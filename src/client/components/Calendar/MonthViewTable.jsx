@@ -66,7 +66,7 @@ const MonthViewTable = ({ events }) => {
                                 <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>
                                     {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>{event.extendedProps?.location}</TableCell>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>{event.extendedProps?.location_id}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
