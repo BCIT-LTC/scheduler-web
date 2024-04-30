@@ -32,3 +32,5 @@ configMapGenerator:
     literals:
       - SAML_IDENTITY_PROVIDER_URL=https://keycloak.ltc.bcit.ca/realms/ltc/protocol/saml
       - SAML_ISSUER=scheduler-web
+      - SAML_IDP_CERT=/app/saml/keycloak_idp.crt
+

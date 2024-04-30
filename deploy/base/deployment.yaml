@@ -39,10 +39,10 @@ spec:
           ports:
             - containerPort: 9000
               protocol: TCP
-          # volumeMounts:
-          #   - name: keycloak-ltc-realm-idp-cert
-          #     mountPath: /app/saml
+      #     volumeMounts:
+      #       - name: saml-idp-cert
+      #         mountPath: /app/saml
       # volumes:
-      #   - name: keycloak-ltc-realm-idp-cert
+      #   - name: saml-idp-cert
       #     secret:
-      #       secretName: keycloak-ltc-realm-idp-cert
+      #       secretName: saml-idp-cert

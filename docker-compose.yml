@@ -22,7 +22,7 @@ services:
       - APP_URL=http://localhost:9000/
       - SAML_IDENTITY_PROVIDER_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
       - SAML_ISSUER=localhost
-
+      - SAML_IDP_CERT=./saml/simplesamlphp_idp.crt
       # auth-signing-key
       - JWT_AUTH_SIGNING_KEY=insecureT0kenSigningKey
 
@@ -54,7 +54,7 @@ services:
       - ./saml/authsources.php:/var/www/simplesamlphp/config/authsources.php
 
       # mount saml-idp-certificate
-      - ./saml/idp.crt:/var/www/simplesamlphp/config/idp.crt
+      - ./saml/simplesamlphp_idp.crt:/var/www/simplesamlphp/config/idp.crt
     networks:
       - openlab-scheduler-network
 
