@@ -48,9 +48,9 @@ app.use("/api", authentication_check, api);
 app.use("/logout", logout);
 
 
-app.get("/hello", (req, res) => {
-  res.send("Hello Vite + React!!!!");
-});
+// app.get("/hello", (req, res) => {
+//   res.send("Hello Vite + React!!!!");
+// });
 
 ViteExpress.listen(app, 9000, () =>
   logger.info("Server is listening on port 9000...")

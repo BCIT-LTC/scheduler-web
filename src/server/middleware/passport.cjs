@@ -26,23 +26,15 @@ var samlStrategy = new saml.Strategy(
   },
   async (profile, done) => {
     console.log("profile info: ");
-    console.log(profile);
-    console.log("---------------------------");
-    console.log("email:", profile.email);
-    console.log("first_name:", profile.first_name);
-    console.log("last_name:", profile.last_name);
-    console.log("role:", profile.role);
-    console.log("app_role:", profile.app_role);
-    // console.log("school:", profile.school);
-    // console.log("program:", profile.program);
+    // console.log(profile);
+    // console.log("---------------------------");
 
     let email = profile.email;
     let first_name = profile.first_name;
     let last_name = profile.last_name;
     let saml_role = profile.role;
-    let app_role = profile.app_role || "";
-    let school = "";
-    let program = "";
+    let app_role = "";
+    let department = profile.department;
     let jwtToken = jwt.sign(
       {
         email,
@@ -50,30 +42,69 @@ var samlStrategy = new saml.Strategy(
         last_name,
         saml_role,
         app_role,
-        school,
-        program,
+        department,
         authorization_checked: false,
         is_logged_in: true,
       },
       process.env.JWT_AUTH_SIGNING_KEY
     );
-    // await fetch(`${process.env.API_URL}login`, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Authorization': `Bearer ${jwtToken}`,
-    //         'content-Type': 'application/json',
-    //     },
-    //     mode: 'cors',
-    // }).then(async (response) => {
-    //     console.log("RESPONSE FROM API")
-    //     console.log(response)
-    //     return await response.json();
-    // }).then((response) => {
-    //     console.log(response);
-    //     let isAdmin = response;
-    //     jwtToken = jwt.sign({ email, firstname, lastname, isAdmin }, process.env.JWT_AUTH_SIGNING_KEY);
-    //     console.log(jwtToken)
-    // });
+
+    console.log("PRE AUTHORIZATION CHECK")
+
+    let response;
+    const url = new URL(process.env.API_URL + "authorize");
+
+    try {
+      response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+
+      response
+        .json()
+        .then((data) => {
+          console.log("Data: ", data.app_role )
+          let email = data.email;
+          let first_name = data.first_name;
+          let last_name = data.last_name;
+          let saml_role = data.role;
+          let app_role = data.app_role;
+          let department = data.department;
+          jwtToken = jwt.sign(
+            {
+              email,
+              first_name,
+              last_name,
+              saml_role,
+              app_role,
+              department,
+              authorization_checked: true,
+              is_logged_in: true,
+            },
+            process.env.JWT_AUTH_SIGNING_KEY
+          );
+        })
+        .catch((error) => {
+          switch (error.http_code) {
+            case 400:
+              console.log("Bad request sent to API: " + error);
+              throw error;
+            case 500:
+              console.log("API cannot perform the request: " + error);
+              throw error;
+            default:
+              console.log("Unknown error: " + error);
+              throw error;
+          }
+        });
+    } catch (error) {
+      console.log("API unreachable: " + error.message);
+      // return res.status(500).json({ error: "API unreachable: " + error.message });
+    }
+    console.log("POST AUTHORIZATION CHECK")
     return done(null, { token: jwtToken });
   }
 );

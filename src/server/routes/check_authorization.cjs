@@ -46,8 +46,7 @@ router.post("", async (req, res, next) => {
           let last_name = data.last_name;
           let saml_role = data.saml_role;
           let app_role = data.app_role;
-          let school = data.school;
-          let program = data.program;
+          let department = data.department;
           let jwtToken = jwt.sign(
             {
               email,
@@ -55,8 +54,7 @@ router.post("", async (req, res, next) => {
               last_name,
               saml_role,
               app_role,
-              school,
-              program,
+              department,
               authorization_checked: true,
               is_logged_in: true,
             },
