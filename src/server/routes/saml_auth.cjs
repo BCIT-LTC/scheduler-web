@@ -25,11 +25,12 @@ const passport = require('passport');
  * @memberof module:routers/login~loginrRouter
  */
 router.post('/',
-    passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true }),
-    function (req, res) {
-        res.cookie('jwt', req.user.token, { httpOnly: false });
-        res.redirect('/');
-    });
+    passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true })
+    // function (req, res) {
+    //     res.cookie('jwt', req.user.token, { httpOnly: false });
+    //     res.redirect('/');
+    // }
+);
 
 /**
  * Route to deal with login callback
@@ -38,11 +39,12 @@ router.post('/',
  * @memberof module:routers/login~loginRouter
  */
 router.post('/callback',
+    passport.authenticate('samlStrategy'),
     function (req, res, next) {
         next();
     },
-    passport.authenticate('samlStrategy'),
     function (req, res) {
+        console.log("BEFORE SETTING COOKIE")
         res.cookie('jwt', req.user.token, { httpOnly: false });
         res.redirect('/');
     }

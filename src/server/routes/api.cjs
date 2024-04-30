@@ -16,10 +16,10 @@ router.all("/*", async (req, res) => {
 
   try {
     let data = await api_requests.all();
-    console.log("Data: ", data)
+    // console.log("Data: ", data)
     res.status(200).send(data);
   } catch (error) {
-    console.log("Error in API call: ", error);
+    // console.log("Error in API call: ", error);
     return error;
   }
 });

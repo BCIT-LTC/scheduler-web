@@ -98,6 +98,12 @@ export default function StringAvatar() {
                             secondary={globalcontext.user.email ? globalcontext.user.email : "No email"}
                         />
                     </ListItem>
+                    <ListItem>
+                        <ListItemText
+                            primary={"saml role: " + globalcontext.user.saml_role}
+                            secondary={"app role: " + globalcontext.user.app_role}
+                        />
+                    </ListItem>
                     <Divider />
                     <MenuList>
                         <MenuItem

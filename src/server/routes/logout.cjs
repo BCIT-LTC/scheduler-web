@@ -11,6 +11,7 @@ const router = express.Router();
 router.post("", async (req, res) => {
     // Unset the cookies by setting their expiration date in the past
     res.clearCookie('jwt');
+    res.clearCookie('default_jwt');
     res.clearCookie('PHPSESSIDIDP');
     res.clearCookie('SimpleSAMLAuthTokenIdp');
     res.clearCookie('session');
