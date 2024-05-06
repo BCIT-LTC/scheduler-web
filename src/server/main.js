@@ -42,15 +42,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/documentation', express.static('js_documentation'));
 app.use("/auth/login", saml_auth);
 app.use("/auth/authorize", default_jwt, check_authorization);
 app.use("/api", authentication_check, api);
 app.use("/logout", logout);
 
-
-// app.get("/hello", (req, res) => {
-//   res.send("Hello Vite + React!!!!");
-// });
 
 ViteExpress.listen(app, 9000, () =>
   logger.info("Server is listening on port 9000...")
