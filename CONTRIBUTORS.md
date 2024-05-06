@@ -34,3 +34,5 @@ This project is a collaboration between the following people:
 - Brandon Chan - ISSP Winter 2024
 - Buck Sin - ISSP Winter 2024
 - Lester Shun - ISSP Winter 2024
+
+- Mika Manaligod - ISSP Spring/Summer 2024
