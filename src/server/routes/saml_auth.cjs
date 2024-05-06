@@ -22,7 +22,7 @@ const passport = require('passport');
  * Route to get SAML login page
  * @name get/login
  * @function
- * @memberof module:routers/login~loginrRouter
+ * @memberof module:routers/login~loginRouter
  */
 router.post('/',
     passport.authenticate('samlStrategy', { failureRedirect: './', failureMessage: true })

@@ -44,3 +44,8 @@ With Docker:
 
 To add/edit accounts for local users see ```/simplesaml/authsources.php```
 
+### Documentation
+
+The code comments are collected and can be found in the `js_documentation` folder after running `docker compose up`
+
+code comments are served as jsdocs format locally at localhost:9000/documentation

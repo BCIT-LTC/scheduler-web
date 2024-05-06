@@ -1,10 +1,11 @@
 {
     "source": {
-        "include": [ "." ],
-        "exclude": [ "node_modules/", "client/" ]
+        "include": [ "src/server/" ],
+        "exclude": [ "node_modules/", "src/client/", "dist/" ],
+        "includePattern": ".+\\.c?js(doc|x)?$"
     },
     "opts": {
-        "destination": "./documentation/",
+        "destination": "./js_documentation/",
         "recurse": true
     }
 }
