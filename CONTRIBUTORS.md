@@ -38,3 +38,4 @@ This project is a collaboration between the following people:
 - Mika Manaligod - ISSP Spring/Summer 2024
 - Ebod Shojaei - ISSP Spring/Summer 2024
 - Aric Or - ISSP Spring/Summer 2024
+- Conrad Christian - ISSP Spring/Summer 2024
