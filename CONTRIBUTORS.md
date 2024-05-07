@@ -40,3 +40,4 @@ This project is a collaboration between the following people:
 - Aric Or - ISSP Spring/Summer 2024
 - Conrad Christian - ISSP Spring/Summer 2024
 - Benny Li - ISSP Spring/Summer 2024
+- Cheryl Lau - ISSP Spring/Summer 2024
