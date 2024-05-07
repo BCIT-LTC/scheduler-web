@@ -44,7 +44,6 @@ router.post('/callback',
         next();
     },
     function (req, res) {
-        console.log("BEFORE SETTING COOKIE")
         res.cookie('jwt', req.user.token, { httpOnly: false });
         res.redirect('/');
     }
