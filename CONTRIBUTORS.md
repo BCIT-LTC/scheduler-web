@@ -36,3 +36,4 @@ This project is a collaboration between the following people:
 - Lester Shun - ISSP Winter 2024
 
 - Mika Manaligod - ISSP Spring/Summer 2024
+- Ebod Shojaei - ISSP Spring/Summer 2024
