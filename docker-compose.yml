@@ -20,7 +20,7 @@ services:
 
       # local saml-config
       - APP_URL=http://localhost:9000/
-      - SAML_IDENTITY_PROVIDER_URL=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+      - SAML_IDENTITY_PROVIDER_URL=http://localhost:9090/simplesaml/saml2/idp/SSOService.php
       - SAML_ISSUER=localhost
       - SAML_IDP_CERT=./saml/simplesamlphp_idp.crt
       # auth-signing-key
@@ -45,7 +45,7 @@ services:
   idp:
     image: kenchan0130/simplesamlphp
     ports:
-      - "8080:8080"
+      - "9090:8080"
     environment:
       - SIMPLESAMLPHP_SP_ENTITY_ID=localhost
       - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost:9000/auth/login/callback

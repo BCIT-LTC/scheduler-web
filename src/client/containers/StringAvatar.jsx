@@ -101,7 +101,7 @@ export default function StringAvatar() {
                     <ListItem>
                         <ListItemText
                             primary={"saml role: " + globalcontext.user.saml_role}
-                            secondary={"app role: " + globalcontext.user.app_role}
+                            secondary={"app roles: " + globalcontext.user.app_roles}
                         />
                     </ListItem>
                     <Divider />

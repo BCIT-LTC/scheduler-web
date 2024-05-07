@@ -33,7 +33,7 @@ var samlStrategy = new saml.Strategy(
     let first_name = profile.first_name;
     let last_name = profile.last_name;
     let saml_role = profile.role;
-    let app_role = "";
+    let app_roles = [];
     let department = profile.department;
     let jwtToken = jwt.sign(
       {
@@ -41,15 +41,13 @@ var samlStrategy = new saml.Strategy(
         first_name,
         last_name,
         saml_role,
-        app_role,
+        app_roles,
         department,
         authorization_checked: false,
         is_logged_in: true,
       },
       process.env.JWT_AUTH_SIGNING_KEY
     );
-
-    console.log("PRE AUTHORIZATION CHECK")
 
     let response;
     const url = new URL(process.env.API_URL + "authorize");
@@ -66,12 +64,14 @@ var samlStrategy = new saml.Strategy(
       response
         .json()
         .then((data) => {
-          console.log("Data: ", data.app_role )
+          if (response.status !== 200) {
+            throw Error(data.error);
+          }
           let email = data.email;
           let first_name = data.first_name;
           let last_name = data.last_name;
-          let saml_role = data.role;
-          let app_role = data.app_role;
+          let saml_role = data.saml_role;
+          let app_roles = data.app_roles;
           let department = data.department;
           jwtToken = jwt.sign(
             {
@@ -79,33 +79,28 @@ var samlStrategy = new saml.Strategy(
               first_name,
               last_name,
               saml_role,
-              app_role,
+              app_roles,
               department,
               authorization_checked: true,
               is_logged_in: true,
             },
             process.env.JWT_AUTH_SIGNING_KEY
           );
+          return done(null, { token: jwtToken });
         })
         .catch((error) => {
-          switch (error.http_code) {
+          switch (response.status) {
             case 400:
-              console.log("Bad request sent to API: " + error);
-              throw error;
+              return done("Bad request sent to API: " + error);
             case 500:
-              console.log("API cannot perform the request: " + error);
-              throw error;
+              return done("API cannot perform the request: " + error);
             default:
-              console.log("Unknown error: " + error);
-              throw error;
+              return done("Unknown error: " + error);
           }
         });
     } catch (error) {
-      console.log("API unreachable: " + error.message);
-      // return res.status(500).json({ error: "API unreachable: " + error.message });
+      return done("API unreachable: " + error.message);
     }
-    console.log("POST AUTHORIZATION CHECK")
-    return done(null, { token: jwtToken });
   }
 );
 

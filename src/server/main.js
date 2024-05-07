@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 
 //ROUTES IMPORTS
 import logout from "./routes/logout.cjs";
-import check_authorization from "./routes/check_authorization.cjs";
 import default_jwt from "./routes/default_jwt.cjs";
 import api from "./routes/api.cjs";
 import saml_auth from "./routes/saml_auth.cjs";
@@ -44,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/documentation', express.static('js_documentation'));
 app.use("/auth/login", saml_auth);
-app.use("/auth/authorize", default_jwt, check_authorization);
+app.use("/auth/authorize", default_jwt);
 app.use("/api", authentication_check, api);
 app.use("/logout", logout);
 
