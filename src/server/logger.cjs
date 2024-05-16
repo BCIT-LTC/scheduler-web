@@ -10,6 +10,7 @@ const { format } = require('logform');
 const { combine, timestamp, label, json } = format;
 
 const logger = winston.createLogger({
+  level: 'info',
   transports: [
     new winston.transports.Console({
       format: combine(

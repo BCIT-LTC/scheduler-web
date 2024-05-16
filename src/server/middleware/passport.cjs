@@ -1,6 +1,7 @@
 const passport = require("passport");
 var saml = require("passport-saml");
 var fs = require("fs");
+const logger = require("../logger.cjs");
 const jwt = require("jsonwebtoken");
 const SAML_CALLBACK_URL = process.env.APP_URL + "auth/login/callback";
 
@@ -99,7 +100,8 @@ var samlStrategy = new saml.Strategy(
           }
         });
     } catch (error) {
-      return done("API unreachable: " + error.message);
+      logger.error("API unreachable: " + error.message);
+      return done(null, { token: jwtToken });
     }
   }
 );
