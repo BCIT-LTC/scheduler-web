@@ -92,17 +92,17 @@ var samlStrategy = new saml.Strategy(
         .catch((error) => {
           switch (response.status) {
             case 400:
-              return done("Bad request sent to API: " + error);
+              logger.error("Bad request sent to API: " + error);
             case 500:
-              return done("API cannot perform the request: " + error);
+              logger.error("API cannot perform the request: " + error);
             default:
-              return done("Unknown error: " + error);
+              logger.error("Unknown error: " + error);
           }
         });
     } catch (error) {
       logger.error("API unreachable: " + error.message);
-      return done(null, { token: jwtToken });
     }
+    return done(null, { token: jwtToken });
   }
 );
 
