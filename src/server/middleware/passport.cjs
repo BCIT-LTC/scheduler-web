@@ -26,8 +26,8 @@ var samlStrategy = new saml.Strategy(
   },
   async (profile, done) => {
     console.log("profile info: ");
-    // console.log(profile);
-    // console.log("---------------------------");
+    console.log(profile);
+    console.log("---------------------------");
 
     let email = profile.email;
     let first_name = profile.first_name;
