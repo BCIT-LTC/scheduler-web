@@ -52,7 +52,6 @@ var samlStrategy = new saml.Strategy(
 
     let response;
     const url = new URL(process.env.API_URL + "authorize");
-
     try {
       response = await fetch(url, {
         method: "POST",
@@ -87,22 +86,28 @@ var samlStrategy = new saml.Strategy(
             },
             process.env.JWT_AUTH_SIGNING_KEY
           );
-          return done(null, { token: jwtToken });
         })
         .catch((error) => {
           switch (response.status) {
             case 400:
-              logger.error("Bad request sent to API: " + error);
+              console.log("Bad request sent to API: " + error);
+            // logger.error("Bad request sent to API: " + error);
             case 500:
-              logger.error("API cannot perform the request: " + error);
+              console.log("API cannot perform the request: " + error);
+            // logger.error("API cannot perform the request: " + error);
             default:
-              logger.error("Unknown error: " + error);
+              console.log("Unknown error: " + error);
+            // logger.error("Unknown error: " + error);
           }
-        });
+        })
+        .finally(() => {
+          return done(null, { token: jwtToken });
+        })
     } catch (error) {
-      logger.error("API unreachable: " + error.message);
+      console.log("API unreachable: " + error.message);
+      // logger.error("API unreachable: " + error.message);
+      return done(null, { token: jwtToken });
     }
-    return done(null, { token: jwtToken });
   }
 );
 

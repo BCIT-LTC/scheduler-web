@@ -12,7 +12,7 @@ router.get('/default_jwt', (req, res) => {
 
         res.cookie('default_jwt', default_jwt_token,
             { httpOnly: false, sameSite: 'Strict', secure: false });
-        res.redirect('/calendar');
+        res.redirect('/');
     } catch (error) {
         logger.error("Error retrieving anonymous token: " + error.message);
         return res.status(500).json(
