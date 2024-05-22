@@ -1,5 +1,5 @@
-import { Outlet, Navigate, Link } from "react-router-dom"
-import { Fragment, useState, useContext } from "react"
+import { Outlet, Navigate, Link } from "react-router-dom";
+import { Fragment, useState, useContext, useEffect } from "react";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -28,22 +28,26 @@ import useGetAnnouncements from '../hooks/announcements/useGetAnnouncement';
 import AnnouncementAlert from '../components/Announcements/AnnouncementAlert';
 import { GlobalContext } from '../context/usercontext';
 
+import AnnouncementButton from '../components/Announcements/AnnouncementButton';
+
 export default function BaseLayout() {
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
-    let announcementsData = null;
+    
+    // Always call the hook outside of any conditionals
+    const { announcements } = useGetAnnouncements();
 
-    //check if the current page is the home page
+    // Check if the current page is the home page
     const isHomePage = window.location.pathname === "/calendar";
 
-    //get announcements if on the home page
-    if(isHomePage && !announcementsData) {
-        announcementsData = useGetAnnouncements().announcements;
-    }
+    // Initialize announcementsData to null or announcements based on the condition
+    let announcementsData = isHomePage ? announcements : null;
 
     //checks for undismissed notifications and displays one as alert
     const selectAnnouncementToDisplay = () => {
+        if (!announcementsData) return null;
+
         const undismissed = announcementsData.filter((announcement) => {
             const cacheKey = `Openlab-${announcement.id}-${announcement.posted_date}`;
             return !localStorage.getItem(cacheKey);
@@ -72,7 +76,7 @@ export default function BaseLayout() {
         setDraweropen(open);
     };
 
-    //create a button theme for the login button
+    // Create a button theme for the login button
     const greyBase = '#EEEEEE';
     const primaryBlue = '#2196f3';
     const theme = createTheme({
@@ -104,19 +108,22 @@ export default function BaseLayout() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             Welcome to OpenLabs
                         </Typography>
-                        {isHomePage && <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 1 }}
-                            onClick={() => { 
-                                window.location.href = "/announcements" }}
-                        >
-                            <Badge badgeContent={announcementsNum} color="warning">
-                                <NotificationsIcon />
+                        {isHomePage && (
+                            <Badge badgeContent={announcementsNum > 0 ? announcementsNum : null} 
+                            color="warning"
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            sx={{
+                                '& .MuiBadge-badge': {
+                                    transform: 'translate(-40%, -10%)',
+                                },
+                            }}
+                            >
+                                <AnnouncementButton />
                             </Badge>
-                        </IconButton>}
+                        )}
                         {globalcontext.user.is_logged_in ?
                             <StringAvatar /> :
                             <ThemeProvider theme={theme}>

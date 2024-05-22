@@ -1,32 +1,21 @@
 import { useEffect, useState, useCallback } from 'react';
+import Cookies from 'js-cookie';
 
 /**
  * Custom hook to get announcements
  * This hook is used in the Announcements container
  * It makes a GET request to the server to get announcements
  *
- * @returns {{isLoading: boolean, error: unknown, announcements: *[], refetchAnnouncements: ((function(): void)|*)}}
+ * @returns {{isLoading: boolean, error: unknown, announcements: Array, refetchAnnouncements: Function}}
  */
 const useGetAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    /**
-     * Function to make a GET request to the client side route to get announcements
-     *
-     * @type {(function(): void)|*}
-     */
     const fetchAnnouncements = useCallback(() => {
-
-        // Getting the jwt token from the cookie
-        const getCookie = (name) => {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        };
-        const jwtToken = getCookie('jwt');
-
+        // Reusing the JWT retrieval from useGetEvents
+        let jwtToken = Cookies.get("default_jwt");
         setIsLoading(true);
 
         // Dummy data for testing, remove this when using real data
@@ -48,32 +37,29 @@ const useGetAnnouncements = () => {
                 last_modified: '2024-04-24T09:32:12'
             }
         ];
-        setAnnouncements(dummyAnnouncements);
-        // remove above when using real data
+        // setAnnouncements(dummyAnnouncements);
 
-        fetch(`/api/announcement`, {
+        fetch(`api/announcement`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwtToken}`,
+                Authorization: `Bearer ${jwtToken}`,
             },
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                //uncomment below to use real data
-                // setAnnouncements(data);
-                setAnnouncements(dummyAnnouncements);
-                setIsLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                setIsLoading(false);
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            setAnnouncements(data);
+            setIsLoading(false);
+        })
+        .catch(error => {
+            setError(`Failed to fetch announcements: ${error}`);
+            setIsLoading(false);
+        });
     }, []);
 
     useEffect(() => {
