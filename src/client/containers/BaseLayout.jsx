@@ -199,7 +199,7 @@ export default function BaseLayout() {
                         </ListItem>
                     )}
                 </List> : null}
-                {globalcontext.user.is_logged_in && (globalcontext.user.app_role === "admin") &&
+                {globalcontext.user.authorization_checked &&
                     <AdminArea />}
             </Drawer>
             <Outlet />

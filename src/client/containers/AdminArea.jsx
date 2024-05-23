@@ -10,6 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 import AddIcon from '@mui/icons-material/Add';
 import GroupIcon from '@mui/icons-material/Group';
 import { GlobalContext } from '../context/usercontext';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+
 
 /**
  * Container to display privileged nav links
@@ -43,6 +45,27 @@ export default function AdminArea() {
                 </ListItemButton>
             </ListItem>
         </List>
+        
+        <List>
+            <ListItem disablePadding
+                onClick={() => { window.location.href = "/locations" }}
+            >
+                <ListItemButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                >
+                    <ListItemIcon>
+                        <ApartmentIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"Room Management"} />
+                </ListItemButton>
+            </ListItem>
+        </List>
+
+
         <List>
             <ListItem disablePadding
                 onClick={() => { 
