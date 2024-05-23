@@ -7,6 +7,7 @@ export default function PrivilegedRoute() {
 
     if (globalcontext.user.app_role && (globalcontext.user.app_role !== "admin")) {
         // If the user's role is not allowed, redirect to home
+        console.log("inside")
         return <Navigate to="/" replace />
     }
 

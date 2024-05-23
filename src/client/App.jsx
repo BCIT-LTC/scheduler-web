@@ -7,6 +7,7 @@ import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 import PrivilegedRoute from "./containers/PrivilegedRoute";
 import EventForm from "./containers/EventForm";
+import Locations from "./containers/Locations";
 
 function App() {
   // Role-based route protection component
@@ -24,6 +25,7 @@ function App() {
             <Route element={<PrivilegedRoute />}>
               <Route path="rolemanagement" element={<RoleManagement />} />
               <Route path="eventform" element={<EventForm />} />
+              <Route path="locations" element={<Locations />} />
             </Route>
           </Route>
           <Route path="" element={<Navigate to="/calendar" />} />
