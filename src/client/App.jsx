@@ -7,13 +7,15 @@ import CalendarPage from "./containers/CalendarPage";
 import ProtectedRoute from "./containers/ProtectedRoute";
 import PrivilegedRoute from "./containers/PrivilegedRoute";
 import EventForm from "./containers/EventForm";
+import ContextProvider from "./context/usercontext";
 import Locations from "./containers/Locations";
+import ContextProvider from "./context/usercontext";
 
 function App() {
   // Role-based route protection component
   return (
 
-    <>
+    <ContextProvider>
       <Routes>
         <Route path="/" element={<BaseLayout />}>
           <Route path="calendar" element={<CalendarPage />} />
@@ -22,7 +24,7 @@ function App() {
           <Route path="announcements" element={<Announcements />} />
           <Route element={<ProtectedRoute />}>
             <Route path="openlab" element={<>schedule openlab</>} />
-            <Route element={<PrivilegedRoute />}>
+            <Route element={<PrivilegedRoute roles = {['admin']}/>}>
               <Route path="rolemanagement" element={<RoleManagement />} />
               <Route path="eventform" element={<EventForm />} />
               <Route path="locations" element={<Locations />} />
@@ -32,7 +34,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
-    </>
+    </ContextProvider>
   );
 }
 
