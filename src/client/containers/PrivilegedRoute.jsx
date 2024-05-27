@@ -1,16 +1,16 @@
-import { useContext } from 'react';
-import { GlobalContext } from '../context/usercontext';
+import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
 
 export default function PrivilegedRoute() {
-    const globalcontext = useContext(GlobalContext);
+    // Check if user is an admin, loading is true while the check is in progress
+    const isPermitted = useCheckIfPermitted({roles_to_check: roles});
 
-    if (globalcontext.user.app_role && (globalcontext.user.app_role !== "admin")) {
-        // If the user's role is not allowed, redirect to home
-        console.log("inside")
-        return <Navigate to="/" replace />
+    // If the user is not an admin, redirect to the unauthorized page
+    if (!isPermitted) {
+        return <Navigate to="/unauthorized" />;
     }
 
-    // User is logged in and has an allowed role, render children
-    return <Outlet />
+    // If the user is an admin, display the child components
+    return <Outlet />;
 }
