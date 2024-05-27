@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import DeleteConfirmationModal from './DeleteConfirmation';
+import DeleteConfirmationModal from '../Shared/DeleteConfirmation';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal'
+import Modal from '@mui/material/Modal';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -63,8 +63,15 @@ const EditUserModal = ({ isOpen, onClose, onSave}) => {
             <option value="Instructor">Instructor</option>
           </select>
         </label>
-        <Button variant="contained" onClick={handleSave}>Save</Button>
-        <DeleteConfirmationModal />
+        <Button variant="contained" onClick={handleSave}>
+          Save
+        </Button>
+        <DeleteConfirmationModal>
+          <>
+            <h2>Delete User</h2>
+            <p>Are you sure you want to delete this user?</p>
+          </>
+        </DeleteConfirmationModal>
       </Box>
       </Modal>
 

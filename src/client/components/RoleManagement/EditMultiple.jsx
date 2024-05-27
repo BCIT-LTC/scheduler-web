@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import DeleteConfirmationModal from './DeleteConfirmation';
+import DeleteConfirmationModal from '../Shared/DeleteConfirmation';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import Modal from '@mui/material/Modal'
+import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
 const style = {
@@ -30,9 +30,6 @@ const EditMultiModal = ({ isOpen, onClose, onSave}) => {
     onClose();
   };
 
-
-
-
   return (
     <Modal
       open = {isOpen}
@@ -52,7 +49,12 @@ const EditMultiModal = ({ isOpen, onClose, onSave}) => {
         <Button variant="contained" onClick={handleSave}>Update</Button>
         <h3>Delete Users</h3>
         <p>All selected users will be removed from the system</p>
-        <DeleteConfirmationModal />
+        <DeleteConfirmationModal>
+          <>
+            <h2>Delete User</h2>
+            <p>Are you sure you want to delete this user?</p>
+          </>
+        </DeleteConfirmationModal>
       </Box>
     </Modal>
   );

@@ -69,7 +69,8 @@ function EventDetails({ event, handleClose }) {
                         <p>{event.extendedProps?.description}</p>
                     </GridBox>
                 </Box>
-                {globalcontext.user.is_logged_in && globalcontext.user.app_role === "admin" && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                {/* TODO: change saml_role to admin role */}
+                {globalcontext.user.is_logged_in && globalcontext.user.saml_role && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
                     {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(true)}}>Edit Series</Button>}
                     <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(false)}}>Edit Event</Button>
                 </Box>}
