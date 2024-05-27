@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
@@ -20,10 +20,14 @@ import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Cookies from 'js-cookie';
 import useGetLocations from '../hooks/locations/useGetLocations';
+import EventConfirmationModal from '../components/Calendar/EventConfirmation';
+import { API_BASE_URL } from '../../constants';
+import { GlobalContext } from '../context/usercontext';
+import DeleteConfirmationModal from '../components/Shared/DeleteConfirmation';
+import Toast from '../components/Shared/Toast';
 
 /**
  * Event Form Page
@@ -31,14 +35,17 @@ import useGetLocations from '../hooks/locations/useGetLocations';
  * @returns {JSX.Element} - Event Form Page
  */
 export default function EventForm() {
+  const globalContext = useContext(GlobalContext);
   const location = useLocation();
   const navigate = useNavigate();
   const locations = useGetLocations().data;
+  const eventsUrl = `${API_BASE_URL}/events`;
 
   const jwt = Cookies.get('jwt');
-  const roomOptions = locations
-    ? locations.map((location) => location.room_location)
-    : [];
+  const [submitting, setSubmitting] = useState(false);
+  const [onSuccess, setOnSuccess] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [showToast, setShowToast] = useState(false);
 
   //converts the recurrence days array to a boolean array
   const initRecurrenceDays = (recurrence_days) => {
@@ -82,7 +89,7 @@ export default function EventForm() {
   };
 
   //for editing events, the event data is passed as state
-  if (location.state) {
+  if (!!location.state) {
     defaultValues = { ...location.state };
     if (Array.isArray(defaultValues.recurrence_days)) {
       defaultValues.recurrence_days = initRecurrenceDays(
@@ -92,17 +99,18 @@ export default function EventForm() {
   }
 
   //form edit mode state, will be set to true if the event data is passed as state
-  const [editMode, setEditMode] = useState(defaultValues.id ? true : false);
+  const [editMode, setEditMode] = useState(
+    defaultValues.event_id ? true : false
+  );
 
   //form recurrence mode state, will be set to false for new events
   const [editSeriesMode, setEditSerieseMode] = useState(
     defaultValues.editSeries ? true : false
   );
-
   //form data state is set to default values
   const [formData, setFormData] = useState({
-    id: defaultValues.id,
-    event_name: defaultValues.summary || defaultValues.series_title || '',
+    event_id: defaultValues.event_id,
+    summary: defaultValues.summary ?? '',
     location_id: defaultValues.location_id,
     recurring_event: editSeriesMode,
     start_time: defaultValues.start_time
@@ -125,10 +133,27 @@ export default function EventForm() {
       : dayjs(),
     facilitator: defaultValues.facilitator || '',
     description: defaultValues.description || '',
-    summary: defaultValues.summary || '',
     holiday_closure_event: defaultValues.holiday_closure_event || false,
-    created_by: 'admin@bcit.ca',
+    created_by: defaultValues.created_by || globalContext.user.email,
+    modified_by: globalContext.user.email,
   });
+
+  const validateForm = () => {
+    const errors = [];
+    if (!formData.summary) {
+      errors.push('Event name is required');
+    }
+    if (!formData.location_id) {
+      errors.push('Location is required');
+    }
+    if (!formData.start_time) {
+      errors.push('Start time is required');
+    }
+    if (!formData.end_time) {
+      errors.push('End time is required');
+    }
+    return errors;
+  };
 
   const [seriesConfirmationOpen, setSeriesConfirmationOpen] = useState(false);
 
@@ -155,7 +180,7 @@ export default function EventForm() {
     setFormData({
       ...formData,
       [field]: formData[field]
-        .set('year', dateObject.year())
+        .set('year', dateObject.year() ? dateObject.year() : dayjs().year())
         .set('month', dateObject.month())
         .set('date', dateObject.date()),
     });
@@ -163,12 +188,16 @@ export default function EventForm() {
 
   const handleTimeChange = (timeObject, field) => {
     if (formData[field] === undefined) return;
+    let updatedTimeObject = dayjs(timeObject)
+      .year(timeObject.year())
+      .month(timeObject.month())
+      .date(timeObject.date())
+      .hour(timeObject.hour())
+      .minute(timeObject.minute())
+      .second(0);
     setFormData({
       ...formData,
-      [field]: formData[field]
-        .set('hour', timeObject.hour())
-        .set('minute', timeObject.minute())
-        .set('second', 0),
+      [field]: updatedTimeObject,
     });
   };
 
@@ -188,9 +217,63 @@ export default function EventForm() {
     setFormData({ ...formData, location_id: locationId });
   };
 
-  //TODO: Implement the submit function
+  const addEvent = (payload) => {
+    fetch(eventsUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt,
+      },
+      body: JSON.stringify(payload),
+    }).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          console.log('API response: ', data);
+          if (data && response.status === 201) {
+            setOnSuccess(true);
+          }
+        })
+        .catch((error) => {
+          setErrors([...errors, error]);
+          console.error('API error: ', error);
+        });
+    });
+  };
+
+  const editEvent = (payload) => {
+    fetch(`${eventsUrl}/${payload.event_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt,
+      },
+
+      body: JSON.stringify(payload),
+    }).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          console.log('API response: ', data);
+          if (data && response.status === 200) {
+            setOnSuccess(true);
+          }
+        })
+        .catch((error) => {
+          setErrors([...errors, error]);
+          console.error('API error: ', error);
+        });
+    });
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
+    const errors = validateForm();
+    if (errors.length > 0) {
+      setErrors(errors);
+      setShowToast(true);
+      return;
+    }
     //remove the recurrence fields if the event is not recurring
     const payload = { ...formData };
     if (!payload.recurring_event) {
@@ -209,33 +292,35 @@ export default function EventForm() {
     if (seriesConfirmationOpen) {
       setSeriesConfirmationOpen(false);
     }
-    console.log('formData payload: ', payload);
 
-    const apiUrl = 'http://localhost:8000/api/events';
-    fetch(apiUrl, {
-      method: 'POST',
+    if (editMode) {
+      setSubmitting(true);
+      editEvent(payload);
+    } else {
+      addEvent(payload);
+    }
+  };
+
+  const onCancel = (e) => {
+    setOnSuccess(false);
+    navigate(-1);
+  };
+
+  const onDelete = () => {
+    fetch(`${eventsUrl}/${formData.event_id}`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + jwt,
       },
-      body: JSON.stringify(payload),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('API response: ', data);
+        console.log('API reponse : ', data);
       })
       .catch((error) => {
         console.error('API error: ', error);
       });
-  };
-
-  const onCancel = (e) => {
-    navigate(-1);
-  };
-
-  //TODO: Implement the delete function
-  const onDelete = (e) => {
-    console.log('delete event');
   };
 
   if (!locations) {
@@ -263,10 +348,13 @@ export default function EventForm() {
               label="Event Name"
               variant="outlined"
               required
-              name="event_name"
-              value={formData.event_name}
+              name="summary"
+              value={formData.summary}
               inputProps={{ maxLength: 50 }}
               onChange={handleFormChange}
+              onBlur={() => {
+                setFormData({ ...formData, summary: formData.summary.trim() });
+              }}
               sx={{ flexGrow: 1, margin: '10px 0' }}
             />
             <TextField
@@ -520,7 +608,7 @@ export default function EventForm() {
                           },
                         }}
                         onChange={(dateObject) => {
-                          handleDateChange(dateObject, 'start_time');
+                          handleTimeChange(dateObject, 'start_time');
                         }}
                       />
                       <MobileTimePicker
@@ -569,7 +657,7 @@ export default function EventForm() {
                           },
                         }}
                         onChange={(dateObject) => {
-                          handleDateChange(dateObject, 'end_time');
+                          handleTimeChange(dateObject, 'end_time');
                         }}
                       />
                       <MobileTimePicker
@@ -619,18 +707,6 @@ export default function EventForm() {
               onChange={handleFormChange}
               sx={{ flexGrow: 1, margin: '10px 0' }}
             />
-            <TextField
-              name="summary"
-              label="Summary"
-              variant="outlined"
-              multiline
-              minRows={2}
-              maxRows={4}
-              value={formData.summary}
-              inputProps={{ maxLength: 200 }}
-              onChange={handleFormChange}
-              sx={{ flexGrow: 1, margin: '10px 0' }}
-            />
             <FormControlLabel
               control={
                 <Checkbox
@@ -658,23 +734,21 @@ export default function EventForm() {
                 CANCEL
               </Button>
               {editMode && (
-                <Button
-                  onClick={onDelete}
-                  variant="contained"
-                  color="error"
-                  size="normal"
+                <DeleteConfirmationModal
+                  onConfirm={onDelete}
+                  onCancel={onCancel}
                 >
-                  Delete
-                </Button>
+                  <>
+                    <h2>Delete Event</h2>
+                    <p>Are you sure you want to delete this event?</p>
+                  </>
+                </DeleteConfirmationModal>
               )}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                size="normal"
-              >
-                SAVE
-              </Button>
+              <EventConfirmationModal
+                onSave={onSubmit}
+                isOpen={onSuccess}
+                onCancel={onCancel}
+              />
             </CardActions>
           </CardContent>
         </Card>
@@ -747,6 +821,11 @@ export default function EventForm() {
           </Box>
         </Modal>
       </Box>
+      <Toast
+        messages={errors}
+        open={showToast}
+        handleClose={() => setShowToast(false)}
+      />
     </form>
   );
 }
