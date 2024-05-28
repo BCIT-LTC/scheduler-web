@@ -11,15 +11,15 @@ import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
  *
  * @param id
  * @param title
- * @param date
+ * @param created_at
  * @param description
  * @param onDelete passed from AnnouncementList
  * @param onEdit passed from AnnouncementList
  * @returns {Element}
  * @constructor
  */
-function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
-    const formattedDate = dayjs(date).format('YYYY/MM/DD');
+function AnnouncementCard({ id, title, created_at, description, onDelete, onEdit }) {
+    const formattedDate = dayjs(created_at).format('YYYY/MM/DD');
     const isAdminOrInstructor = useCheckIfPermitted({ roles_to_check: ["admin", "instructor"] });
     return (
     <Card style={{ marginBottom: '24px', boxShadow: '0 3px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
@@ -95,8 +95,8 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
           key={announcement.announcements_id || index}
           id={announcement.announcements_id}
           title={announcement.title}
-          date={announcement.date}
           description={announcement.description}
+          created_at={announcement.created_at}
           onDelete={handleDelete}
             onEdit={handleEdit}
         />
@@ -109,7 +109,7 @@ function AnnouncementList({ announcements, onDelete, refetchAnnouncements, onSna
                     id={editAnnouncement.announcements_id}
                     existingTitle={editAnnouncement.title}
                     existingDescription={editAnnouncement.description}
-                    existingDate={editAnnouncement.date}
+                    existingDate={editAnnouncement.created_at}
                     handleClose={handleEditClose}
                     onAnnouncementEdited={() => {
                         handleEditClose();

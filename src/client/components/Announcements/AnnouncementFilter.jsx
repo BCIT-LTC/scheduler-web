@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Typography,
+  // FormGroup,
+  // FormControlLabel,
+  // Checkbox,
+  // Typography,
   TextField,
   InputAdornment,
 } from "@mui/material";
-import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import SearchIcon from "@mui/icons-material/Search";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 // Filter styles for mobile view
 const filterStyles = {
@@ -29,7 +29,7 @@ const filterStyles = {
  * @constructor
  */
 const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+  // const [selectedDate, setSelectedDate] = useState(dayjs());
   const [searchText, setSearchText] = useState("");
   const [selectedRooms, setSelectedRooms] = useState({
     SE41025: false,
@@ -90,10 +90,10 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
    *
    * @param newValue
    */
-  const handleDateChange = (newValue) => {
-    setSelectedDate(newValue);
-    onFilterChange("date", newValue ? newValue.format("YYYY-MM-DD") : null);
-  };
+  // const handleDateChange = (newValue) => {
+  //   setSelectedDate(newValue);
+  //   onFilterChange("created_at", newValue ? newValue.format("YYYY-MM-DD") : null);
+  // };
 
   return (
     <Box>
@@ -127,7 +127,7 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
         />
       </Box>
       {/*Switching to mobile view*/}
-      {isMobile() ? (
+      {/* {isMobile() ? (
         <p></p>
       ) : (
         <>
@@ -168,12 +168,12 @@ const AnnouncementFilter = ({ onSearchChange, onFilterChange }) => {
                 openTo="day"
                 value={selectedDate}
                 onChange={handleDateChange}
-                renderInput={(params) => <div />} // This hides the input field
+                textField={(params) => <div />} // This hides the input field
               />
             </LocalizationProvider>
           </Box>
         </>
-      )}
+      )} */}
     </Box>
   );
 };

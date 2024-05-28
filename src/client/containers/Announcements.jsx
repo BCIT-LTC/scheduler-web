@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Container,
   Grid,
@@ -11,6 +11,8 @@ import {
   InputLabel,
   Button,
   Slide,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import AnnouncementList from "../components/Announcements/AnnouncementList";
 import AnnouncementFilter from "../components/Announcements/AnnouncementFilter";
@@ -18,58 +20,58 @@ import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
 import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
 import Dialog from "@mui/material/Dialog";
 import NewAnnouncement from "../components/Announcements/NewAnnouncement";
-import { GlobalContext } from "../context/usercontext";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import dayjs from "dayjs";
 import useCheckIfPermitted from "../hooks/users/useCheckIfPermitted";
 
-/**
- * Announcements page aka announcement container
- *
- * @returns {Element}
- * @constructor
- */
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
   const [snackbarColor, setSnackbarColor] = useState("success");
-  const isAdminOrInstructor = useCheckIfPermitted({ roles_to_check: ["admin", "instructor"] });
-
+  const isAdminOrInstructor = useCheckIfPermitted({
+    roles_to_check: ["admin", "instructor"],
+  });
 
   // Transition for snackbar
   function TransitionLeft(props) {
     return <Slide {...props} direction="left" />;
   }
+
   const handleOpenDialog = () => {
     setDialogue(true);
   };
+
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [message, setMessage] = useState("");
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       setOpen(false);
     }
   };
+
   const handleAlertClose = () => {
     setOpen(false);
   };
+
   const handleSnackbarOpen = (message, severity) => {
     setSeverity(severity);
     setMessage(message);
     setOpen(true);
     setSnackbarColor(severity === "success" ? "info" : severity);
   };
-  // used for both edit and create
+
+  // Used for both edit and create
   const handleCloseDialog = () => {
     setDialogue(false);
   };
+
   const [filters, setFilters] = useState({
-    date: null,
+    created_at: null,
     search: "",
     rooms: [],
     sort: "latest",
   });
+
   const { announcements, isLoading, error, refetchAnnouncements } =
     useGetAnnouncements();
   const { deleteAnnouncement } = useDeleteAnnouncements();
@@ -77,16 +79,19 @@ const Announcements = () => {
   const onAnnouncementCreated = () => {
     refetchAnnouncements();
   };
+
   const handleSortChange = (event) => {
     setFilters((prev) => ({ ...prev, sort: event.target.value }));
   };
 
   const sortedAnnouncements = useMemo(() => {
     return [...announcements].sort((a, b) => {
+      const dateA = dayjs(a.created_at);
+      const dateB = dayjs(b.created_at);
       if (filters.sort === "latest") {
-        return new Date(b.date) - new Date(a.date);
+        return dateB.diff(dateA);
       } else {
-        return new Date(a.date) - new Date(b.date);
+        return dateA.diff(dateB);
       }
     });
   }, [announcements, filters.sort]);
@@ -99,26 +104,29 @@ const Announcements = () => {
     setFilters((prev) => ({ ...prev, search: value }));
   };
 
-  const filteredAnnouncements = sortedAnnouncements.filter((announcement) => {
-    // Filter by date if a date is set
-    if (
-      filters.date &&
-      dayjs(announcement.date).format("YYYY-MM-DD") !== filters.date
-    ) {
-      return false;
-    }
-    // Filter by search text if search text is provided
-    if (
-      filters.search &&
-      !announcement.title.toLowerCase().includes(filters.search.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by selected rooms if any rooms are selected
-    return !(
-      filters.rooms.length > 0 && !filters.rooms.includes(announcement.room)
-    );
-  });
+  const filteredAnnouncements = useMemo(() => {
+    return sortedAnnouncements.filter((announcement) => {
+      // Filter by date if a date is set
+      if (
+        filters.created_at &&
+        dayjs(announcement.created_at).format("YYYY-MM-DD") !==
+          filters.created_at
+      ) {
+        return false;
+      }
+      // Filter by search text if search text is provided
+      if (
+        filters.search &&
+        !announcement.title.toLowerCase().includes(filters.search.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filter by selected rooms if any rooms are selected
+      return !(
+        filters.rooms.length > 0 && !filters.rooms.includes(announcement.room)
+      );
+    });
+  }, [sortedAnnouncements, filters]);
 
   if (isLoading) {
     return <div>Loading...</div>; // Or some loading spinner
@@ -187,7 +195,6 @@ const Announcements = () => {
             onAnnouncementCreated={onAnnouncementCreated}
           />
         </Dialog>
-        {/*The Snackbar uses an Alert for better UX*/}
         <Snackbar
           open={open}
           autoHideDuration={6000}
