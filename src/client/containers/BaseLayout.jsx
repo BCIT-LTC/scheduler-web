@@ -27,6 +27,7 @@ import StringAvatar from './StringAvatar';
 import useGetAnnouncements from '../hooks/announcements/useGetAnnouncement';
 import AnnouncementAlert from '../components/Announcements/AnnouncementAlert';
 import { GlobalContext } from '../context/usercontext';
+import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
 
 import AnnouncementButton from '../components/Announcements/AnnouncementButton';
 
@@ -34,6 +35,7 @@ export default function BaseLayout() {
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
+    const isAdminOrInstructor = useCheckIfPermitted({ roles_to_check: ["admin", "instructor"] });
     
     // Always call the hook outside of any conditionals
     const { announcements } = useGetAnnouncements();
@@ -179,28 +181,9 @@ export default function BaseLayout() {
                     </ListItem>
                 </List>
 
-                {globalcontext.user.is_logged_in ? <List>
-                    {globalcontext.user.app_role && (globalcontext.user.app_role === "admin" || globalcontext.user.app_role === "instructor") && (
-                        <ListItem disablePadding
-                            onClick={() => { window.location.href = "/rolemanagement" }}
-                        >
-                            <ListItemButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ mr: 2 }}
-                            >
-                                <ListItemIcon>
-                                    <PersonIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={"Role administration"} />
-                            </ListItemButton>
-                        </ListItem>
-                    )}
-                </List> : null}
-                {globalcontext.user.authorization_checked &&
-                    <AdminArea />}
+                {globalcontext.user.is_logged_in && isAdminOrInstructor && (
+                    <AdminArea />
+                )}
             </Drawer>
             <Outlet />
         </Fragment >

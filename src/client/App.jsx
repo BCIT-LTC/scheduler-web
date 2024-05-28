@@ -9,7 +9,6 @@ import PrivilegedRoute from "./containers/PrivilegedRoute";
 import EventForm from "./containers/EventForm";
 import ContextProvider from "./context/usercontext";
 import Locations from "./containers/Locations";
-import ContextProvider from "./context/usercontext";
 
 function App() {
   // Role-based route protection component

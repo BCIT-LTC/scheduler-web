@@ -24,8 +24,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import useGetUsersList from '../../hooks/users/useGetUsersList';
-import { GlobalContext } from '../../context/usercontext';
-import { useContext } from 'react';
+import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted.js';
 
 const columns = [
   { field: 'user', headerName: 'User', flex: 1 },
@@ -97,7 +96,8 @@ const Table = ({ filter }) => {
   const [selectedUsers, setSelectedUsers] = useState([]); //Track selected users
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSingleUserEdit, setIsSingleUserEdit] = useState(false);
-  const { user } = useContext(GlobalContext);
+  const isAdmin = useCheckIfPermitted({ roles_to_check: ["admin"] });
+  const isInstructor = useCheckIfPermitted({ roles_to_check: ["instructor"] });
 
   const searchTable = (event) => {
     const value = event.target.value.toLowerCase();
@@ -114,11 +114,13 @@ const Table = ({ filter }) => {
     } else if (filter === 'instructors') {
       return (
         row.role.toLowerCase() === 'instructor' &&
+        isInstructor &&
         (row.user.toLowerCase().includes(searchText) || row.email.toLowerCase().includes(searchText))
       );
     } else if (filter === 'admins') {
       return (
         row.role.toLowerCase() === 'admin' &&
+        isAdmin &&
         (row.user.toLowerCase().includes(searchText) || row.email.toLowerCase().includes(searchText))
       );
     }
@@ -149,7 +151,7 @@ const Table = ({ filter }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '1em 0em' }}>
         <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable} />
-        {user.app_role === 'admin' && (
+        {isAdmin && (
           <Button onClick={handleEdit} variant="outlined" sx={{ color: 'grey', borderColor: 'rgb(128,128,128)' }}>Edit Users</Button>
         )}
       </Box>
