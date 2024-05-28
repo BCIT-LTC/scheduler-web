@@ -22,6 +22,7 @@ import { GlobalContext } from "../context/usercontext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import dayjs from "dayjs";
+import useCheckIfPermitted from "../hooks/users/useCheckIfPermitted";
 
 /**
  * Announcements page aka announcement container
@@ -32,11 +33,8 @@ import dayjs from "dayjs";
 const Announcements = () => {
   const [dialog, setDialogue] = useState(false);
   const [snackbarColor, setSnackbarColor] = useState("success");
-  const { user } = useContext(GlobalContext);
-  let role = "student";
-  if (user && user.app_role) {
-    role = user.app_role;
-  }
+  const isAdminOrInstructor = useCheckIfPermitted({ roles_to_check: ["admin", "instructor"] });
+
 
   // Transition for snackbar
   function TransitionLeft(props) {
@@ -164,7 +162,7 @@ const Announcements = () => {
             <MenuItem value="oldest">Oldest</MenuItem>
           </Select>
         </FormControl>
-        {role && (role === "admin" || role === "instructor") && (
+        {isAdminOrInstructor && (
           <Button
             onClick={handleOpenDialog}
             variant="contained"
