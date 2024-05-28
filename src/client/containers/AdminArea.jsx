@@ -1,5 +1,5 @@
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { Navigate } from "react-router-dom"
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -19,6 +19,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
  * @returns {JSX.Element} - Admin Area
  */
 export default function AdminArea() {
+    const navigate = useNavigate();
 
   const globalcontext = useContext(GlobalContext);
   
@@ -28,8 +29,7 @@ export default function AdminArea() {
         <ListItemText primary={"Admin Area"} sx={{ ml: 2 }} />
         <List>
             <ListItem disablePadding
-                onClick={() => { 
-                    window.location.href = "/eventform" }}
+                onClick={() => navigate("/eventform")}
             >
                 <ListItemButton
                     size="large"
@@ -48,7 +48,7 @@ export default function AdminArea() {
         
         <List>
             <ListItem disablePadding
-                onClick={() => { window.location.href = "/locations" }}
+                onClick={() => navigate("/locations")}
             >
                 <ListItemButton
                     size="large"
@@ -68,8 +68,7 @@ export default function AdminArea() {
 
         <List>
             <ListItem disablePadding
-                onClick={() => { 
-                    window.location.href = "/rolemanagement" }}
+                onClick={() => navigate("/rolemanagement")}
             >
                 <ListItemButton
                     size="large"
