@@ -5,6 +5,8 @@ import Dialog from "@mui/material/Dialog";
 import EditAnnouncementComponent from "./EditAnnouncement";
 import dayjs from "dayjs";
 import {GlobalContext} from "../../context/usercontext";
+import {getRoles, hasRole} from "../../utils/getRole";
+
 /**
  * Announcement card component
  *
@@ -19,7 +21,8 @@ import {GlobalContext} from "../../context/usercontext";
  */
 function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
     const { user } = useContext(GlobalContext);
-    const role = user.app_role;
+    const roles = getRoles(user.token);
+    const role = "admin" ?? roles.includes("admin");
     const formattedDate = dayjs(date).format('YYYY/MM/DD');
     return (
     <Card style={{ marginBottom: '24px', boxShadow: '0 3px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
@@ -36,12 +39,12 @@ function AnnouncementCard({ id, title, date, description, onDelete, onEdit }) {
           {description}
         </Typography>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {role && (role === "admin" || role === "instructor") && (
-            <Button variant="outlined" color="primary" onClick={() => onEdit(id)}>EDIT</Button>
+            {hasRole("admin") && (
+            <div>
+              <Button variant="outlined" color="primary" onClick={() => onEdit(id)}>EDIT</Button>
+              <Button variant="outlined" color="secondary" style={{ marginLeft: '8px' }} onClick={() => onDelete(id)}>DELETE</Button>
+            </div>
             )}
-            {role && (role === "admin" || role === "instructor") && (
-                <Button variant="outlined" color="secondary" style={{ marginLeft: '8px' }} onClick={() => onDelete(id)}>DELETE</Button>
-                )}
         </div>
       </CardContent>
     </Card>
