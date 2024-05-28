@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Outlet, Navigate, Link } from "react-router-dom";
 import { Fragment, useState, useContext, useEffect } from "react";
 
@@ -32,6 +33,7 @@ import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
 import AnnouncementButton from '../components/Announcements/AnnouncementButton';
 
 export default function BaseLayout() {
+    const navigate = useNavigate();
     const globalcontext = useContext(GlobalContext);
     const [Draweropen, setDraweropen] = useState(false);
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
@@ -51,16 +53,16 @@ export default function BaseLayout() {
         if (!announcementsData) return null;
 
         const undismissed = announcementsData.filter((announcement) => {
-            const cacheKey = `Openlab-${announcement.id}-${announcement.posted_date}`;
+            const cacheKey = `Openlab-${announcement.id}-${announcement.created_at}`;
             return !localStorage.getItem(cacheKey);
-        }).sort((a, b) => new Date(b.posted_date) - new Date(a.posted_date));
+        }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
         const num = undismissed.length;
         if (num !== announcementsNum) setAnnouncementsNum(num);
         //if there are no undismissed announcements, return null
         if (num === 0) return null;
 
-        const cacheKey = `Openlab-${undismissed[0].id}-${undismissed[0].posted_date}`;
+        const cacheKey = `Openlab-${undismissed[0].id}-${undismissed[0].created_at}`;
         return <AnnouncementAlert
             title={undismissed[0].title}
             message={undismissed[0].description}
@@ -142,9 +144,7 @@ export default function BaseLayout() {
             >
                 <List>
                     <ListItem disablePadding
-                        onClick={() => {
-                            window.location.href = "/announcements"
-                        }}
+                        onClick={() => navigate("/announcements")}
                     >
                         <ListItemButton
                             size="large"
@@ -164,7 +164,7 @@ export default function BaseLayout() {
 
                 <List>
                     <ListItem disablePadding
-                        onClick={() => { window.location.href = "/calendar" }}
+                        onClick={() => navigate("/calendar")}
                     >
                         <ListItemButton
                             size="large"
