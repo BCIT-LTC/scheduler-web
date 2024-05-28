@@ -18,27 +18,6 @@ const useGetAnnouncements = () => {
         let jwtToken = Cookies.get("default_jwt");
         setIsLoading(true);
 
-        // Dummy data for testing, remove this when using real data
-        let dummyAnnouncements = [
-            {
-                id: 1,
-                title: 'Website Maintenance',
-                description: 'OpenLab Scheduler website will be down for maintenance on Sunday, May 5th, 2024 from 00:00 to 06:00 PST.',
-                posted_by: 'Jasica Munday',
-                posted_date: '2024-04-20T09:32:12',
-                last_modified: '2024-04-22T08:12:34'
-            },
-            {
-                id: 2,
-                title: 'Statutory Holiday: Victoria Day',
-                description: 'BCIT will be closed on May 20th, 2024 for Statutory Holiday: Victoria Day.',
-                posted_by: 'Jasica Munday',
-                posted_date: '2024-04-24T09:32:12',
-                last_modified: '2024-04-24T09:32:12'
-            }
-        ];
-        // setAnnouncements(dummyAnnouncements);
-
         fetch(`api/announcement`, {
             method: 'GET',
             headers: {
