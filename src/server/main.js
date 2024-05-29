@@ -3,7 +3,7 @@ import express from "express";
 import ViteExpress from "vite-express";
 import cookieSession from "cookie-session";
 import cors from "cors";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 //ROUTES IMPORTS
@@ -19,8 +19,10 @@ import authentication_check from "./middleware/authentication_check.cjs";
 import logger from "./logger.cjs";
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(cookieParser());
 
 

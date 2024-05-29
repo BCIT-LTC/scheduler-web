@@ -6,13 +6,13 @@
 module.exports = class ApiRequests {
   constructor(path, auth_token, method, body) {
 
-    if (path === undefined) {
+    if (!path) {
       throw new Error("ApiRequests path is undefined");
     }
-    if (auth_token === undefined) {
+    if (!auth_token) {
       throw new Error("ApiRequest auth_token is undefined");
     }
-    if (process.env.API_URL === undefined) {
+    if (!process.env.API_URL) {
       throw new Error("Scheduler-API endpoint not defined");
     } else {
       let api_url = new URL(process.env.API_URL);
@@ -26,8 +26,8 @@ module.exports = class ApiRequests {
       headers: headers,
       mode: "cors",
     };
-    if (['POST', 'PUT', 'DELETE'].includes(method)) {
-      this.fetchoptions.body = body;
+    if (['POST', 'PUT', 'DELETE'].includes(method) && body) {
+      this.fetchoptions.body = JSON.stringify(body);
     }
   }
 
@@ -36,13 +36,12 @@ module.exports = class ApiRequests {
    * It works in conjunction with the client side API routes.
    * Will GET, POST, PUT, DELETE to the API.
    *
-   * @returns {<{data: {error}, status: number}>}
+   * @returns {Promise<any>} - The response data from the API call.
    */
   async all() {
-    let data;
     try {
-      let response = await fetch(this.url, this.fetchoptions);
-      data = await response.json();
+      const response = await fetch(this.url, this.fetchoptions);
+      const data = await response.json();
       return data;
     } catch (error) {
       // console.log(error);
