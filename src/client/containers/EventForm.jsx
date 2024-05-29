@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
@@ -23,11 +23,49 @@ import Modal from '@mui/material/Modal';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Cookies from 'js-cookie';
 import useGetLocations from '../hooks/locations/useGetLocations';
-import EventConfirmationModal from '../components/Calendar/EventConfirmation';
+import EventConfirmationModal from '../components/Calendar/EventConfirmationModal';
 import { API_BASE_URL } from '../../constants';
 import { GlobalContext } from '../context/usercontext';
 import DeleteConfirmationModal from '../components/Shared/DeleteConfirmation';
 import Toast from '../components/Shared/Toast';
+import EventFormSeriesDates from './EventFormSeriesDates';
+import utc from 'dayjs/plugin/utc';
+
+const seriesFieldMappings = {
+  summary: 'series_title',
+  recurrence_start_time: 'start_time',
+  recurrence_end_time: 'end_time',
+  recurrence_start_date: 'start_date',
+  recurrence_end_date: 'end_date',
+};
+
+const eventPayloadFields = [
+  'event_id',
+  'summary',
+  'location_id',
+  'start_time',
+  'end_time',
+  'facilitator',
+  'description',
+  'created_by',
+  'modified_by',
+];
+
+const seriesPayloadFields = [
+  'series_id',
+  'summary',
+  'location_id',
+  'recurrence_start_time',
+  'recurrence_end_time',
+  'recurrence_frequency_weeks',
+  'recurrence_frequency_days',
+  'recurrence_start_date',
+  'recurrence_end_date',
+  'facilitator',
+  'description',
+  'created_by',
+  'modified_by',
+];
 
 /**
  * Event Form Page
@@ -40,61 +78,52 @@ export default function EventForm() {
   const navigate = useNavigate();
   const locations = useGetLocations().data;
   const eventsUrl = `${API_BASE_URL}/events`;
+  const seriesUrl = `${API_BASE_URL}/series`;
 
   const jwt = Cookies.get('jwt');
   const [submitting, setSubmitting] = useState(false);
   const [onSuccess, setOnSuccess] = useState(false);
   const [errors, setErrors] = useState([]);
   const [showToast, setShowToast] = useState(false);
+  const [series, setSeries] = useState(null);
 
-  //converts the recurrence days array to a boolean array
-  const initRecurrenceDays = (recurrence_days) => {
-    let days = [];
-    for (let i = 0; i < 7; i++) {
-      days.push(false);
-    }
-    recurrence_days.forEach((day) => {
-      switch (day) {
-        case 'Monday':
-          days[0] = true;
-          break;
-        case 'Tuesday':
-          days[1] = true;
-          break;
-        case 'Wednesday':
-          days[2] = true;
-          break;
-        case 'Thursday':
-          days[3] = true;
-          break;
-        case 'Friday':
-          days[4] = true;
-          break;
-        case 'Saturday':
-          days[5] = true;
-          break;
-        case 'Sunday':
-          days[6] = true;
-          break;
-        default:
-          break;
+  dayjs.extend(utc);
+  const getSeries = async () => {
+    try {
+      const response = await fetch(`${seriesUrl}/${location.state.series_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed response');
       }
-    });
-    return days;
+      const data = await response.json();
+      console.log('API response: ', data);
+
+      if (data && response.status === 200) {
+        return {
+          ...data,
+        };
+      }
+    } catch (error) {
+      setErrors([...errors, error]);
+      console.error('API error: ', error);
+    }
   };
 
   let defaultValues = {
     location_id:
       locations && locations.length > 0 ? locations[0].location_id : '',
+    recurrence_frequency_weeks: 1,
   };
 
   //for editing events, the event data is passed as state
   if (!!location.state) {
     defaultValues = { ...location.state };
-    if (Array.isArray(defaultValues.recurrence_days)) {
-      defaultValues.recurrence_days = initRecurrenceDays(
-        defaultValues.recurrence_days
-      );
+    if (defaultValues.series_id) {
     }
   }
 
@@ -105,8 +134,29 @@ export default function EventForm() {
 
   //form recurrence mode state, will be set to false for new events
   const [editSeriesMode, setEditSerieseMode] = useState(
-    defaultValues.editSeries ? true : false
+    defaultValues.series_id && location.state.editSeries ? true : false
   );
+
+  function filterPayload(payload, seriesPayloadFields) {
+    return Object.keys(payload)
+      .filter((key) => seriesPayloadFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = payload[key];
+        return obj;
+      }, {});
+  }
+
+  function renameFields(payload, mappings) {
+    const renamedPayload = {};
+    for (const key in payload) {
+      if (payload.hasOwnProperty(key)) {
+        const newName = mappings[key] || key;
+        renamedPayload[newName] = payload[key];
+      }
+    }
+    return renamedPayload;
+  }
+
   //form data state is set to default values
   const [formData, setFormData] = useState({
     event_id: defaultValues.event_id,
@@ -124,7 +174,7 @@ export default function EventForm() {
       ? dayjs(defaultValues.end_time)
       : dayjs(),
     recurrence_frequency_weeks: defaultValues.recurrence_frequency_weeks,
-    recurrence_days: defaultValues.recurrence_days || [],
+    recurrence_frequency_days: defaultValues.recurrence_frequency_days || [],
     recurrence_start_date: defaultValues.start_date
       ? dayjs(defaultValues.start_date)
       : dayjs(),
@@ -136,7 +186,29 @@ export default function EventForm() {
     holiday_closure_event: defaultValues.holiday_closure_event || false,
     created_by: defaultValues.created_by || globalContext.user.email,
     modified_by: globalContext.user.email,
+    series_id: defaultValues.series_id || null,
   });
+
+  useEffect(() => {
+    const fetchSeries = async () => {
+      const fetchedSeries = await getSeries();
+      setSeries(fetchedSeries);
+      const parseDateTime = (dateStr) => dayjs(dateStr.slice(0, -1));
+      setFormData({
+        ...formData,
+        recurrence_start_date: parseDateTime(fetchedSeries.start_date),
+        recurrence_end_date: parseDateTime(fetchedSeries.end_date),
+        recurrence_frequency_days: fetchedSeries.recurrence_frequency_days,
+        recurrence_frequency_weeks: fetchedSeries.recurrence_frequency_weeks,
+      });
+    };
+    fetchSeries();
+  }, [
+    location && location.state && location.state.series_id,
+    formData.recurring_event,
+  ]);
+
+  useEffect(() => {}, [location]);
 
   const validateForm = () => {
     const errors = [];
@@ -201,11 +273,8 @@ export default function EventForm() {
     });
   };
 
-  const handleRecurringDaysChange = (e) => {
-    const dayNum = parseInt(e.target.name[e.target.name.length - 1]);
-    const newRecurringDays = formData.recurrence_days;
-    newRecurringDays[dayNum] = e.target.checked;
-    setFormData({ ...formData, recurrence_days: newRecurringDays });
+  const handleSeriesFieldsChange = (field, input) => {
+    setFormData({ ...formData, [field]: input });
   };
 
   const handleLocationChange = (e) => {
@@ -242,6 +311,7 @@ export default function EventForm() {
   };
 
   const editEvent = (payload) => {
+    payload.series_id = null;
     fetch(`${eventsUrl}/${payload.event_id}`, {
       method: 'PUT',
       headers: {
@@ -249,6 +319,56 @@ export default function EventForm() {
         Authorization: 'Bearer ' + jwt,
       },
 
+      body: JSON.stringify(payload),
+    }).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          console.log('API response: ', data);
+          if (data && response.status === 200) {
+            setOnSuccess(true);
+          }
+        })
+        .catch((error) => {
+          setErrors([...errors, error]);
+          console.error('API error: ', error);
+        });
+    });
+  };
+
+  const addSeries = (payload) => {
+    fetch(seriesUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt,
+      },
+      body: JSON.stringify(payload),
+    }).then((response) => {
+      console.log('reponse', response);
+      response
+        .json()
+        .then((data) => {
+          console.log('API response: ', data);
+          if (data && response.status === 201) {
+            setOnSuccess(true);
+          }
+        })
+        .catch((error) => {
+          setErrors([...errors, error]);
+          console.error('API error: ', error);
+        });
+    });
+  };
+
+  const editSeries = (payload) => {
+    setSeriesConfirmationOpen(false);
+    fetch(`${seriesUrl}/${payload.series_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt,
+      },
       body: JSON.stringify(payload),
     }).then((response) => {
       response
@@ -274,40 +394,58 @@ export default function EventForm() {
       setShowToast(true);
       return;
     }
+
     //remove the recurrence fields if the event is not recurring
-    const payload = { ...formData };
-    if (!payload.recurring_event) {
-      delete payload.recurrence_start_time;
-      delete payload.recurrence_end_time;
-      delete payload.recurrence_frequency_weeks;
-      delete payload.recurrence_days;
-      delete payload.recurrence_start_date;
-      delete payload.recurrence_end_date;
-    }
+    const rawPayload = { ...formData };
+    if (!formData.recurring_event) {
+      const payload = filterPayload(rawPayload, eventPayloadFields);
 
-    if (editMode && editSeriesMode && !seriesConfirmationOpen) {
-      setSeriesConfirmationOpen(true);
-      return;
-    }
-    if (seriesConfirmationOpen) {
-      setSeriesConfirmationOpen(false);
-    }
+      if (editMode) {
+        setSubmitting(true);
 
-    if (editMode) {
-      setSubmitting(true);
-      editEvent(payload);
+        editEvent(payload);
+      } else {
+        addEvent(payload);
+      }
     } else {
-      addEvent(payload);
+      const payload = filterPayload(rawPayload, seriesPayloadFields);
+      const mappedPayload = renameFields(payload, seriesFieldMappings);
+
+      if (editSeriesMode) {
+        setSubmitting(true);
+        setSeriesConfirmationOpen(true);
+        editSeries(mappedPayload);
+      } else {
+        setSubmitting(true);
+        addSeries(mappedPayload);
+      }
     }
   };
 
   const onCancel = (e) => {
     setOnSuccess(false);
-    navigate(-1);
+    navigate('/');
   };
 
-  const onDelete = () => {
+  const deleteEvent = () => {
     fetch(`${eventsUrl}/${formData.event_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('API reponse : ', data);
+      })
+      .catch((error) => {
+        console.error('API error: ', error);
+      });
+  };
+
+  const deleteSeries = () => {
+    fetch(`${seriesUrl}/${formData.series_id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -397,191 +535,13 @@ export default function EventForm() {
               //if recurring event is checked, show the recurring event options
               formData.recurring_event ? (
                 <>
-                  <FormControl sx={{ flexGrow: 1, margin: '10px 0' }}>
-                    <label>Event Time*</label>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <MobileTimePicker
-                        label="Start"
-                        name="recurrence_start_time"
-                        required
-                        defaultValue={formData.recurrence_start_time}
-                        sx={{ flexGrow: 1, margin: '10px 0' }}
-                        slotProps={{
-                          textField: {
-                            variant: 'filled',
-                            style: {},
-                            InputProps: {
-                              endAdornment: (
-                                <ScheduleIcon sx={{ opacity: '0.5' }} />
-                              ),
-                            },
-                          },
-                        }}
-                        onChange={(dateObject) => {
-                          handleTimeChange(dateObject, 'recurrence_start_time');
-                        }}
-                      />
-                      <MobileTimePicker
-                        label="End"
-                        name="recurrence_end_time"
-                        required
-                        minTime={formData.recurrence_start_time}
-                        defaultValue={formData.recurrence_end_time}
-                        slotProps={{
-                          textField: {
-                            variant: 'filled',
-                            style: {},
-                            InputProps: {
-                              endAdornment: (
-                                <ScheduleIcon sx={{ opacity: '0.5' }} />
-                              ),
-                            },
-                          },
-                        }}
-                        onChange={(dateObject) => {
-                          handleTimeChange(dateObject, 'recurrence_end_time');
-                        }}
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
-                  <FormControl sx={{ flexGrow: 1, margin: '10px 0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      Recur every
-                      <TextField
-                        name="recurrence_frequency_weeks"
-                        type="number"
-                        size="small"
-                        value={formData.recurrence_frequency_weeks}
-                        onChange={(e) => {
-                          var value = parseInt(e.target.value, 10);
-                          const max = 52;
-                          const min = 1;
-                          if (value > max) value = max;
-                          if (value < min) value = min;
-                          setFormData({
-                            ...formData,
-                            recurrence_frequency_weeks: value,
-                          });
-                        }}
-                        sx={{
-                          margin: '0 10px',
-                          width: '70px',
-                          textAlign: 'center',
-                        }}
-                      />
-                      week(s) on:
-                    </div>
-                    <div
-                      role="group"
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        paddingLeft: '10px',
-                      }}
-                    >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="recurrence_days_0"
-                            checked={formData.recurrence_days[0]}
-                            onChange={handleRecurringDaysChange}
-                          />
-                        }
-                        label="Monday"
-                      ></FormControlLabel>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="recurrence_days_1"
-                            checked={formData.recurrence_days[1]}
-                            onChange={handleRecurringDaysChange}
-                          />
-                        }
-                        label="Tuesday"
-                      ></FormControlLabel>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="recurrence_days_2"
-                            checked={formData.recurrence_days[2]}
-                            onChange={handleRecurringDaysChange}
-                          />
-                        }
-                        label="Wednesday"
-                      ></FormControlLabel>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="recurrence_days_3"
-                            checked={formData.recurrence_days[3]}
-                            onChange={handleRecurringDaysChange}
-                          />
-                        }
-                        label="Thursday"
-                      ></FormControlLabel>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="recurrence_days_4"
-                            checked={formData.recurrence_days[4]}
-                            onChange={handleRecurringDaysChange}
-                          />
-                        }
-                        label="Friday"
-                      ></FormControlLabel>
-                    </div>
-                  </FormControl>
-                  <FormControl sx={{ flexGrow: 1, margin: '10px 0' }}>
-                    <label>Range of recurrence</label>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        name="recurrence_start_date"
-                        label="Start Date (dd/mm/yyyy)"
-                        format="DD/MM/YYYY"
-                        defaultValue={formData.recurrence_start_date}
-                        required
-                        disablePast={true}
-                        sx={{ flexGrow: 1, margin: '10px 0' }}
-                        slotProps={{
-                          textField: {
-                            variant: 'filled',
-                            style: {},
-                            InputProps: {
-                              endAdornment: (
-                                <CalendarTodayIcon sx={{ opacity: '0.5' }} />
-                              ),
-                            },
-                          },
-                        }}
-                        onChange={(dateObject) => {
-                          handleDateChange(dateObject, 'recurrence_start_date');
-                        }}
-                      />
-                      <DatePicker
-                        name="recurrence_end_date"
-                        label="End Date (dd/mm/yyyy)"
-                        format="DD/MM/YYYY"
-                        defaultValue={formData.recurrence_end_date}
-                        required
-                        minDate={formData.recurrence_start_date}
-                        disablePast={true}
-                        slotProps={{
-                          textField: {
-                            variant: 'filled',
-                            style: {},
-                            InputProps: {
-                              endAdornment: (
-                                <CalendarTodayIcon sx={{ opacity: '0.5' }} />
-                              ),
-                            },
-                          },
-                        }}
-                        onChange={(dateObject) => {
-                          handleDateChange(dateObject, 'recurrence_end_date');
-                        }}
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
+                  {formData.recurrence_end_date && (
+                    <EventFormSeriesDates
+                      formData={formData}
+                      handleFieldChange={handleSeriesFieldsChange}
+                      handleTimeChange={handleTimeChange}
+                    />
+                  )}
                 </>
               ) : (
                 <>
@@ -608,6 +568,7 @@ export default function EventForm() {
                           },
                         }}
                         onChange={(dateObject) => {
+                          handleTimeChange(dateObject, 'start_time');
                           handleTimeChange(dateObject, 'start_time');
                         }}
                       />
@@ -657,6 +618,7 @@ export default function EventForm() {
                           },
                         }}
                         onChange={(dateObject) => {
+                          handleTimeChange(dateObject, 'end_time');
                           handleTimeChange(dateObject, 'end_time');
                         }}
                       />
@@ -735,8 +697,10 @@ export default function EventForm() {
               </Button>
               {editMode && (
                 <DeleteConfirmationModal
-                  onConfirm={onDelete}
+                  onDeleteEvent={deleteEvent}
+                  onDeleteSeries={deleteSeries}
                   onCancel={onCancel}
+                  isSeries={formData.recurring_event}
                 >
                   <>
                     <h2>Delete Event</h2>
@@ -744,11 +708,18 @@ export default function EventForm() {
                   </>
                 </DeleteConfirmationModal>
               )}
-              <EventConfirmationModal
-                onSave={onSubmit}
-                isOpen={onSuccess}
-                onCancel={onCancel}
-              />
+              {!seriesConfirmationOpen && (
+                <>
+                  <EventConfirmationModal
+                    onSave={onSubmit}
+                    isOpen={onSuccess}
+                    onCancel={onCancel}
+                    buttonText={
+                      formData.recurring_event ? 'Save Series' : 'Save Event'
+                    }
+                  />
+                </>
+              )}
             </CardActions>
           </CardContent>
         </Card>
@@ -808,6 +779,7 @@ export default function EventForm() {
                 >
                   Cancel
                 </Button>
+
                 <Button
                   variant="contained"
                   color="primary"
@@ -821,6 +793,11 @@ export default function EventForm() {
           </Box>
         </Modal>
       </Box>
+      <Toast
+        messages={errors}
+        open={showToast}
+        handleClose={() => setShowToast(false)}
+      />
       <Toast
         messages={errors}
         open={showToast}

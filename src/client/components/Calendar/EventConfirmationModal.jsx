@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -16,7 +16,7 @@ const style = {
   pb: 3,
 };
 
-const EventConfirmationModal = ({ isOpen, onCancel, onSave }) => {
+const EventConfirmationModal = ({ isOpen, onCancel, onSave, buttonText }) => {
   const [open, setOpen] = useState(isOpen);
 
   const handleClose = () => {
@@ -33,7 +33,7 @@ const EventConfirmationModal = ({ isOpen, onCancel, onSave }) => {
         color="primary"
         size="normal"
       >
-        SAVE
+        {buttonText}
       </Button>
       <Modal open={isOpen} onClose={handleClose}>
         <Box className="modal-content" sx={{ ...style, width: 200 }}>

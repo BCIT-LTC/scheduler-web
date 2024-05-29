@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 const style = {
@@ -18,7 +16,14 @@ const style = {
   pb: 3,
 };
 
-const DeleteConfirmationModal = ({ isOpen, onCancel, onConfirm, children }) => {
+const DeleteConfirmationModal = ({
+  isOpen,
+  onCancel,
+  onDeleteSeries,
+  onDeleteEvent,
+  children,
+  isSeries,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -51,17 +56,30 @@ const DeleteConfirmationModal = ({ isOpen, onCancel, onConfirm, children }) => {
             >
               Cancel
             </Button>
+            {isSeries && 
             <Button
               variant="outlined"
               color="error"
               onClick={() => {
-                onConfirm();
+                onDeleteSeries();
                 setOpen(false);
                 onCancel();
               }}
               className="delete"
             >
-              Confirm Delete
+              Delete Series
+            </Button>}
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => {
+                onDeleteEvent();
+                setOpen(false);
+                onCancel();
+              }}
+              className="delete"
+            >
+              Delete Event Only
             </Button>
           </Box>
         </Box>
