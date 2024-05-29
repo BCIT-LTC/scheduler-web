@@ -18,10 +18,11 @@ const GridBox = styled(Box)({
 });
 
 function EventDetails({ event, handleClose }) {
+console.log("event", event)
 
     const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
-    const handleClickEditEvent = (editSeries) => {
+    const handleClickEdit = (editSeries) => {
         navigate("/eventform", {state: {...event.extendedProps.unparsedEventData, editSeries: editSeries}});
     }
 
@@ -71,8 +72,8 @@ function EventDetails({ event, handleClose }) {
                 </Box>
                 {/* TODO: change saml_role to admin role */}
                 {globalcontext.user.is_logged_in && globalcontext.user.saml_role && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
-                    {event.extendedProps?.recurring && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(true)}}>Edit Series</Button>}
-                    <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEditEvent(false)}}>Edit Event</Button>
+                    {event.extendedProps?.series_id && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEdit(true)}}>Edit Series</Button>}
+                    <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEdit(false)}}>Edit Event</Button>
                 </Box>}
             </Card>
         </Box>
