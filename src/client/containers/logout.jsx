@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
  *  send the user back to the home page.
  */
 export default function logout() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   fetch("/logout", {
     method: "POST",
@@ -13,7 +13,8 @@ export default function logout() {
   })
     .then(() => {
       // Once the request is successful, redirect the user
-      navigate("/");
+      // navigate("/");
+      window.location.href = "/";
     })
     .catch((error) => {
       // Handle any errors that occur during the request

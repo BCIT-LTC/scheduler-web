@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 
 // GridBox for displaying the location details
 const GridBox = styled(Box)({
-    height: "1.5em",
+    maxheight: "1.5em",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
