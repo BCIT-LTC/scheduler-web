@@ -9,6 +9,7 @@ import useCreateAnnouncement from "../../hooks/announcements/useCreateAnnounceme
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackbarOpen} ) => {
+    const [handleCloseDialog, refetchAnnouncements] = handleClose;
     const [title, setTitle] = useState('');
     const [announcement, setAnnouncement] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
@@ -20,7 +21,8 @@ const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackb
             // TODO: Add mui snackbar instead of alert
             onSnackbarOpen('Announcement created successfully!', "success");
             onAnnouncementCreated();
-            handleClose();
+            handleCloseDialog();
+            refetchAnnouncements();
         } catch (error) {
             onSnackbarOpen('Announcement not created', "error");
         }
@@ -68,20 +70,20 @@ const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackb
                     onChange={e => setAnnouncement(e.target.value)}
                     style={{ marginBottom: '15px' }}
                 />
-                <DatePicker
+                {/* <DatePicker
                     label="Date"
                     value={selectedDate}
                     onChange={(newValue) => setSelectedDate(newValue)}
-                    renderInput={(params) => <TextField {...params} variant="outlined" />}
+                    textField={(params) => <TextField {...params} variant="outlined" />}
                     style={{ marginBottom: '15px' }}
-                />
+                /> */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     width: '30%',
                     paddingTop: '10px', // Add space between the content and buttons
                 }}>
-                    <Button variant="outlined" color="primary" onClick={handleClose} style={{ marginRight: '5px' }}>
+                    <Button variant="outlined" color="primary" onClick={handleCloseDialog} style={{ marginRight: '5px' }}>
                         CANCEL
                     </Button>
                     <Button variant="contained" color="primary" onClick={handleSave}>
@@ -113,15 +115,15 @@ const NewAnnouncementComponent = ( {handleClose, onAnnouncementCreated, onSnackb
                     onChange={e => setAnnouncement(e.target.value)}
                     style={{ marginBottom: '15px' }}
                 />
-                <DatePicker
+                {/* <DatePicker
                     label="Date"
                     value={selectedDate}
                     onChange={(newValue) => setSelectedDate(newValue)}
-                    renderInput={(params) => <TextField {...params} variant="outlined" />}
+                    textField={(params) => <TextField {...params} variant="outlined" />}
                     style={{ marginBottom: '15px' }}
-                />
+                /> */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #0e0007', width: '30%', marginTop: '2%', paddingTop: '2%'}}>
-                    <Button variant="outlined" color="primary" onClick={handleClose} style={{marginRight: '5px'}}>
+                    <Button variant="outlined" color="primary" onClick={handleCloseDialog} style={{marginRight: '5px'}}>
                         CANCEL
                     </Button>
                     <Button variant="contained" color="primary" onClick={handleSave}>

@@ -13,12 +13,12 @@ import {
   Slide,
   Snackbar,
   Alert,
+  Dialog,
 } from "@mui/material";
 import AnnouncementList from "../components/Announcements/AnnouncementList";
 import AnnouncementFilter from "../components/Announcements/AnnouncementFilter";
 import useGetAnnouncements from "../hooks/announcements/useGetAnnouncement";
 import useDeleteAnnouncements from "../hooks/announcements/useDeleteAnnouncement";
-import Dialog from "@mui/material/Dialog";
 import NewAnnouncement from "../components/Announcements/NewAnnouncement";
 import dayjs from "dayjs";
 import useCheckIfPermitted from "../hooks/users/useCheckIfPermitted";
@@ -72,8 +72,7 @@ const Announcements = () => {
     sort: "latest",
   });
 
-  const { announcements, isLoading, error, refetchAnnouncements } =
-    useGetAnnouncements();
+  const { announcements = [], isLoading, error, refetchAnnouncements } = useGetAnnouncements();
   const { deleteAnnouncement } = useDeleteAnnouncements();
 
   const onAnnouncementCreated = () => {
@@ -191,7 +190,7 @@ const Announcements = () => {
           <NewAnnouncement
             onSnackbarOpen={handleSnackbarOpen}
             onSnackbarClose={handleSnackbarClose}
-            handleClose={handleCloseDialog}
+            handleClose={[handleCloseDialog, refetchAnnouncements]}
             onAnnouncementCreated={onAnnouncementCreated}
           />
         </Dialog>

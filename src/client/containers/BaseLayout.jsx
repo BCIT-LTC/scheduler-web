@@ -53,7 +53,7 @@ export default function BaseLayout() {
         if (!announcementsData) return null;
 
         const undismissed = announcementsData.filter((announcement) => {
-            const cacheKey = `Openlab-${announcement.id}-${announcement.created_at}`;
+            const cacheKey = `Openlab-${announcement.announcement_id}-${announcement.created_at}`;
             return !localStorage.getItem(cacheKey);
         }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
@@ -62,7 +62,7 @@ export default function BaseLayout() {
         //if there are no undismissed announcements, return null
         if (num === 0) return null;
 
-        const cacheKey = `Openlab-${undismissed[0].id}-${undismissed[0].created_at}`;
+        const cacheKey = `Openlab-${undismissed[0].announcement_id}-${undismissed[0].created_at}`;
         return <AnnouncementAlert
             title={undismissed[0].title}
             message={undismissed[0].description}

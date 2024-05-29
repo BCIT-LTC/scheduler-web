@@ -92,7 +92,7 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
                     label="Date"
                     value={selectedDate}
                     onChange={(newValue) => setSelectedDate(newValue)}
-                    renderInput={(params) => <TextField {...params} variant="outlined" />}
+                    textField={(params) => <TextField {...params} variant="outlined" />}
                     style={{ marginBottom: '15px' }}
                 />
                 <div style={{
@@ -133,13 +133,13 @@ const EditAnnouncementComponent = ({ id, existingTitle, existingDescription, exi
                 onChange={e => setAnnouncement(e.target.value)}
                 style={{ marginBottom: '15px' }}
             />
-            <DatePicker
+            {/* <DatePicker
                 label="Date"
                 value={selectedDate}
                 onChange={(newValue) => setSelectedDate(newValue)}
-                renderInput={(params) => <TextField {...params} variant="outlined" />}
+                textField={(params) => <TextField {...params} variant="outlined" />}
                 style={{ marginBottom: '15px' }}
-            />
+            /> */}
             <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #0e0007', width: '30%', marginTop: '2%', paddingTop: '2%'}}>
                 <Button variant="outlined" color="primary" onClick={handleClose} style={{marginRight: '5px'}}>
                     CANCEL
