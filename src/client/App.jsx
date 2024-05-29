@@ -9,6 +9,8 @@ import PrivilegedRoute from "./containers/PrivilegedRoute";
 import EventForm from "./containers/EventForm";
 import ContextProvider from "./context/usercontext";
 import Locations from "./containers/Locations";
+import CreateLocation from "./components/Locations/NewLocation";
+import EditLocation from "./components/Locations/EditLocation";
 
 function App() {
   // Role-based route protection component
@@ -27,6 +29,8 @@ function App() {
               <Route path="rolemanagement" element={<RoleManagement />} />
               <Route path="eventform" element={<EventForm />} />
               <Route path="locations" element={<Locations />} />
+              <Route path="createlocation" element={<CreateLocation />} />
+              <Route path="editlocation" element={<EditLocation />} />
             </Route>
           </Route>
           <Route path="" element={<Navigate to="/calendar" />} />
