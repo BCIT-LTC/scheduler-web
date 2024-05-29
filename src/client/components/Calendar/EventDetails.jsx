@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { GlobalContext } from '../../context/usercontext';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -55,7 +55,7 @@ console.log("event", event)
                         <p>Room</p><p>:</p>
                     </GridBox>
                     <GridBox gridColumn="span 8">
-                        <p>{event.extendedProps?.location_id}</p>
+                        <p>{event.extendedProps?.roomLocation}</p>
                     </GridBox>
                     <GridBox gridColumn="span 4">
                         <p>Facilitator</p><p>:</p>
