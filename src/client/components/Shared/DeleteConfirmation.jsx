@@ -23,8 +23,13 @@ const DeleteConfirmationModal = ({
   onDeleteEvent,
   children,
   isSeries,
+  setOnSuccess,
+  setToastType,
+  setToastMessages,
+  setShowToast
 }) => {
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -38,44 +43,61 @@ const DeleteConfirmationModal = ({
       <Button
         variant="contained"
         color="error"
-        size="normal"
         onClick={handleOpen}
       >
         Delete
       </Button>
-
       <Modal open={open} onClose={handleClose}>
         <Box className="modal-content" sx={{ ...style, width: 200 }}>
-          <>{children}</>
+          {children}
           <Box gap={2} sx={{ display: 'flex', flexDirection: 'column' }}>
             <Button
               variant="contained"
-              onClick={() => {
-                handleClose();
-              }}
+              onClick={handleClose}
             >
               Cancel
             </Button>
-            {isSeries && 
+            {isSeries && (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={async () => {
+                  try {
+                    await onDeleteSeries();
+                    setOnSuccess(true);
+                    setToastType("success");
+                    setToastMessages(["Series deleted successfully"]);
+                  } catch (error) {
+                    setToastType("error");
+                    setToastMessages([error.message]);
+                  } finally {
+                    setShowToast(true);
+                    setOpen(false);
+                    onCancel();
+                  }
+                }}
+                className="delete"
+              >
+                Delete Series
+              </Button>
+            )}
             <Button
               variant="outlined"
               color="error"
-              onClick={() => {
-                onDeleteSeries();
-                setOpen(false);
-                onCancel();
-              }}
-              className="delete"
-            >
-              Delete Series
-            </Button>}
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => {
-                onDeleteEvent();
-                setOpen(false);
-                onCancel();
+              onClick={async () => {
+                try {
+                  await onDeleteEvent();
+                  setOnSuccess(true);
+                  setToastType("success");
+                  setToastMessages(["Event deleted successfully"]);
+                } catch (error) {
+                  setToastType("error");
+                  setToastMessages([error.message]);
+                } finally {
+                  setShowToast(true);
+                  setOpen(false);
+                  onCancel();
+                }
               }}
               className="delete"
             >
