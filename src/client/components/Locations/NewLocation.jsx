@@ -6,11 +6,15 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import addLocation from '../../hooks/locations/useCreateLocation';
 import { GlobalContext } from '../../context/usercontext';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function CreateLocation() {
     const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
     const [roomLocation, setRoomLocation] = useState('');
+    const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return(
         <Box sx={{
@@ -20,7 +24,7 @@ function CreateLocation() {
             justifyContent: 'center',
         }}>
             <Card sx={{
-                width: '50%',
+                width: isMobile ? '100%' : '50%',
                 height: '100%',
                 display: 'flex',
                 justifyContent: 'center',

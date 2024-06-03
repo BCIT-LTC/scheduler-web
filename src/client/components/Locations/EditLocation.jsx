@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { API_BASE_URL } from '../../../constants';
 import { GlobalContext } from '../../context/usercontext';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const url = `${API_BASE_URL}/locations`;
@@ -51,6 +53,8 @@ function EditLocation() {
     const location = useLocation();
     const locationData = location.state.location;
     const [roomLocation, setRoomLocation] = useState(locationData.location);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return(
         <Box sx={{
@@ -60,7 +64,7 @@ function EditLocation() {
             justifyContent: 'center',
         }}>
             <Card sx={{
-                width: '50%',
+                width: isMobile ? '100%' : '50%',
                 height: '100%',
                 display: 'flex',
                 justifyContent: 'center',
