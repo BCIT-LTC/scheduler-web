@@ -36,7 +36,7 @@ const seriesFieldMappings = {
   recurrence_start_time: "start_time",
   recurrence_end_time: "end_time",
   recurrence_start_date: "start_date",
-  recurrence_end_date: "end_date"
+  recurrence_end_date: "end_date",
 };
 
 const eventPayloadFields = [
@@ -48,7 +48,7 @@ const eventPayloadFields = [
   "facilitator",
   "description",
   "created_by",
-  "modified_by"
+  "modified_by",
 ];
 
 const seriesPayloadFields = [
@@ -64,7 +64,7 @@ const seriesPayloadFields = [
   "facilitator",
   "description",
   "created_by",
-  "modified_by"
+  "modified_by",
 ];
 
 /**
@@ -89,6 +89,7 @@ export default function EventForm() {
   const [toastType, setToastType] = useState("");
   const [toastMessages, setToastMessages] = useState([]);
   const [series, setSeries] = useState(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   dayjs.extend(utc);
   const getSeries = async () => {
@@ -97,8 +98,8 @@ export default function EventForm() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + jwt
-        }
+          Authorization: "Bearer " + jwt,
+        },
       });
       if (!response.ok) {
         throw new Error("Failed response");
@@ -108,7 +109,7 @@ export default function EventForm() {
 
       if (data && response.status === 200) {
         return {
-          ...data
+          ...data,
         };
       }
     } catch (error) {
@@ -120,7 +121,7 @@ export default function EventForm() {
   let defaultValues = {
     location_id:
       locations && locations.length > 0 ? locations[0].location_id : "",
-    recurrence_frequency_weeks: 1
+    recurrence_frequency_weeks: 1,
   };
 
   //for editing events, the event data is passed as state
@@ -139,6 +140,12 @@ export default function EventForm() {
   const [editSeriesMode, setEditSerieseMode] = useState(
     defaultValues.series_id && location.state.editSeries ? true : false
   );
+
+  const setToast = (type, messages) => {
+    setToastType(type);
+    setToastMessages(messages);
+    setShowToast(true);
+  };
 
   function filterPayload(payload, seriesPayloadFields) {
     return Object.keys(payload)
@@ -189,7 +196,7 @@ export default function EventForm() {
     holiday_closure_event: defaultValues.holiday_closure_event || false,
     created_by: defaultValues.created_by || globalContext.user.email,
     modified_by: globalContext.user.email,
-    series_id: defaultValues.series_id || null
+    series_id: defaultValues.series_id || null,
   });
 
   useEffect(() => {
@@ -202,13 +209,13 @@ export default function EventForm() {
         recurrence_start_date: parseDateTime(fetchedSeries.start_date),
         recurrence_end_date: parseDateTime(fetchedSeries.end_date),
         recurrence_frequency_days: fetchedSeries.recurrence_frequency_days,
-        recurrence_frequency_weeks: fetchedSeries.recurrence_frequency_weeks
+        recurrence_frequency_weeks: fetchedSeries.recurrence_frequency_weeks,
       });
     };
     fetchSeries();
   }, [
     location && location.state && location.state.series_id,
-    formData.recurring_event
+    formData.recurring_event,
   ]);
 
   useEffect(() => {}, [location]);
@@ -257,7 +264,7 @@ export default function EventForm() {
       [field]: formData[field]
         .set("year", dateObject.year() ? dateObject.year() : dayjs().year())
         .set("month", dateObject.month())
-        .set("date", dateObject.date())
+        .set("date", dateObject.date()),
     });
   };
 
@@ -272,7 +279,7 @@ export default function EventForm() {
       .second(0);
     setFormData({
       ...formData,
-      [field]: updatedTimeObject
+      [field]: updatedTimeObject,
     });
   };
 
@@ -294,9 +301,9 @@ export default function EventForm() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
+        Authorization: "Bearer " + jwt,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     }).then((response) => {
       response
         .json()
@@ -321,10 +328,10 @@ export default function EventForm() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
+        Authorization: "Bearer " + jwt,
       },
 
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     }).then((response) => {
       response
         .json()
@@ -350,11 +357,10 @@ export default function EventForm() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
+        Authorization: "Bearer " + jwt,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     }).then((response) => {
-      console.log("reponse", response);
       response
         .json()
         .then((data) => {
@@ -376,9 +382,9 @@ export default function EventForm() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
+        Authorization: "Bearer " + jwt,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     }).then((response) => {
       response
         .json()
@@ -400,9 +406,8 @@ export default function EventForm() {
     const errors = validateForm();
     if (errors.length > 0) {
       setErrors(errors);
-      setShowToast(true);
-      setToastType("error");
-      setToastMessages(errors);
+      setToast("error", errors);
+
       return;
     }
 
@@ -443,8 +448,7 @@ export default function EventForm() {
       }
     } catch (error) {
       setErrors([error.message]);
-      setToastType("error");
-      setToastMessages([error.message]);
+      setToast("error', [error.message]");
     } finally {
       setShowToast(true);
       setSubmitting(false);
@@ -461,13 +465,14 @@ export default function EventForm() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("API reponse : ", data);
         setSuccessMessage("Event deleted successfully");
+        setShowDeleteConfirmation(false);
       })
       .catch((error) => {
         console.error("API error: ", error);
@@ -479,8 +484,8 @@ export default function EventForm() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -510,7 +515,7 @@ export default function EventForm() {
           width: "100%",
           height: "100%",
           display: "flex",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <Card sx={{ flexGrow: 1, maxWidth: "500px", minWidth: "300px" }}>
@@ -601,9 +606,9 @@ export default function EventForm() {
                             InputProps: {
                               endAdornment: (
                                 <CalendarTodayIcon sx={{ opacity: "0.5" }} />
-                              )
-                            }
-                          }
+                              ),
+                            },
+                          },
                         }}
                         onChange={(dateObject) => {
                           handleTimeChange(dateObject, "start_time");
@@ -622,9 +627,9 @@ export default function EventForm() {
                             InputProps: {
                               endAdornment: (
                                 <ScheduleIcon sx={{ opacity: "0.5" }} />
-                              )
-                            }
-                          }
+                              ),
+                            },
+                          },
                         }}
                         onChange={(dateObject) => {
                           handleTimeChange(dateObject, "start_time");
@@ -651,9 +656,9 @@ export default function EventForm() {
                             InputProps: {
                               endAdornment: (
                                 <CalendarTodayIcon sx={{ opacity: "0.5" }} />
-                              )
-                            }
-                          }
+                              ),
+                            },
+                          },
                         }}
                         onChange={(dateObject) => {
                           handleTimeChange(dateObject, "end_time");
@@ -672,9 +677,9 @@ export default function EventForm() {
                             InputProps: {
                               endAdornment: (
                                 <ScheduleIcon sx={{ opacity: "0.5" }} />
-                              )
-                            }
-                          }
+                              ),
+                            },
+                          },
                         }}
                         onChange={(dateObject) => {
                           handleTimeChange(dateObject, "end_time");
@@ -719,10 +724,11 @@ export default function EventForm() {
             />
             <CardActions
               sx={{
-                flexGrow: 1,
                 display: "flex",
-                justifyContent: "space-around",
-                marginTop: "10px"
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "10px",
+                gap: 3,
               }}
             >
               <Button
@@ -735,35 +741,28 @@ export default function EventForm() {
               </Button>
               {editMode && (
                 <DeleteConfirmationModal
+                  isOpen={showDeleteConfirmation}
                   onDeleteEvent={async () => {
                     try {
                       await deleteEvent();
                       setOnSuccess(true);
-                      setToastType("success");
-                      setToastMessages(["Event deleted successfully"]);
-                      setShowToast(true);
+                      setToast("success", ["Event deleted successfully"]);
                     } catch (error) {
                       console.error(error);
-                      setToastType("error");
-                      setToastMessages([error.message]);
-                      setShowToast(true);
+                      setToast("error", error.message);
                     }
                   }}
                   onDeleteSeries={async () => {
                     try {
                       await deleteSeries();
                       setOnSuccess(true);
-                      setToastType("success");
-                      setToastMessages(["Series deleted successfully"]);
-                      setShowToast(true);
+                      setToast("success", ["Series deleted successfully"]);
                     } catch (error) {
                       console.error(error);
-                      setToastType("error");
-                      setToastMessages([error.message]);
-                      setShowToast(true);
+                      setToast("error", error.message);
                     }
                   }}
-                  onCancel={onCancel}
+                  onCancel={showDeleteConfirmation}
                   isSeries={formData.recurring_event}
                 >
                   <>
@@ -774,14 +773,23 @@ export default function EventForm() {
               )}
               {!seriesConfirmationOpen && (
                 <>
-                  <EventConfirmationModal
+                  <Button
+                    onClick={onSubmit}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="normal"
+                  >
+                    {formData.recurring_event ? "Save Series" : "Save Event"}
+                  </Button>
+                  {/* <EventConfirmationModal
                     onSave={onSubmit}
                     isOpen={onSuccess}
                     onCancel={onCancel}
                     buttonText={
                       formData.recurring_event ? "Save Series" : "Save Event"
                     }
-                  />
+                  /> */}
                 </>
               )}
             </CardActions>
@@ -794,7 +802,7 @@ export default function EventForm() {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Card
@@ -805,7 +813,7 @@ export default function EventForm() {
                 boxShadow: 1,
                 borderRadius: 2,
                 position: "absolute",
-                border: "3px red solid"
+                border: "3px red solid",
               }}
             >
               <DisabledByDefaultIcon
@@ -816,7 +824,7 @@ export default function EventForm() {
                   right: "10px",
                   color: "grey",
                   height: "30px",
-                  width: "30px"
+                  width: "30px",
                 }}
               />
               <Box display="flex" justifyContent="center" color="red">
@@ -860,8 +868,12 @@ export default function EventForm() {
       <Notification
         messages={toastMessages}
         open={showToast}
-        handleClose={handleCloseNotification}
+        handleClose={() => {
+          setShowToast(false);
+        }}
         type={toastType}
+        actionText="View Calendar"
+        action={handleCloseNotification}
       />
     </form>
   );
