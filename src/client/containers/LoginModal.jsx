@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -48,13 +48,13 @@ const privacy_style = {
  * @returns {JSX.Element} - LoginModal
  */
 export default function LoginModal() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button variant="contained" color="inversePrimary" onClick={handleOpen}>Login</Button>
+      <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#fff', color: (theme) => theme.palette.primary.main }}>Login</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -69,19 +69,17 @@ export default function LoginModal() {
                 <Typography variant="h6" sx={{pt: 1}}>
                     Privacy statement
                 </Typography>
-                <Typography>
-                    <p>This service has passed {" "}
-                      <Link href="https://www.bcit.ca/information-access-privacy/" target="_blank" rel="noopener" underline="none">Privacy Impact Assessment BCIT-A29</Link>,
-                       and complies with BCIT policies {" "}
-                      <Link href="https://www.bcit.ca/files/pdf/policies/3501.pdf" target="_blank" rel="noopener" underline="none">3501</Link> and {" "}
-                      <Link href="https://www.bcit.ca/files/pdf/policies/3502.pdf" target="_blank" rel="noopener" underline="none">3502</Link>.
-                    </p>
+                <p>This service has passed {" "}
+                  <Link href="https://www.bcit.ca/information-access-privacy/" target="_blank" rel="noopener" underline="none">Privacy Impact Assessment BCIT-A29</Link>,
+                   and complies with BCIT policies {" "}
+                  <Link href="https://www.bcit.ca/files/pdf/policies/3501.pdf" target="_blank" rel="noopener" underline="none">3501</Link> and {" "}
+                  <Link href="https://www.bcit.ca/files/pdf/policies/3502.pdf" target="_blank" rel="noopener" underline="none">3502</Link>.
+                </p>
 
-                    <p>For more information, please contact the BCIT Privacy Office.</p>
+                <p>For more information, please contact the BCIT Privacy Office.</p>
 
-                    <p><strong>Email: </strong>privacy@bcit.ca</p>
-                    <p><strong>Phone: </strong>604-454-2044</p>
-                </Typography>
+                <p><strong>Email: </strong>privacy@bcit.ca</p>
+                <p><strong>Phone: </strong>604-454-2044</p>
             </Box>
             <form className="form" action="/auth/login" method="post">
                 <Button variant="contained" type="submit">Login</Button>

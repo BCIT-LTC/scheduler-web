@@ -2,27 +2,29 @@ import Cookies from "js-cookie";
 import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 
-const url = `api/locations`;
+const url = 'api/announcements';
 
-const useCreateLocation = () => {
+const useUpdateAnnouncement = () => {
   const globalcontext = useContext(GlobalContext);
   const [isSuccessful, setisSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [responseError, setResponseError] = useState(false);
 
-  const createLocation = async (event) => {
+  const updateAnnouncement = async (event, announcement_id) => {
     event.preventDefault();
     setIsSubmitted(true);
     setIsLoading(true);
     
     let payload = {
-      room_location: event.target.room_location.value,
-      created_by: globalcontext.user.email
+      title: event.target.title.value,
+      description: event.target.description.value,
+      modified_by: globalcontext.user.email,
+      // created_at: new Date().toISOString(),
     };
 
-    await fetch(url, {
-      method: 'POST',
+    await fetch(`${url}/${announcement_id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Cookies.get("jwt")}`,
@@ -51,7 +53,7 @@ const useCreateLocation = () => {
       });
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, createLocation };
+  return { isSuccessful, isLoading, isSubmitted, responseError, updateAnnouncement };
 }
 
-export default useCreateLocation;
+export default useUpdateAnnouncement;

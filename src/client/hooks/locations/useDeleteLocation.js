@@ -1,33 +1,26 @@
 import Cookies from "js-cookie";
-import { useState, useContext } from 'react';
-import { GlobalContext } from '../../context/usercontext';
+import { useState } from 'react';
 
-const url = `api/locations`;
+const url = 'api/locations';
 
-const useCreateLocation = () => {
-  const globalcontext = useContext(GlobalContext);
+const useDeleteLocation = () => {
   const [isSuccessful, setisSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [responseError, setResponseError] = useState(false);
 
-  const createLocation = async (event) => {
+  const deleteLocation = async (event, location_id) => {
     event.preventDefault();
     setIsSubmitted(true);
     setIsLoading(true);
     
-    let payload = {
-      room_location: event.target.room_location.value,
-      created_by: globalcontext.user.email
-    };
 
-    await fetch(url, {
-      method: 'POST',
+    await fetch(`${url}/${location_id}`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
-      body: JSON.stringify(payload),
     })
       .then((response) => {
         // Checking if the response is successful
@@ -51,7 +44,7 @@ const useCreateLocation = () => {
       });
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, createLocation };
+  return { isSuccessful, isLoading, isSubmitted, responseError, deleteLocation };
 }
 
-export default useCreateLocation;
+export default useDeleteLocation;

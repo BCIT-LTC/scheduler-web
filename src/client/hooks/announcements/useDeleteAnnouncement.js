@@ -1,61 +1,50 @@
-import { useState, useCallback } from "react";
 import Cookies from "js-cookie";
+import { useState } from 'react';
 
-/**
- * Custom hook to delete an announcement
- * This hook is used in the Announcements container
- * It makes a DELETE request to the server to delete an announcement
- *
- * @returns {{isDeleted: boolean, error: unknown, deleteAnnouncement: deleteAnnouncement}}
- */
-const useDeleteAnnouncements = () => {
-  const [isDeleted, setIsDeleted] = useState(false);
-  const [error, setError] = useState(null);
+const url = 'api/announcements';
 
-  /**
-   * Function to make a DELETE request to the client-side route to delete an announcement
-   *
-   * @param {string} id - The ID of the announcement
-   * @param {function} onSuccess - Callback function on success
-   * @param {function} onError - Callback function on error
-   */
-  const deleteAnnouncement = useCallback(async (id, onSuccess, onError) => {
-    const jwtToken = Cookies.get("default_jwt");
+const useDeleteAnnouncement = () => {
+  const [isSuccessful, setisSuccessful] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [responseError, setResponseError] = useState(false);
 
-    console.log("Deleting announcement with ID:", id);
+  const deleteAnnouncement = async (event, announcement_id) => {
+    event.preventDefault();
+    setIsSubmitted(true);
+    setIsLoading(true);
+    
 
-    try {
-      const response = await fetch(`/api/announcement/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        mode: "cors",
+    await fetch(`${url}/${announcement_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get("jwt")}`,
+      },
+    })
+      .then((response) => {
+        // Checking if the response is successful
+        if (!response.ok) {
+          // If response is not ok, throw an error with the response data
+          return response.json().then(errorData => {
+            setResponseError(errorData);
+            throw new Error('Error from backend');
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setisSuccessful(true);
+      })
+      .catch((error) => {
+        setisSuccessful(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
+  };
 
-      console.log("Response status:", response.status);
+  return { isSuccessful, isLoading, isSubmitted, responseError, deleteAnnouncement };
+}
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error data:", errorData);
-        throw new Error(
-          `Error: ${response.status}, ${JSON.stringify(errorData)}`
-        );
-      }
-
-      const data = await response.json();
-      console.log("Response data:", data);
-      setIsDeleted(true);
-      if (onSuccess) onSuccess(data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-      setError(error.message);
-      if (onError) onError(error.message);
-    }
-  }, []);
-
-  return { deleteAnnouncement, isDeleted, error };
-};
-
-export default useDeleteAnnouncements;
+export default useDeleteAnnouncement;

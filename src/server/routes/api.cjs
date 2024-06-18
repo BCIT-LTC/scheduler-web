@@ -1,5 +1,5 @@
 const express = require("express");
-
+const logger = require("../logger.cjs")(__filename);
 const router = express.Router();
 const ApiRequests = require("../services/api_requests.cjs");
 
@@ -24,8 +24,7 @@ const ApiRequests = require("../services/api_requests.cjs");
  * @returns {Promise<any>} - The response data from the API call.
  */
 router.all("/*", async (req, res) => {
-  console.log("Accessing the API...");
-
+  logger.info("API request: ", req.originalUrl);
   const api_requests = new ApiRequests(
     req.originalUrl,
     req.headers.authorization,
@@ -34,11 +33,10 @@ router.all("/*", async (req, res) => {
   );
 
   try {
-    let data = await api_requests.all();
-    // console.log("Data: ", data)
-    res.status(200).send(data);
+    let {statuscode, data} = await api_requests.all();
+    res.status(statuscode).send(data);
   } catch (error) {
-    // console.log("Error in API call: ", error);
+    logger.error("Error in API call: ", error);
     return error;
   }
 });

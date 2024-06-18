@@ -16,7 +16,7 @@ import saml_auth from "./routes/saml_auth.cjs";
 import passport from "./middleware/passport.cjs";
 import authentication_check from "./middleware/authentication_check.cjs";
 
-import logger from "./logger.cjs";
+// import logger from "./logger.cjs";
 
 const app = express();
 app.use(express.json());
@@ -51,5 +51,7 @@ app.use("/logout", logout);
 
 
 ViteExpress.listen(app, 9000, () =>
-  logger.info("Server is listening on port 9000...")
+  // logger.info("Server is listening on port 9000...")
+console.log("Server is listening on port 9000...")
+
 );

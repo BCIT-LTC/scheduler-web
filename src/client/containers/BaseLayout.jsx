@@ -1,54 +1,70 @@
-import { useNavigate } from "react-router-dom";
-import { Outlet, Navigate, Link } from "react-router-dom";
 import { Fragment, useState, useContext, useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import Badge from '@mui/material/Badge';
-
 import Drawer from '@mui/material/Drawer';
 import TodayIcon from '@mui/icons-material/Today';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PersonIcon from '@mui/icons-material/Person';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { createTheme, alpha, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
+import { GlobalContext } from '../context/usercontext';
+import useGetAnnouncements from '../hooks/announcements/useGetAnnouncements';
+import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
 import AdminArea from './AdminArea';
 import LoginModal from './LoginModal';
 import StringAvatar from './StringAvatar';
-import useGetAnnouncements from '../hooks/announcements/useGetAnnouncement';
 import AnnouncementAlert from '../components/Announcements/AnnouncementAlert';
-import { GlobalContext } from '../context/usercontext';
-import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
+import AnnouncementBadge from '../components/Announcements/AnnouncementBadge';
 
-import AnnouncementButton from '../components/Announcements/AnnouncementButton';
+const theme = createTheme();
+const drawerWidth = 240;
 
 export default function BaseLayout() {
+    const theme = createTheme();
+    const drawerWidth = 240;
+
     const navigate = useNavigate();
     const globalcontext = useContext(GlobalContext);
-    const [Draweropen, setDraweropen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true); // Drawer is open by default
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
-    const isAdminOrInstructor = useCheckIfPermitted({ roles_to_check: ["admin", "instructor"] });
-    
-    // Always call the hook outside of any conditionals
-    const { announcements } = useGetAnnouncements();
-
-    // Check if the current page is the home page
+    const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
+    const { data: announcements, getAnnouncements } = useGetAnnouncements();
     const isHomePage = window.location.pathname === "/calendar";
+    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const isLargeScreen = useMediaQuery(theme => theme.breakpoints.up('lg'));
+    const [drawerVariant, setDrawerVariant] = useState('persistent');
 
-    // Initialize announcementsData to null or announcements based on the condition
-    let announcementsData = isHomePage ? announcements : null;
+    let announcementsData = isHomePage ? announcements : null; // Only show announcements on the home page
 
-    //checks for undismissed notifications and displays one as alert
+    const topBarStyles = {
+        width: { lg: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%', xs: '100%' },
+        ml: { lg: drawerOpen ? `${drawerWidth}px` : '0px', xs: '0px' },
+        transition: theme.transitions.create(['margin', 'width'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen })
+    };
+
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
+    // Function to select the announcement to display and checks for undismissed notifications and displays one as alert
     const selectAnnouncementToDisplay = () => {
         if (!announcementsData) return null;
 
@@ -71,41 +87,43 @@ export default function BaseLayout() {
                 localStorage.setItem(cacheKey, JSON.stringify(true));
                 setAnnouncementsNum(num - 1);
             }} />;
-    }
-
-    const toggleDrawer = (open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-        setDraweropen(open);
     };
 
-    // Create a button theme for the login button
-    const greyBase = '#EEEEEE';
-    const primaryBlue = '#2196f3';
-    const theme = createTheme({
-        palette: {
-            inversePrimary: {
-                main: greyBase,
-                light: alpha(greyBase, 0.5),
-                dark: alpha(greyBase, 0.9),
-                contrastText: primaryBlue,
-            },
-        },
-    });
+    useEffect(() => {
+        const fetchAnnouncements = async () => {
+            try {
+                await getAnnouncements();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchAnnouncements();
+    }, []);
+
+
+    useEffect(() => {
+        if (isLargeScreen) {
+            setDrawerOpen(true);
+            setDrawerVariant('persistent');
+        } else {
+            setDrawerOpen(false);
+            setDrawerVariant('temporary');
+        }
+    }, [isLargeScreen]);
 
     return (
         <Fragment>
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <AppBar position="fixed" sx={topBarStyles}>
                     <Toolbar>
                         <IconButton
                             size="large"
                             edge="start"
                             color="inherit"
                             aria-label="menu"
-                            sx={{ mr: 2 }}
-                            onClick={toggleDrawer(true)}
+                            sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
+                            onClick={handleDrawerOpen}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -113,38 +131,66 @@ export default function BaseLayout() {
                             Welcome to OpenLabs
                         </Typography>
                         {isHomePage && (
-                            <Badge badgeContent={announcementsNum > 0 ? announcementsNum : null} 
-                            color="warning"
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            sx={{
-                                '& .MuiBadge-badge': {
-                                    transform: 'translate(-40%, -10%)',
-                                },
-                            }}
+                            <Badge badgeContent={announcementsNum > 0 ? announcementsNum : null}
+                                color="warning"
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                sx={{
+                                    '& .MuiBadge-badge': {
+                                        transform: 'translate(-40%, -10%)',
+                                    },
+                                }}
                             >
-                                <AnnouncementButton />
+                                <AnnouncementBadge />
                             </Badge>
                         )}
-                        {globalcontext.user.is_logged_in ?
-                            <StringAvatar /> :
-                            <ThemeProvider theme={theme}>
-                                <LoginModal />
-                            </ThemeProvider>}
+                        {globalcontext.user.is_logged_in ? <StringAvatar /> : <LoginModal />}
                     </Toolbar>
                 </AppBar>
             </Box>
-            {isHomePage ? selectAnnouncementToDisplay() : null}
+            {isHomePage ?
+                <div style={{
+                    marginTop: `${theme.mixins.toolbar.minHeight + (isSmallScreen ? 0 : 8)}px`,
+                    marginLeft: isLargeScreen && drawerOpen ? `${drawerWidth}px` : '0px',
+                    transition: theme.transitions.create(['margin', 'width'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen })
+                }}>
+                    {selectAnnouncementToDisplay()}
+                </div>
+                : null}
             <Drawer
+                variant={drawerVariant}
                 anchor='left'
-                open={Draweropen}
-                onClose={(ev, reason) => setDraweropen(false)}
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+                ModalProps={{ BackdropProps: { invisible: isLargeScreen } }}
+                sx={{
+                    width: { lg: drawerWidth },
+                    maxWidth: `${drawerWidth}px`, // Add this line
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: { lg: drawerWidth },
+                        boxSizing: 'border-box',
+                    },
+                }}
             >
+                <Button
+                    endIcon={<ChevronLeftIcon />}
+                    color="inherit"
+                    sx={{
+                        width: 'auto',
+                    }}
+                    onClick={handleDrawerClose}
+                />
                 <List>
                     <ListItem disablePadding
-                        onClick={() => navigate("/announcements")}
+                        onClick={() => {
+                            if (!isLargeScreen) {
+                                setDrawerOpen(false);
+                            }
+                            navigate("/announcements");
+                        }}
                     >
                         <ListItemButton
                             size="large"
@@ -161,10 +207,14 @@ export default function BaseLayout() {
                     </ListItem>
                 </List>
 
-
                 <List>
                     <ListItem disablePadding
-                        onClick={() => navigate("/calendar")}
+                        onClick={() => {
+                            if (!isLargeScreen) {
+                                setDrawerOpen(false);
+                            }
+                            navigate("/calendar");
+                        }}
                     >
                         <ListItemButton
                             size="large"
@@ -181,11 +231,15 @@ export default function BaseLayout() {
                     </ListItem>
                 </List>
 
-                {globalcontext.user.is_logged_in && isAdminOrInstructor && (
-                    <AdminArea />
+                {isAdmin && (
+                    <AdminArea setDrawerOpen={setDrawerOpen} isLargeScreen={isLargeScreen} />
                 )}
             </Drawer>
-            <Outlet />
+
+            <Box component="main" sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${drawerOpen ? drawerWidth : 0}px - 48px)`, ml: `${drawerOpen ? drawerWidth : 0}px`, transition: theme.transitions.create(['margin', 'width'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen }) }}>
+                <Toolbar />
+                <Outlet />
+            </Box>
         </Fragment >
-    )
+    );
 }

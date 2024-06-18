@@ -17,9 +17,9 @@ export default function ContextProvider({ children }) {
             user = jwtDecode(default_jwt);
         } else {
             user = jwtDecode(jwt);
-            console.log("find user detail: ")
-            console.log("User: ", user)
-            console.log("Roles", user.app_roles);
+            // console.log("find user detail: ")
+            // console.log("User: ", user)
+            // console.log("Roles", user.app_roles);
         }
     }   
     catch (error) {

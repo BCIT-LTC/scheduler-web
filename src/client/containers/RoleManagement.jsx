@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { Navigate } from "react-router-dom"
-import UsersTable from "../components/RoleManagement/UsersTable";
+import Container from '@mui/material/Container';
+import UserTable from "../components/RoleManagement/UserTable";
 
 export default function RoleManagement() {
 
   return (
-    <>
-      <UsersTable />
-    </>
+    <Container maxWidth="md">
+      <UserTable />
+    </Container>
   );
 }

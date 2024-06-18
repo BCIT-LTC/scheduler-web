@@ -1,16 +1,16 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 
-const url = `api/users`;
+const url = `api/roles`;
 
-const useGetUsersList = () => {
-    const [data, setData] = useState([]); // This is the data that will be returned from the hook
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+const useGetRoles = () => {
+    const [getRolesData, setGetRolesData] = useState([]); // This is the data that will be returned from the hook
+    const [getRolesIsSuccesful, setGetRolesIsSuccesful] = useState(false);
+    const [getRolesIsLoading, setGetRolesIsLoading] = useState(false);
+    const [getRolesResponseError, setGetRolesResponseError] = useState(false);
 
-    const getUsers = async () => {
-        setIsLoading(true);
+    const getRoles = async () => {
+        setGetRolesIsLoading(true);
         await fetch(url, {
             method: 'GET',
             headers: {
@@ -23,32 +23,32 @@ const useGetUsersList = () => {
                 if (!response.ok) {
                     // If response is not ok, throw an error with the response data
                     return response.json().then(errorData => {
-                        setResponseError(errorData);
+                        setGetRolesResponseError(errorData);
                         throw new Error('Error from backend');
                     });
                 }
                 return response.json();
             })
             .then((data) => {
-                setData(data);
-                setisSuccessful(true);
+                setGetRolesData(data);
+                setGetRolesIsSuccesful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setGetRolesIsSuccesful(false);
             })
             .finally(() => {
-                setIsLoading(false);
+                setGetRolesIsLoading(false);
             });
     }
 
     return {
-        data,
-        isSuccessful,
-        isLoading,
-        responseError,
-        getUsers
+        getRolesData,
+        getRolesIsSuccesful,
+        getRolesIsLoading,
+        getRolesResponseError,
+        getRoles
     };
 }
 
 
-export default useGetUsersList;
+export default useGetRoles;

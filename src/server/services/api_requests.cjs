@@ -3,6 +3,8 @@
  * @class
  * @classdesc This file contains the class ApiRequests. This class is used to make requests to the API.
  */
+
+const logger = require("../logger.cjs")(__filename);
 module.exports = class ApiRequests {
   constructor(path, auth_token, method, body) {
 
@@ -26,7 +28,7 @@ module.exports = class ApiRequests {
       headers: headers,
       mode: "cors",
     };
-    if (['POST', 'PUT', 'DELETE'].includes(method) && body) {
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method) && body) {
       this.fetchoptions.body = JSON.stringify(body);
     }
   }
@@ -42,9 +44,10 @@ module.exports = class ApiRequests {
     try {
       const response = await fetch(this.url, this.fetchoptions);
       const data = await response.json();
-      return data;
+      const statuscode = response.status;
+      return {statuscode, data};
     } catch (error) {
-      // console.log(error);
+      logger.error("Error in ApiRequests call: ", error);
       return error;
     }
   }

@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const logger = require("../logger.cjs")(__filename);
 
 router.get('/default_jwt', (req, res) => {
 
     try {
         let default_jwt_token = jwt.sign({
+            app_roles: ['guest'],
             authorization_checked: false,
             is_logged_in: false
         }, process.env.JWT_AUTH_SIGNING_KEY);

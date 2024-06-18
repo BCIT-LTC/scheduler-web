@@ -2,27 +2,26 @@ import Cookies from "js-cookie";
 import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 
-const url = `api/locations`;
-
-const useCreateLocation = () => {
+const useUpdateLocation = () => {
   const globalcontext = useContext(GlobalContext);
   const [isSuccessful, setisSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [responseError, setResponseError] = useState(false);
 
-  const createLocation = async (event) => {
+
+  const updateLocation = async (event) => {
     event.preventDefault();
     setIsSubmitted(true);
     setIsLoading(true);
-    
+
     let payload = {
       room_location: event.target.room_location.value,
-      created_by: globalcontext.user.email
+      modified_by: globalcontext.user.email
     };
 
-    await fetch(url, {
-      method: 'POST',
+    await fetch(`api/locations/${event.target.location_id.value}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Cookies.get("jwt")}`,
@@ -50,8 +49,7 @@ const useCreateLocation = () => {
         setIsLoading(false);
       });
   };
+  return { isSuccessful, isLoading, isSubmitted, responseError, updateLocation };
+};
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, createLocation };
-}
-
-export default useCreateLocation;
+export default useUpdateLocation;

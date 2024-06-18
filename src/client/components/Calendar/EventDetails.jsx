@@ -3,10 +3,11 @@ import Card from '@mui/material/Card';
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import { GlobalContext } from '../../context/usercontext';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
+import useGetSeries from '../../hooks/series/useGetSeries';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const GridBox = styled(Box)({
     height: "1.5em",
@@ -18,13 +19,9 @@ const GridBox = styled(Box)({
 });
 
 function EventDetails({ event, handleClose }) {
-console.log("event", event)
-
-    const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
-    const handleClickEdit = (editSeries) => {
-        navigate("/eventform", {state: {...event.extendedProps.unparsedEventData, editSeries: editSeries}});
-    }
+    const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
+    const { isLoading, isSuccessful, getSeries } = useGetSeries();
 
     return (
         <Box
@@ -55,7 +52,7 @@ console.log("event", event)
                         <p>Room</p><p>:</p>
                     </GridBox>
                     <GridBox gridColumn="span 8">
-                        <p>{event.extendedProps?.roomLocation}</p>
+                        <p>{event.extendedProps?.room_location}</p>
                     </GridBox>
                     <GridBox gridColumn="span 4">
                         <p>Facilitator</p><p>:</p>
@@ -70,11 +67,30 @@ console.log("event", event)
                         <p>{event.extendedProps?.description}</p>
                     </GridBox>
                 </Box>
-                {/* TODO: change saml_role to admin role */}
-                {globalcontext.user.is_logged_in && globalcontext.user.saml_role && <Box display="flex" justifyContent="center" padding="1em 0 0 0">
-                    {event.extendedProps?.series_id && <Button variant="outlined" sx={{margin: "0 15px"}} onClick={() => {handleClickEdit(true)}}>Edit Series</Button>}
-                    <Button variant="contained" color="primary" sx={{margin: "0 15px"}} onClick={() => {handleClickEdit(false)}}>Edit Event</Button>
-                </Box>}
+                {
+                    isAdmin &&
+                    <Box display="flex" justifyContent="center" padding="1em 0 0 0">
+                        {event.extendedProps?.series_id &&
+                            <Button variant="outlined" sx={{ margin: "0 15px" }} disabled={isLoading}
+                                onClick={async () => {
+                                    const series = await getSeries(event.extendedProps.series_id);
+                                    navigate('/editseries', {
+                                        state: { mode: 'edit-series', ...series }
+                                    });
+                                }}>
+                                {isLoading ? <CircularProgress /> : "Edit Series"}
+                            </Button>
+                        }
+                        <Button variant="contained" color="primary" sx={{ margin: "0 15px" }} disabled={isLoading}
+                            onClick={() => {
+                                navigate('/editevent', {
+                                    state: { mode: 'edit-event', ...event.extendedProps.unparsedEventData }
+                                });
+                            }}>
+                            Edit Event
+                        </Button>
+                    </Box>
+                }
             </Card>
         </Box>
 

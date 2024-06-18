@@ -1,10 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Alert, IconButton } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import CancelIcon from '@mui/icons-material/Cancel';
+import IconButton from '@mui/material/IconButton';
 
-// Set up cache for the alert
 const Cache = {
     setItem: (key, value) => {
         localStorage.setItem(key, JSON.stringify(value));
@@ -27,11 +25,20 @@ const Cache = {
  * @param {function} onDismiss - Function to dismiss the alert
  * @returns {React.Element}
  */
-const AnnouncementAlert = ({ title, message, cacheKey, onDismiss }) => {
+const AnnouncementAlert = ({
+    title = '',
+    message = '',
+    cacheKey = '',
+    onDismiss = () => { }
+} = {}) => {
+
+    if (!title || !message || !cacheKey) {
+        throw new Error('title, message and cacheKey are required parameters');
+    }
 
     const handleDismiss = () => {
-        Cache.setItem(cacheKey, true); // Cache the dismissal state
-        onDismiss(); // Call the provided dismiss handler
+        Cache.setItem(cacheKey, true);
+        onDismiss();
     };
 
     return (
@@ -55,17 +62,6 @@ const AnnouncementAlert = ({ title, message, cacheKey, onDismiss }) => {
             </Box>
         </Alert>
     );
-};
-
-AnnouncementAlert.propTypes = {
-    title: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
-    cacheKey: PropTypes.string.isRequired,
-    onDismiss: PropTypes.func,
-};
-
-AnnouncementAlert.defaultProps = {
-    onDismiss: () => {},
 };
 
 export default AnnouncementAlert;

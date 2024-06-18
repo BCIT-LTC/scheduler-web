@@ -58,16 +58,16 @@ services:
     networks:
       - openlab-scheduler-network
 
-  jsdocs:
-    image: node:21-alpine
-    command:
-      - /bin/sh
-      - -c
-      - |
-        ./node_modules/.bin/jsdoc -c ./jsdoc.conf.json -r
-    working_dir: /build
-    volumes:
-      - .:/build
+  # jsdocs:
+  #   image: node:21-alpine
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       ./node_modules/.bin/jsdoc -c ./jsdoc.conf.json -r
+  #   working_dir: /build
+  #   volumes:
+  #     - .:/build
 
 networks:
   openlab-scheduler-network:

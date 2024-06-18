@@ -1,7 +1,7 @@
 const passport = require("passport");
 var saml = require("passport-saml");
 var fs = require("fs");
-const logger = require("../logger.cjs");
+const logger = require("../logger.cjs")(__filename);
 const jwt = require("jsonwebtoken");
 const SAML_CALLBACK_URL = process.env.APP_URL + "auth/login/callback";
 
@@ -26,9 +26,9 @@ var samlStrategy = new saml.Strategy(
     // disableRequestedAuthnContext: true
   },
   async (profile, done) => {
-    console.log("profile info: ");
-    console.log(profile);
-    console.log("---------------------------");
+    // console.log("profile info: ");
+    // console.log(profile);
+    // console.log("---------------------------");
 
     let email = profile.email;
     let first_name = profile.first_name;
@@ -90,22 +90,18 @@ var samlStrategy = new saml.Strategy(
         .catch((error) => {
           switch (response.status) {
             case 400:
-              console.log("Bad request sent to API: " + error);
-            // logger.error("Bad request sent to API: " + error);
+            logger.error("Bad request sent to API: " + error);
             case 500:
-              console.log("API cannot perform the request: " + error);
-            // logger.error("API cannot perform the request: " + error);
+            logger.error("API cannot perform the request: " + error);
             default:
-              console.log("Unknown error: " + error);
-            // logger.error("Unknown error: " + error);
+            logger.error("Unknown error: " + error);
           }
         })
         .finally(() => {
           return done(null, { token: jwtToken });
         })
     } catch (error) {
-      console.log("API unreachable: " + error.message);
-      // logger.error("API unreachable: " + error.message);
+      logger.error("API unreachable: " + error.message);
       return done(null, { token: jwtToken });
     }
   }

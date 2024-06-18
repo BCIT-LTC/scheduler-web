@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const logger = require("../logger.cjs")(__filename);
 
 /**
  * Delete cookies
@@ -10,6 +11,7 @@ const router = express.Router();
  */
 router.post("", async (req, res) => {
     // Unset the cookies by setting their expiration date in the past
+    logger.info("logging out");
     res.clearCookie('jwt');
     res.clearCookie('default_jwt');
     res.clearCookie('PHPSESSIDIDP');

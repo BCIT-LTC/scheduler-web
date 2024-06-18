@@ -1,79 +1,59 @@
-import { useState, useCallback, useContext } from "react";
-import { GlobalContext } from "../../context/usercontext";
 import Cookies from "js-cookie";
+import { useState, useContext } from 'react';
+import { GlobalContext } from '../../context/usercontext';
 
-/**
- * Custom hook to create an announcement
- * This hook is used in the Announcements container
- * It makes a POST request to the server to create an announcement
- *
- * @returns {{createAnnouncement: function, error: string | null, isSuccessful: boolean}}
- */
+const url = 'api/announcements';
+
 const useCreateAnnouncement = () => {
-  const globalContext = useContext(GlobalContext);
-  const [error, setError] = useState(null);
-  const [isSuccessful, setIsSuccessful] = useState(false);
+  const globalcontext = useContext(GlobalContext);
+  const [isSuccessful, setisSuccessful] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [responseError, setResponseError] = useState(false);
 
-  /**
-   * Function to make a POST request to the server to create an announcement
-   *
-   * @param {string} title - The title of the announcement
-   * @param {string} description - The description of the announcement
-   * @param {string} date - The creation date of the announcement
-   * @param {function} onSuccess - Callback function on success
-   * @param {function} onError - Callback function on error
-   */
-  const createAnnouncement = useCallback(
-    async (title, description, date, onSuccess, onError) => {
-      const jwtToken = Cookies.get("default_jwt");
-      const user = globalContext.user.email;
-      const formattedDate = new Date().toISOString();
+  const createAnnouncement = async (event) => {
+    event.preventDefault();
+    setIsSubmitted(true);
+    setIsLoading(true);
+    
+    let payload = {
+      title: event.target.title.value,
+      description: event.target.description.value,
+      created_by: globalcontext.user.email,
+      // created_at: new Date().toISOString(),
+    };
 
-      const payload = {
-        title: String(title),
-        description: String(description),
-        created_by: String(user),
-        created_at: formattedDate,
-      };
-
-      console.log("Payload being sent:", JSON.stringify(payload));
-
-      try {
-        const response = await fetch("/api/announcement", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jwtToken}`,
-          },
-          body: JSON.stringify(payload),
-          mode: "cors",
-        });
-
-        console.log("Response status:", response.status);
-
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get("jwt")}`,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        // Checking if the response is successful
         if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Error data:", errorData);
-          throw new Error(
-            `Error: ${response.status}, ${JSON.stringify(errorData)}`
-          );
+          // If response is not ok, throw an error with the response data
+          return response.json().then(errorData => {
+            setResponseError(errorData);
+            throw new Error('Error from backend');
+          });
         }
+        return response.json();
+      })
+      .then((data) => {
+        setisSuccessful(true);
+      })
+      .catch((error) => {
+        setisSuccessful(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
-        const data = await response.json();
-        console.log("Response data:", data);
-        setIsSuccessful(true);
-        if (onSuccess) onSuccess(data);
-      } catch (error) {
-        console.error("Fetch error:", error);
-        setError(error.message);
-        setIsSuccessful(false);
-        if (onError) onError(error.message);
-      }
-    },
-    [globalContext.user.email]
-  );
-
-  return { createAnnouncement, error, isSuccessful };
-};
+  return { isSuccessful, isLoading, isSubmitted, responseError, createAnnouncement };
+}
 
 export default useCreateAnnouncement;

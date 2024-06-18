@@ -1,24 +1,22 @@
-import React from "react";
-import {
-  IconButton,
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Popover,
-} from "@mui/material";
+import { useState } from 'react';
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import useGetAnnouncements from "../../hooks/announcements/useGetAnnouncement";
+import useGetAnnouncements from "../../hooks/announcements/useGetAnnouncements";
 
-const AnnouncementButton = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const { announcements, isLoading, refetchAnnouncements } =
-    useGetAnnouncements();
+const AnnouncementBadge = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { data: announcementsData, isSuccessful, isLoading, responseError, getAnnouncements } = useGetAnnouncements();
 
-  const handleClick = (event) => {
+  const handleClick = async (event) => {
     setAnchorEl(event.currentTarget);
-    refetchAnnouncements();
+    await getAnnouncements();
   };
 
   const handleClose = () => {
@@ -59,11 +57,13 @@ const AnnouncementButton = () => {
             Announcements
           </Typography>
           {isLoading ? (
-            <Typography>Loading...</Typography>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress  />
+            </div>
           ) : (
             <List>
-              {announcements.length > 0 ? (
-                announcements.map((announcement) => (
+              {announcementsData?.length > 0 ? (
+                announcementsData.map((announcement) => (
                   <ListItem key={announcement.announcement_id}>
                     <ListItemText
                       primary={announcement.title}
@@ -105,4 +105,4 @@ const AnnouncementButton = () => {
   );
 };
 
-export default AnnouncementButton;
+export default AnnouncementBadge;

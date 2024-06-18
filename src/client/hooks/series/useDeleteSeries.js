@@ -1,36 +1,38 @@
-import { useState } from "react";
 import Cookies from "js-cookie";
+import { useState } from 'react';
+const url = `api/series`;
 
-const url = `api/users`;
 
-const useGetUsersList = () => {
-    const [data, setData] = useState([]); // This is the data that will be returned from the hook
+const useDeleteSeries = () => {
     const [isSuccessful, setisSuccessful] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [responseError, setResponseError] = useState(false);
 
-    const getUsers = async () => {
+    const deleteSeries = async (event, series_id) => {
+        event.preventDefault();
+        setIsSubmitted(true);
         setIsLoading(true);
-        await fetch(url, {
-            method: 'GET',
+
+        await fetch(`${url}/${series_id}`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${Cookies.get("jwt")}`,
-            },
+            }
         })
             .then((response) => {
-                // Checking if the response is successful  
+                // Checking if the response is successful
                 if (!response.ok) {
                     // If response is not ok, throw an error with the response data
                     return response.json().then(errorData => {
                         setResponseError(errorData);
-                        throw new Error('Error from backend');
+                        throw new Error(`Error from backend: ${errorData}`);
                     });
                 }
                 return response.json();
             })
             .then((data) => {
-                setData(data);
                 setisSuccessful(true);
             })
             .catch((error) => {
@@ -39,16 +41,9 @@ const useGetUsersList = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-    }
-
-    return {
-        data,
-        isSuccessful,
-        isLoading,
-        responseError,
-        getUsers
     };
-}
 
+    return { isSuccessful, isLoading, isSubmitted, responseError, deleteSeries };
+};
 
-export default useGetUsersList;
+export default useDeleteSeries;

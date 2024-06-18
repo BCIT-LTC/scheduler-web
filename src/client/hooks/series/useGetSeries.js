@@ -1,36 +1,27 @@
 import Cookies from "js-cookie";
-import { useState, useContext } from 'react';
-import { GlobalContext } from '../../context/usercontext';
+import { useState } from "react";
 
-const url = `api/locations`;
+const url = `api/series`;
 
-const useCreateLocation = () => {
-  const globalcontext = useContext(GlobalContext);
+const useGetSeries = () => {
+  const [data, setData] = useState(null); // This is the data that will be returned from the hook
   const [isSuccessful, setisSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [responseError, setResponseError] = useState(false);
 
-  const createLocation = async (event) => {
-    event.preventDefault();
-    setIsSubmitted(true);
-    setIsLoading(true);
-    
-    let payload = {
-      room_location: event.target.room_location.value,
-      created_by: globalcontext.user.email
-    };
 
-    await fetch(url, {
-      method: 'POST',
+  const getSeries = async (event_id) => {
+    let seriesData = null;
+    setIsLoading(true);
+    await fetch(`${url}/${event_id}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
-      body: JSON.stringify(payload),
     })
       .then((response) => {
-        // Checking if the response is successful
+        // Checking if the response is successful  
         if (!response.ok) {
           // If response is not ok, throw an error with the response data
           return response.json().then(errorData => {
@@ -41,6 +32,8 @@ const useCreateLocation = () => {
         return response.json();
       })
       .then((data) => {
+        seriesData = data;
+        setData(data);
         setisSuccessful(true);
       })
       .catch((error) => {
@@ -49,9 +42,15 @@ const useCreateLocation = () => {
       .finally(() => {
         setIsLoading(false);
       });
+    return seriesData;
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, createLocation };
+  return {
+    data,
+    isSuccessful,
+    isLoading,
+    responseError,
+    getSeries
+  };
 }
-
-export default useCreateLocation;
+export default useGetSeries;
