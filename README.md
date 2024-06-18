@@ -19,7 +19,7 @@ OpenLab Scheduler is a web application designed to help BCIT's Nursing instructo
 With Docker:
 
 1. Ensure Docker is running on your local machine
-1. In the root of the project, run `docker compose up`
+1. In the root of the project, run `docker compose up` (include --build if it's the first time)
 1. This may take a long time, be patient
 1. Open `http://localhost:9000` to see the webpage
 1. Changes to the code will hot reload and be reflected in the webpage or express server 
