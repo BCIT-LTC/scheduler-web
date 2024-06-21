@@ -90,20 +90,20 @@ export default function StringAvatar() {
                 onClose={handleClose}
             >
                 <List>
-                    <ListItem
-                        onClick={handleClose}
-                    >
+                    <ListItem onClick={handleClose}>
                         <ListItemText
                             primary={globalcontext.user.first_name + " " + globalcontext.user.last_name}
                             secondary={globalcontext.user.email ? globalcontext.user.email : "No email"}
                         />
                     </ListItem>
+                    {/* 
                     <ListItem>
                         <ListItemText
                             primary={"saml role: " + globalcontext.user.saml_role}
                             secondary={"app roles: " + globalcontext.user.app_roles}
                         />
-                    </ListItem>
+                    </ListItem> 
+                    */}
                     <Divider />
                     <MenuList>
                         <MenuItem

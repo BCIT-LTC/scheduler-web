@@ -2,10 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery, useTheme, Grid } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
-    
+
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    
+
     // Ref to store the FullCalendar dot element
     const dotRef = useRef(null);
 
@@ -13,7 +13,7 @@ const MonthViewTable = ({ events }) => {
         return (
             <Grid ref={dotRef} item className={`fc-daygrid-event-dot`} sx={{
                 border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #f00'
-            }}/>
+            }} />
         );
     };
 
@@ -30,14 +30,14 @@ const MonthViewTable = ({ events }) => {
         }
     }, [events]);
 
-    if (events.length > 0 ) { 
+    if (events.length > 0) {
 
         let sortedEvents = [...events].sort((a, b) => {
             return new Date(a.start) - new Date(b.start);
         });
-    
+
         return (
-            <TableContainer sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TableContainer sx={{ display: 'flex', justifyContent: 'center', border: '1px solid lightgray', mt: 2 }}>
                 <Table>
                     <TableHead>
                         <TableRow sx={{ textAlign: 'center' }}>
@@ -49,24 +49,25 @@ const MonthViewTable = ({ events }) => {
                     <TableBody>
                         {sortedEvents.map((event, index) => (
                             <TableRow key={index}>
-                                <TableCell className="event-dot-cell" sx={{ 
+                                <TableCell className="event-dot-cell" sx={{
                                     display: 'flex',
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                     textAlign: 'center',
                                     fontSize: isMobile ? 'x-small' : 'medium',
-                                ...(index === 0 && {
-                                    /* The first event dot appears blue, all others will appear red to highlight overlap */
-                                    '.fc-daygrid-event-dot': {
-                                        border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #3788d8'
-                                    }
-                                }), }} align='center'>
+                                    ...(index === 0 && {
+                                        /* The first event dot appears blue, all others will appear red to highlight overlap */
+                                        '.fc-daygrid-event-dot': {
+                                            border: 'calc(var(--fc-daygrid-event-dot-width) / 2) solid #3788d8'
+                                        }
+                                    }),
+                                }} align='center'>
                                     {renderEventDot()}&nbsp;{event.title}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>
                                     {event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>{event.extendedProps?.location_id}</TableCell>
+                                <TableCell sx={{ fontSize: isMobile ? 'x-small' : 'medium' }} align='center'>{event.extendedProps?.room_location}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

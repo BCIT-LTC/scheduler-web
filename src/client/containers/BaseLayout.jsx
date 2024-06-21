@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
@@ -31,7 +30,6 @@ import AnnouncementAlert from '../components/Announcements/AnnouncementAlert';
 import AnnouncementBadge from '../components/Announcements/AnnouncementBadge';
 
 const theme = createTheme();
-const drawerWidth = 240;
 
 export default function BaseLayout() {
     const theme = createTheme();
@@ -55,7 +53,7 @@ export default function BaseLayout() {
         ml: { lg: drawerOpen ? `${drawerWidth}px` : '0px', xs: '0px' },
         transition: theme.transitions.create(['margin', 'width'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen })
     };
-
+    const iconMinWidth = { minWidth: 38 };
     const handleDrawerOpen = () => {
         setDrawerOpen(true);
     };
@@ -128,7 +126,7 @@ export default function BaseLayout() {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Welcome to OpenLabs
+                            {isSmallScreen ? 'OpenLabs' : 'Welcome to OpenLabs'}
                         </Typography>
                         {isHomePage && (
                             <Badge badgeContent={announcementsNum > 0 ? announcementsNum : null}
@@ -166,78 +164,78 @@ export default function BaseLayout() {
                 onClose={handleDrawerClose}
                 ModalProps={{ BackdropProps: { invisible: isLargeScreen } }}
                 sx={{
+                    position: 'fixed', // Make the Drawer cover the entire viewport
+                    height: '100vh',
                     width: { lg: drawerWidth },
-                    maxWidth: `${drawerWidth}px`, // Add this line
+                    maxWidth: `${drawerWidth}px`,
                     flexShrink: 0,
+                    overflow: 'hidden', // Prevent the Drawer from scrolling
                     '& .MuiDrawer-paper': {
+                        position: 'fixed', // Make the Drawer cover the entire viewport
+                        height: '100vh',
                         width: { lg: drawerWidth },
                         boxSizing: 'border-box',
+                        overflow: 'hidden', // Prevent the Drawer from scrolling
                     },
                 }}
             >
-                <Button
-                    endIcon={<ChevronLeftIcon />}
-                    color="inherit"
-                    sx={{
-                        width: 'auto',
-                    }}
-                    onClick={handleDrawerClose}
-                />
-                <List>
-                    <ListItem disablePadding
-                        onClick={() => {
-                            if (!isLargeScreen) {
-                                setDrawerOpen(false);
-                            }
-                            navigate("/announcements");
-                        }}
-                    >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
-                                <AnnouncementIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={"Announcements"} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
+                <Box display="flex" flexDirection="column" height="100%">
+                    <Box flexGrow={1}>
+                        <List>
+                            <ListItem disablePadding onClick={handleDrawerClose}>
+                                <ListItemButton aria-label="menu">
+                                    <ListItemIcon sx={{ width: "100%", justifyContent: "end", textAlign: "right" }}>
+                                        <ChevronLeftIcon />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding
+                                onClick={() => {
+                                    if (!isLargeScreen) {
+                                        setDrawerOpen(false);
+                                    }
+                                    navigate("/announcements");
+                                }}
+                            >
+                                <ListItemButton aria-label="announcements">
+                                    <ListItemIcon sx={iconMinWidth}>
+                                        <AnnouncementIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Announcements"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding
+                                onClick={() => {
+                                    if (!isLargeScreen) {
+                                        setDrawerOpen(false);
+                                    }
+                                    navigate("/calendar");
+                                }}
+                            >
+                                <ListItemButton aria-label="calendar">
+                                    <ListItemIcon sx={iconMinWidth}>
+                                        <TodayIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Calendar"} />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
+                    </Box>
+                    {isAdmin && (
+                        <AdminArea setDrawerOpen={setDrawerOpen} isLargeScreen={isLargeScreen} />
+                    )}
+                </Box>
 
-                <List>
-                    <ListItem disablePadding
-                        onClick={() => {
-                            if (!isLargeScreen) {
-                                setDrawerOpen(false);
-                            }
-                            navigate("/calendar");
-                        }}
-                    >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
-                                <TodayIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={"Calendar"} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-
-                {isAdmin && (
-                    <AdminArea setDrawerOpen={setDrawerOpen} isLargeScreen={isLargeScreen} />
-                )}
             </Drawer>
 
-            <Box component="main" sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${drawerOpen ? drawerWidth : 0}px - 48px)`, ml: `${drawerOpen ? drawerWidth : 0}px`, transition: theme.transitions.create(['margin', 'width'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen }) }}>
-                <Toolbar />
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    width: `calc(100% - ${(drawerOpen && isLargeScreen) ? drawerWidth : 0}px)`,
+                    ml: 'auto',
+                }}
+            >
                 <Outlet />
             </Box>
         </Fragment >

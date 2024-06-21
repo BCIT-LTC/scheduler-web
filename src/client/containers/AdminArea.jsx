@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-
+import ListSubheader from '@mui/material/ListSubheader';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -18,6 +18,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
  * @returns {JSX.Element} - Admin Area
  */
 export default function AdminArea({ setDrawerOpen, isLargeScreen }) {
+    const iconMinWidth = { minWidth: 38 };
     const navigate = useNavigate();
 
     const closeDrawer = () => {
@@ -28,23 +29,20 @@ export default function AdminArea({ setDrawerOpen, isLargeScreen }) {
 
     return (
         <>
-            <Box position="absolute" bottom={0}>
-                <ListItemText primary={"Admin Area"} sx={{ ml: 2 }} />
-                <List>
+            <Box>
+                <List
+                    aria-labelledby="Admin Area List"
+                    subheader={<ListSubheader>Admin Area</ListSubheader>
+                    }
+                >
                     <ListItem disablePadding
                         onClick={() => {
                             closeDrawer();
                             navigate("/createevent");
                         }}
                     >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
+                        <ListItemButton aria-label="Create New Event">
+                            <ListItemIcon sx={iconMinWidth}>
                                 <AddIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Create New Event"} />
@@ -56,14 +54,8 @@ export default function AdminArea({ setDrawerOpen, isLargeScreen }) {
                     <ListItem disablePadding
                         onClick={() => { closeDrawer(); navigate("/locations"); }}
                     >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
+                        <ListItemButton aria-label="Room Management">
+                            <ListItemIcon sx={iconMinWidth}>
                                 <ApartmentIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Room Management"} />
@@ -76,14 +68,8 @@ export default function AdminArea({ setDrawerOpen, isLargeScreen }) {
                     <ListItem disablePadding
                         onClick={() => { closeDrawer(); navigate("/rolemanagement"); }}
                     >
-                        <ListItemButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <ListItemIcon>
+                        <ListItemButton aria-label="Role Management">
+                            <ListItemIcon sx={iconMinWidth}>
                                 <GroupIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Role Management"} />

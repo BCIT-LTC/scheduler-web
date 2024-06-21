@@ -9,7 +9,7 @@ export default function CustomTextField(props) {
 
     const optionalProps = useMemo(() => ({
         ...(props.fieldType != undefined && { type: props.fieldType }),
-        ...(props.inputProps != undefined && { InputProps: props.inputProps }),
+        ...(props.inputProps != undefined && { inputProps: props.inputProps }),
         ...(props.selectContent != undefined && { select: true, 'data-transaction-name': `${props.fieldLabel}` }),
     }), [props.fieldType, props.inputProps, props.selectContent, props.fieldLabel]);
 
@@ -36,7 +36,7 @@ export default function CustomTextField(props) {
     }, [customState, props, isCustomStateEmpty]);
 
     return (
-        <Stack spacing={0.5} className='custom-form'>
+        <Stack spacing={0.5} className='custom-form' style={{ display: props.hideField ? 'none' : 'flex' }}>
             <TextField
                 id={props.name}
                 name={props.name}
@@ -52,6 +52,7 @@ export default function CustomTextField(props) {
                 {...optionalProps}
                 error={isError}
                 helperText={isError ? `${props.fieldLabel} is required` : ""}
+                disabled={props.disabled}
             >
                 {props.selectContent ?
                     props.selectContent.map((item) => (
