@@ -19,10 +19,11 @@ const useCreateAnnouncement = () => {
     let payload = {
       title: event.target.title.value,
       description: event.target.description.value,
+      event_id: event.target.event_id?.value? event.target.event_id.value : null,
       created_by: globalcontext.user.email,
       // created_at: new Date().toISOString(),
     };
-
+    console.table(payload);
     await fetch(url, {
       method: 'POST',
       headers: {

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
-
+import CustomDisplayData from '../Shared/CustomDisplayData';
 /**
  * Announcement details component
  * @param announcement - announcement object
@@ -38,9 +38,11 @@ const AnnouncementDetails = ({ announcement, isAdmin }) => {
                 subheaderTypographyProps={{ color: "secondary" }}
             />
             <CardContent>
-                <Typography variant="body1" component="p">
+                <Typography variant="body1" component="p" style={{ marginBottom: '1em' }}>
                     {announcement.description}
                 </Typography>
+
+                {announcement.event && <CustomDisplayData data={announcement.event} />}
             </CardContent>
 
             {isAdmin && (

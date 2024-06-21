@@ -8,24 +8,24 @@ $config = array(
 
     'example-userpass' => array(
         'exampleauth:UserPass',
-        'admin@bcit.ca:admin' => array(
-            'email' => 'admin@bcit.ca',
+        'courseproduction@bcit.ca:admin' => array(
+            'email' => 'courseproduction@bcit.ca',
             'first_name' => 'admin_firstname',
             'last_name' => 'admin_lastname',
             'role' => 'employee', 
             'department' => 'School of Health Sciences',
             'display_name' => 'admin_displayname'
         ),
-        'instructor@bcit.ca:instructor' => array(
-            'email' => 'instructor@bcit.ca',
+        'employee_one@bcit.ca:instructor' => array(
+            'email' => 'employee_one@bcit.ca',
             'first_name' => 'instructor_firstname',
             'last_name' => 'instructor_lastname',
             'role' => 'instructor', 
             'department' => 'School of Health Sciences',
             'display_name' => 'admin_displayname'
         ),
-        'student@bcit.ca:student' => array(
-            'email' => 'student@bcit.ca',
+        'nursing_student@bcit.ca:student' => array(
+            'email' => 'nursing_student@bcit.ca',
             'first_name' => 'student_firstname',
             'last_name' => 'student_lastname',
             'role' => 'student', 

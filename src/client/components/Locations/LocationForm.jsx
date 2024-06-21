@@ -130,7 +130,7 @@ export default function LocationForm() {
                 </Typography>
 
                 <FormControl fullWidth>
-                    <CustomTextField fieldLabel="Room Name" name="room_location" required={true} defaultState={roomLocation} updateState={setRoomLocation} />
+                    <CustomTextField fieldLabel="Room Name" name="room_location" required={true} defaultState={roomLocation} updateState={setRoomLocation} inputProps={{ maxLength: 50 }} />
 
                     <Stack direction="row" spacing={2} justifyContent="center">
                         <Button

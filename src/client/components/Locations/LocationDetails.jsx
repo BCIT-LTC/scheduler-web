@@ -17,7 +17,7 @@ const GridBox = styled(Box)({
 
 // Display the cards of the selected location
 function LocationDetails({row, handleClose}) {
-    console.log(`Selected location ${row.location}`)
+
     return (
         <Box
             display="flex"

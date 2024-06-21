@@ -1,14 +1,14 @@
 import { useEffect, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import useGetAnnouncements from '../../hooks/announcements/useGetAnnouncements';
+import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
 import AnnouncementFilters from './AnnouncementFilters';
 import AnnouncementDetails from './AnnouncementDetails';
-import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
-import { useNavigate } from 'react-router-dom';
 
 const AnnouncementsPage = () => {
     const navigate = useNavigate();

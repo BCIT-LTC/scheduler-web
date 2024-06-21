@@ -11,6 +11,8 @@ import FormControl from "@mui/material/FormControl";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
 
 // Custom hooks
 import useCreateAnnouncement from "../../hooks/announcements/useCreateAnnouncement";
@@ -20,7 +22,7 @@ import useDeleteAnnouncement from "../../hooks/announcements/useDeleteAnnounceme
 // Custom components
 import CustomTextField from "../Shared/CustomTextField";
 import CustomConfirmationModal from "../Shared/CustomConfirmationModal";
-
+import CustomDisplayData from "../Shared/CustomDisplayData";
 
 
 dayjs.extend(utc);
@@ -48,14 +50,25 @@ export default function AnnouncementForm() {
                 announcement_id: previousState.announcement_id,
                 title: previousState.title,
                 description: previousState.description,
-
+                event: previousState.event ? previousState.event : null
             };
+        } else if (previousState.mode === 'create-event-announcement') {
+            initialState = {
+                mode: 'create-announcement',
+                announcement_id: null,
+                title: '',
+                description: '',
+                event: previousState.event
+            };
+
         }
     }
 
     const [mode, setMode] = useState(initialState.mode);
     const [title, setTitle] = useState(initialState.title);
     const [description, setDescription] = useState(initialState.description);
+    const [eventId, setEventId] = useState(initialState?.event?.event_id);
+    const announcementEvent = initialState?.event;
 
 
     const isFormValid = () => {
@@ -115,7 +128,6 @@ export default function AnnouncementForm() {
         }
     };
 
-
     return (
         <Container maxWidth="sm">
             <Box id="announcement-form" component="form"
@@ -132,10 +144,19 @@ export default function AnnouncementForm() {
                 <Typography variant="h7" align="center" color="textSecondary" paragraph>
                     {mode === 'create-announcement' ? 'Create a new announcement' : 'Edit an existing announcement'}
                 </Typography>
+                {
+                    announcementEvent &&
+                    <CustomDisplayData data={announcementEvent} />
+                }
+
+                {
+                    previousState?.mode === 'create-event-announcement' &&
+                    <CustomTextField fieldLabel="Event ID" name="event_id" required={true} defaultState={eventId} updateState={setEventId} disabled={true} hideField={true} />
+                }
 
                 <FormControl fullWidth>
-                    <CustomTextField fieldLabel="Title" name="title" required={true} defaultState={title} updateState={setTitle} />
-                    <CustomTextField fieldLabel="Description" name="description" required={true} multiline={true} defaultState={description} updateState={setDescription} />
+                    <CustomTextField fieldLabel="Title" name="title" required={true} defaultState={title} updateState={setTitle} inputProps={{ maxLength: 50 }} />
+                    <CustomTextField fieldLabel="Description" name="description" required={true} multiline={true} defaultState={description} updateState={setDescription} inputProps={{ maxLength: 200 }} />
 
                     <Stack direction="row" spacing={2} justifyContent="center">
                         <Button
@@ -147,7 +168,7 @@ export default function AnnouncementForm() {
                         >
                             Cancel
                         </Button>
-                        {(mode === 'edit-announcement' || 'delete-announcement') &&
+                        {(mode !== 'create-announcement') &&
                             <Button
                                 fullWidth
                                 type="button"

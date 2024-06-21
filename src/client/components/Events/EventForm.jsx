@@ -1,5 +1,5 @@
 // React and third-party libraries
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -28,7 +28,7 @@ import CustomDatePicker from "../Shared/CustomDatePicker";
 import CustomTimePicker from "../Shared/CustomTimePicker";
 import CustomCheckbox from "../Shared/CustomCheckbox";
 import CustomConfirmationModal from "../Shared/CustomConfirmationModal";
-
+import CustomDisplayData from "../Shared/CustomDisplayData";
 
 
 dayjs.extend(utc);
@@ -69,7 +69,8 @@ export default function EventForm() {
                 end_time: dayjs(previousState.end_time),
                 facilitator: previousState.facilitator,
                 description: previousState.description,
-                status: previousState.status
+                status: previousState.status,
+                event_announcement: previousState.event_announcement
             };
         } else if (previousState.mode === 'edit-series') {
             initialState = {
@@ -105,6 +106,8 @@ export default function EventForm() {
     const [status, setStatus] = useState(initialState.status);
     const [recurrenceFrequency, setRecurrenceFrequency] = useState(initialState.recurrence_frequency || 1);
     const [recurrenceDays, setRecurrenceDays] = useState(initialState.recurrence_days || [1, 2, 3, 4, 5]);
+
+    const eventAnnouncement = initialState.event_announcement || null;
 
     //   const [isHoliday, setIsHoliday] = useState(false);
     const statusArray = [{ value: "CONFIRMED", text: "CONFIRMED" }, { value: "TENTATIVE", text: "TENTATIVE" }, { value: "CANCELLED", text: "CANCELLED" }];
@@ -218,7 +221,7 @@ export default function EventForm() {
         } else if (mode === 'create-series' && !isRecurring) {
             setMode('create-event');
         }
-        console.log('mode:', mode);
+        // console.log('mode:', mode);
     }, [mode, isRecurring]);
 
 
@@ -239,9 +242,11 @@ export default function EventForm() {
                     {mode === 'create-event' ? 'Create a new event' : mode === 'edit-event' ? 'Edit an existing event' : mode === 'create-series' ? 'Create a new series' : 'Edit an existing series'}
                 </Typography>
 
+                {eventAnnouncement && <CustomDisplayData data={eventAnnouncement} />}
+                
                 <FormControl fullWidth>
                     <CustomTextField fieldLabel={mode === 'create-event' || mode === 'edit-event' ? 'Event Name' : 'Series Name'}
-                        name="summary" required={true} defaultState={summary} updateState={setSummary} />
+                        name="summary" required={true} defaultState={summary} updateState={setSummary} inputProps={{ maxLength: 200 }} />
                     <CustomTextField fieldLabel="Room" name="location_id" required={true} defaultState={locationId} updateState={setLocationId} selectContent={locationsArray} />
 
                     {/* Only show checkbox on create-event or create-series mode */}
@@ -268,8 +273,8 @@ export default function EventForm() {
                         </>
                     }
 
-                    <CustomTextField fieldLabel="Facilitator" name="facilitator" defaultState={facilitator} updateState={setFacilitator} />
-                    <CustomTextField fieldLabel="Description" name="description" multiline={true} defaultState={description} updateState={setDescription} />
+                    <CustomTextField fieldLabel="Facilitator" name="facilitator" defaultState={facilitator} updateState={setFacilitator} inputProps={{ maxLength: 200 }} />
+                    <CustomTextField fieldLabel="Description" name="description" multiline={true} defaultState={description} updateState={setDescription} inputProps={{ maxLength: 200 }} />
                     <CustomTextField fieldLabel="Status" name="status" defaultState={status} updateState={setStatus} selectContent={statusArray} />
                     {/* <CustomCheckbox label="Holiday/Closed" name="is_holiday" defaultChecked={isHoliday} updateCheckbox={setIsHoliday} /> */}
 
