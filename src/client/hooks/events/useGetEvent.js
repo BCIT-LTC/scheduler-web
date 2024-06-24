@@ -88,7 +88,6 @@ const useGetEvents = () => {
     const events =
         function (info, successCallback, failureCallback) {
             let jwtToken = Cookies.get("default_jwt");
-            console.log('Fetching data');
             const params = new URLSearchParams({
                 start: new Date(info.start).toISOString(),
                 end: new Date(info.end).toISOString()

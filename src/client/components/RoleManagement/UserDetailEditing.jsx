@@ -89,7 +89,7 @@ const UserDetailEditing = () => {
             <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                 {userDetails.first_name} {userDetails.last_name}
             </Typography>
-            <Typography variant="h7" align="center" color="textPrimary" gutterBottom>
+            <Typography variant="h7" align="center" color="textSecondary" paragraph>
                 View/Edit Roles
             </Typography>
             <TextField
@@ -98,11 +98,20 @@ const UserDetailEditing = () => {
                 name="user_id"
                 value={userDetails.user_id}
             />
+
             <TextField
                 label="email"
                 id="email"
                 name="email"
                 value={userDetails.email}
+            />
+
+            <TextField
+                label="logged in as"
+                id="saml_role"
+                name="saml_role"
+                disabled
+                value={userDetails.saml_role}
             />
 
             <FormControl

@@ -9,7 +9,7 @@ const logger = require("../logger.cjs")(__filename);
  * @inner
  * @return {} 200 if true
  */
-router.post("", async (req, res) => {
+router.post("", (req, res, next) => {
     // Unset the cookies by setting their expiration date in the past
     logger.info("logging out");
     res.clearCookie('jwt');
@@ -20,6 +20,12 @@ router.post("", async (req, res) => {
     res.clearCookie('session.sig');
     // Send a response to indicate the cookies have been unset
     res.sendStatus(200);
+
+    req.logout(function (err) {
+        logger.info("logging out");
+        if (err) { return next(err); }
+        res.redirect('/');
+    });
 });
 
 module.exports = router;
