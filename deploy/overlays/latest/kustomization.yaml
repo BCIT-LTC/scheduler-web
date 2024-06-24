@@ -14,11 +14,11 @@ nameSuffix: -latest
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 2.1.0-6d171f71--2024-06-21.1718960932 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-latest:tag"}
+  version: 2.1.1-65307fb3--2024-06-24.1719244534 # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-latest:tag"}
 images:
   - name: "scheduler-web"
     newName: "registry.ltc.bcit.ca/web-apps/openlab-scheduler/scheduler-web"
-    newTag: "2.1.0-6d171f71--2024-06-21.1718960932" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-latest:tag"}
+    newTag: "2.1.1-65307fb3--2024-06-24.1719244534" # {"$imagepolicy": "openlab-scheduler:scheduler-web-image-policy-latest:tag"}
 patches:
   # Patches ingress hostname with "latest--" prefix
   - target:
@@ -51,7 +51,6 @@ configMapGenerator:
     literals:
       - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
     behavior: merge
-    
   # SAML config
   #
   # Alternate Keycloak SAML idP
