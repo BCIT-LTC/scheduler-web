@@ -24,7 +24,6 @@ const ApiRequests = require("../services/api_requests.cjs");
  * @returns {Promise<any>} - The response data from the API call.
  */
 router.all("/*", async (req, res) => {
-  logger.info("API request: ", req.originalUrl);
   const api_requests = new ApiRequests(
     req.originalUrl,
     req.headers.authorization,

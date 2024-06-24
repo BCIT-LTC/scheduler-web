@@ -68,10 +68,11 @@ secretGenerator:
 
 configMapGenerator:
   # Alternate API backend location
-  # - name: api-config
-  #   literals:
-  #     - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
-
+  - name: api-config
+    literals:
+      - API_URL=https://latest--scheduler-api.ltc.bcit.ca/api/
+    behavior: merge
+    
   # SAML config
   #
   # Alternate Keycloak SAML idP

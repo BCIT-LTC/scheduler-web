@@ -31,6 +31,14 @@ $config = array(
             'role' => 'student', 
             'department' => 'School of Health Sciences',
             'display_name' => 'admin_displayname'
+        ),
+        'guest_student@bcit.ca:student' => array(
+            'email' => 'guest_student@bcit.ca',
+            'first_name' => 'student_firstname',
+            'last_name' => 'student_lastname',
+            'role' => 'student', 
+            'department' => 'School of Health Sciences',
+            'display_name' => 'guest_student_displayname'
         )
     ),
 );

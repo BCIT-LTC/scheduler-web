@@ -54,7 +54,7 @@ const UserTable = () => {
             <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                 Role Management
             </Typography>
-            <Typography variant="h7" align="center" color="textPrimary" gutterBottom>
+            <Typography variant="h7" align="center" color="textSecondary" paragraph>
                 Select a user to view/edit roles
             </Typography>
             <TextField label="Search" id="outlined-size-normal" size='small' placeholder='Name, Email, Etc...' onChange={searchTable} />
