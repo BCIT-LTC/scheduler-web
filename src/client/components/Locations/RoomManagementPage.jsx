@@ -40,7 +40,7 @@ const RoomManagementPage = () => {
                 secondaryAction={
                     <IconButton edge="end" aria-label="edit"
                         onClick={() => {
-                            navigate(`/editlocation`, { state: { location: item } })
+                            navigate(`/editlocation`, { state: { mode: 'edit-location' , ...item } })
                         }}
                     >
                         <EditIcon />

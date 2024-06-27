@@ -3,6 +3,8 @@ import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 import commonResponseHandler from "../commonResponseHandler";
 
+const url = 'api/locations';
+
 const useUpdateLocation = () => {
   const globalcontext = useContext(GlobalContext);
   const [updateLocationIsSuccessful, setUpdateLocationIsSuccessful] = useState(false);
@@ -11,7 +13,7 @@ const useUpdateLocation = () => {
   const [updateLocationResponseError, setUpdateLocationResponseError] = useState(false);
 
 
-  const updateLocation = async (event) => {
+  const updateLocation = async (event, location_id) => {
     event.preventDefault();
     setUpdateLocationIsSubmitted(true);
     setUpdateLocationIsLoading(true);
@@ -21,7 +23,7 @@ const useUpdateLocation = () => {
       modified_by: globalcontext.user.email
     };
 
-    await fetch(`api/locations/${event.target.location_id.value}`, {
+    await fetch(`${url}/${location_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

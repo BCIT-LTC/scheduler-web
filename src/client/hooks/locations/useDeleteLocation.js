@@ -15,7 +15,6 @@ const useDeleteLocation = () => {
     setDeleteLocationIsSubmitted(true);
     setDeleteLocationIsLoading(true);
 
-
     await fetch(`${url}/${location_id}`, {
       method: 'DELETE',
       headers: {

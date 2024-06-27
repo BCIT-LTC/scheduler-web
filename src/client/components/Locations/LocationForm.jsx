@@ -142,7 +142,7 @@ export default function LocationForm() {
                         >
                             Cancel
                         </Button>
-                        {(mode === 'edit-location' || 'delete-location') &&
+                        {(mode != 'create-location') &&
                             <Button
                                 fullWidth
                                 type="button"
