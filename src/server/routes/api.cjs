@@ -36,7 +36,8 @@ router.all("/*", async (req, res) => {
     res.status(statuscode).send(data);
   } catch (error) {
     logger.error("Error in API call: ", error);
-    return error;
+    // return error;
+    res.status(500).send(error);
   }
 });
 

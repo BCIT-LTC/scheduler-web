@@ -1,19 +1,20 @@
 import Cookies from "js-cookie";
 import { useState } from 'react';
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = 'api/locations';
 
 const useDeleteLocation = () => {
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [responseError, setResponseError] = useState(false);
+  const [deleteLocationIsSuccessful, setDeleteLocationIsSuccessful] = useState(false);
+  const [deleteLocationIsLoading, setDeleteLocationIsLoading] = useState(false);
+  const [deleteLocationIsSubmitted, setDeleteLocationIsSubmitted] = useState(false);
+  const [deleteLocationResponseError, setDeleteLocationResponseError] = useState(false);
 
   const deleteLocation = async (event, location_id) => {
     event.preventDefault();
-    setIsSubmitted(true);
-    setIsLoading(true);
-    
+    setDeleteLocationIsSubmitted(true);
+    setDeleteLocationIsLoading(true);
+
 
     await fetch(`${url}/${location_id}`, {
       method: 'DELETE',
@@ -22,29 +23,21 @@ const useDeleteLocation = () => {
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
     })
-      .then((response) => {
-        // Checking if the response is successful
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        setisSuccessful(true);
+        setDeleteLocationIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setDeleteLocationIsSuccessful(false);
+        setDeleteLocationResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setDeleteLocationIsLoading(false);
       });
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, deleteLocation };
+  return { deleteLocationIsSuccessful, deleteLocationIsLoading, deleteLocationIsSubmitted, deleteLocationResponseError, deleteLocation };
 }
 
 export default useDeleteLocation;

@@ -1,18 +1,19 @@
 import Cookies from "js-cookie";
 import { useState } from 'react';
+import commonResponseHandler from "../commonResponseHandler";
+
 const url = `api/series`;
 
-
 const useDeleteSeries = () => {
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [deleteSeriesIsSuccessful, setDeleteSeriesIsSuccessful] = useState(false);
+    const [deleteSeriesIsLoading, setDeleteSeriesIsLoading] = useState(false);
+    const [deleteSeriesIsSubmitted, setDeleteSeriesIsSubmitted] = useState(false);
+    const [deleteSeriesResponseError, setDeleteSeriesResponseError] = useState(false);
 
     const deleteSeries = async (event, series_id) => {
         event.preventDefault();
-        setIsSubmitted(true);
-        setIsLoading(true);
+        setDeleteSeriesIsSubmitted(true);
+        setDeleteSeriesIsLoading(true);
 
         await fetch(`${url}/${series_id}`, {
             method: 'DELETE',
@@ -21,29 +22,21 @@ const useDeleteSeries = () => {
                 Authorization: `Bearer ${Cookies.get("jwt")}`,
             }
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error(`Error from backend: ${errorData}`);
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setisSuccessful(true);
+                setDeleteSeriesIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setDeleteSeriesIsSuccessful(false);
+                setDeleteSeriesResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setDeleteSeriesIsLoading(false);
             });
     };
 
-    return { isSuccessful, isLoading, isSubmitted, responseError, deleteSeries };
+    return { deleteSeriesIsSuccessful, deleteSeriesIsLoading, deleteSeriesIsSubmitted, deleteSeriesResponseError, deleteSeries };
 };
 
 export default useDeleteSeries;

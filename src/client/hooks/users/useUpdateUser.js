@@ -1,15 +1,12 @@
 import Cookies from "js-cookie";
 import { useState, useContext } from 'react';
-import { GlobalContext } from '../../context/usercontext';
-import { CollectionsOutlined } from "@mui/icons-material";
+import commonResponseHandler from "../commonResponseHandler";
 
 const useUpdateUser = () => {
-    const globalcontext = useContext(GlobalContext);
     const [updateUserIsSuccessful, setUpdateUserIsSuccessful] = useState(false);
     const [updateUserIsLoading, setUpdateUserIsLoading] = useState(false);
     const [updateUserIsSubmitted, setUpdateUserIsSubmitted] = useState(false);
     const [updateUserResponseError, setUpdateUserResponseError] = useState(false);
-
 
     const updateUser = async (event) => {
         event.preventDefault();
@@ -27,7 +24,7 @@ const useUpdateUser = () => {
             app_roles: app_roles
         };
 
-        await fetch(`api/user/${event.target.user_id.value}`, {
+        await fetch(`api/users/${event.target.user_id.value}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,26 +32,14 @@ const useUpdateUser = () => {
             },
             body: JSON.stringify(payload),
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        // console.log(JSON.stringify(errorData.errors))
-                        if (errorData.errors) {
-                            setUpdateUserResponseError(JSON.stringify(errorData.errors));
-                        }
-                        throw new Error('Error from backend :' + JSON.stringify(errorData.errors));
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
                 setUpdateUserIsSuccessful(true);
             })
             .catch((error) => {
                 setUpdateUserIsSuccessful(false);
-                // setUpdateUserResponseError(error);
+                setUpdateUserResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
                 setUpdateUserIsLoading(false);

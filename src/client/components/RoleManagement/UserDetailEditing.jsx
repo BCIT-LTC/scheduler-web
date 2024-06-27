@@ -121,13 +121,17 @@ const UserDetailEditing = () => {
                 variant="standard"
             >
                 <FormLabel component="legend">Select Roles</FormLabel>
-                <AppRoles />
+                {getRolesResponseError ?
+                    <FormHelperText error>{getRolesResponseError}</FormHelperText>
+                    :
+                    <AppRoles />
+                }
                 {userDetails.app_roles.length === 0 &&
                     <FormHelperText>At least one role must be selected</FormHelperText>}
             </FormControl>
             {updateUserResponseError &&
                 <Typography variant="h7" align="center" color="error" gutterBottom>
-                    {updateUserResponseError}
+                    Error: {updateUserResponseError}
                 </Typography>
             }
 

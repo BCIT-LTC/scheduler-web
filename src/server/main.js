@@ -52,6 +52,6 @@ app.use("/logout", logout);
 
 ViteExpress.listen(app, 9000, () =>
   // logger.info("Server is listening on port 9000...")
-console.log("Server is listening on port 9000...")
+  console.log("Server is listening on port 9000... in " + process.env.NODE_ENV + " mode")
 
 );

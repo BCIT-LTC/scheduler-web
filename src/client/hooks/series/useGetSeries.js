@@ -1,18 +1,17 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = `api/series`;
 
 const useGetSeries = () => {
-  const [data, setData] = useState(null); // This is the data that will be returned from the hook
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [responseError, setResponseError] = useState(false);
-
+  const [getSeriesData, setGetSeriesData] = useState(null); // This is the data that will be returned from the hook
+  const [getSeriesIsSuccessful, setGetSeriesIsSuccessful] = useState(false);
+  const [getSeriesIsLoading, setGetSeriesIsLoading] = useState(false);
+  const [getSeriesResponseError, setGetSeriesResponseError] = useState(false);
 
   const getSeries = async (event_id) => {
-    let seriesData = null;
-    setIsLoading(true);
+    setGetSeriesIsLoading(true);
     await fetch(`${url}/${event_id}`, {
       method: 'GET',
       headers: {
@@ -20,36 +19,26 @@ const useGetSeries = () => {
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
     })
-      .then((response) => {
-        // Checking if the response is successful  
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        seriesData = data;
-        setData(data);
-        setisSuccessful(true);
+        setGetSeriesData(data);
+        setGetSeriesIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setGetSeriesIsSuccessful(false);
+        setGetSeriesResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setGetSeriesIsLoading(false);
       });
-    return seriesData;
   };
 
   return {
-    data,
-    isSuccessful,
-    isLoading,
-    responseError,
+    getSeriesData,
+    getSeriesIsSuccessful,
+    getSeriesIsLoading,
+    getSeriesResponseError,
     getSeries
   };
 }

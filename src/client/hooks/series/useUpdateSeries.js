@@ -3,22 +3,23 @@ import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import commonResponseHandler from "../commonResponseHandler";
+
 const url = `api/series`;
 
 dayjs.extend(utc);
 
-
 const useUpdateSeries = () => {
     const globalcontext = useContext(GlobalContext);
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [updateSeriesIsSuccessful, setUpdateSeriesIsSuccessful] = useState(false);
+    const [updateSeriesIsLoading, setUpdateSeriesIsLoading] = useState(false);
+    const [updateSeriesIsSubmitted, setUpdateSeriesIsSubmitted] = useState(false);
+    const [updateSeriesResponseError, setUpdateSeriesResponseError] = useState(false);
 
     const updateSeries = async (event, series_id) => {
         event.preventDefault();
-        setIsSubmitted(true);
-        setIsLoading(true);
+        setUpdateSeriesIsSubmitted(true);
+        setUpdateSeriesIsLoading(true);
 
         const startDate = dayjs(new Date(event.target.start_date.value).toISOString());
         const startTime = dayjs(event.target.start_time.value, "hh:mm A");
@@ -71,29 +72,21 @@ const useUpdateSeries = () => {
             },
             body: JSON.stringify(payload),
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error('Error from backend');
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setisSuccessful(true);
+                setUpdateSeriesIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setUpdateSeriesIsSuccessful(false);
+                setUpdateSeriesResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setUpdateSeriesIsLoading(false);
             });
     };
 
-    return { isSuccessful, isLoading, isSubmitted, responseError, updateSeries };
+    return { updateSeriesIsSuccessful, updateSeriesIsLoading, updateSeriesIsSubmitted, updateSeriesResponseError, updateSeries };
 };
 
 export default useUpdateSeries;

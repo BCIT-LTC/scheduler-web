@@ -3,6 +3,8 @@ import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import commonResponseHandler from "../commonResponseHandler";
+
 const url = `api/series`;
 
 dayjs.extend(utc);
@@ -10,15 +12,15 @@ dayjs.extend(utc);
 
 const useCreateSeries = () => {
     const globalcontext = useContext(GlobalContext);
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [createSeriesIsSuccessful, setCreateSeriesIsSuccessful] = useState(false);
+    const [createSeriesIsLoading, setCreateSeriesIsLoading] = useState(false);
+    const [createSeriesIsSubmitted, setCreateSeriesIsSubmitted] = useState(false);
+    const [createSeriesResponseError, setCreateSeriesResponseError] = useState(false);
 
     const createSeries = async (event) => {
         event.preventDefault();
-        setIsSubmitted(true);
-        setIsLoading(true);
+        setCreateSeriesIsSubmitted(true);
+        setCreateSeriesIsLoading(true);
 
         const startDate = dayjs(new Date(event.target.start_date.value).toISOString());
         const startTime = dayjs(event.target.start_time.value, "hh:mm A");
@@ -62,7 +64,7 @@ const useCreateSeries = () => {
             status: event.target.status.value,
             created_by: globalcontext.user.email
         };
-        
+
         await fetch(url, {
             method: 'POST',
             headers: {
@@ -71,29 +73,21 @@ const useCreateSeries = () => {
             },
             body: JSON.stringify(payload),
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error('Error from backend');
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setisSuccessful(true);
+                setCreateSeriesIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setCreateSeriesIsSuccessful(false);
+                setCreateSeriesResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setCreateSeriesIsLoading(false);
             });
     };
 
-    return { isSuccessful, isLoading, isSubmitted, responseError, createSeries };
+    return { createSeriesIsSuccessful, createSeriesIsLoading, createSeriesIsSubmitted, createSeriesResponseError, createSeries };
 };
 
 export default useCreateSeries;

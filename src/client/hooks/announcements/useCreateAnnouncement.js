@@ -1,25 +1,26 @@
 import Cookies from "js-cookie";
 import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = 'api/announcements';
 
 const useCreateAnnouncement = () => {
   const globalcontext = useContext(GlobalContext);
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [responseError, setResponseError] = useState(false);
+  const [createAnnouncementIsSuccessful, setCreateAnnouncementIsSuccessful] = useState(false);
+  const [createAnnouncementIsLoading, setCreateAnnouncementIsLoading] = useState(false);
+  const [createAnnouncementIsSubmitted, setCreateAnnouncementIsSubmitted] = useState(false);
+  const [createAnnouncementResponseError, setCreateAnnouncementResponseError] = useState(false);
 
   const createAnnouncement = async (event) => {
     event.preventDefault();
-    setIsSubmitted(true);
-    setIsLoading(true);
-    
+    setCreateAnnouncementIsSubmitted(true);
+    setCreateAnnouncementIsLoading(true);
+
     let payload = {
       title: event.target.title.value,
       description: event.target.description.value,
-      event_id: event.target.event_id?.value? event.target.event_id.value : null,
+      event_id: event.target.event_id?.value ? event.target.event_id.value : null,
       created_by: globalcontext.user.email,
       // created_at: new Date().toISOString(),
     };
@@ -32,29 +33,21 @@ const useCreateAnnouncement = () => {
       },
       body: JSON.stringify(payload),
     })
-      .then((response) => {
-        // Checking if the response is successful
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        setisSuccessful(true);
+        setCreateAnnouncementIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setCreateAnnouncementIsSuccessful(false);
+        setCreateAnnouncementResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setCreateAnnouncementIsLoading(false);
       });
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, createAnnouncement };
+  return { createAnnouncementIsSuccessful, createAnnouncementIsLoading, createAnnouncementIsSubmitted, createAnnouncementResponseError, createAnnouncement };
 }
 
 export default useCreateAnnouncement;

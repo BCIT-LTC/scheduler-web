@@ -21,10 +21,10 @@ const RoomManagementPage = () => {
     const navigate = useNavigate();
 
     const {
-        data,
-        isSuccessful,
-        isLoading,
-        responseError,
+        getLocationsData,
+        getLocationsIsSuccessful,
+        getLocationsIsLoading,
+        getLocationsResponseError,
         getLocations } = useGetLocations();
 
     useEffect(() => {
@@ -98,7 +98,7 @@ const RoomManagementPage = () => {
                     Create Room
                 </Button>
             </Stack>
-            {isLoading ?
+            {getLocationsIsLoading ?
                 <>
                     <Stack spacing={1}>
                         <Skeleton variant="text" sx={{ fontSize: '3rem' }} />
@@ -106,8 +106,8 @@ const RoomManagementPage = () => {
                     </Stack>
                 </>
                 :
-                isSuccessful ?
-                    <ListOfRooms data={data} />
+                getLocationsIsSuccessful ?
+                    <ListOfRooms data={getLocationsData} />
                     :
                     <Typography variant="h7" align="center" color="textSecondary" paragraph>
                         Error fetching data

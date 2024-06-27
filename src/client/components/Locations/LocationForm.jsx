@@ -62,32 +62,32 @@ export default function LocationForm() {
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
-        isSuccessful: isCreateLocationSuccessful,
-        isLoading: isCreateLocationLoading,
-        isSubmitted: isCreateLocationSubmitted,
-        responseError: createLocationResponseError,
+        createLocationIsSuccessful,
+        createLocationIsLoading,
+        createLocationIsSubmitted,
+        createLocationResponseError,
         createLocation
     } = useCreateLocation();
 
     const {
-        isSuccessful: isUpdateLocationSuccessful,
-        isLoading: isUpdateLocationLoading,
-        isSubmitted: isUpdateLocationSubmitted,
-        responseError: updateLocationResponseError,
+        updateLocationIsSuccessful,
+        updateLocationIsLoading,
+        updateLocationIsSubmitted,
+        updateLocationResponseError,
         updateLocation
     } = useUpdateLocation();
 
-    const { isSuccessful: isDeleteLocationSuccessful,
-        isLoading: isDeleteLocationLoading,
-        isSubmitted: isDeleteLocationSubmitted,
-        responseError: deleteLocationResponseError,
+    const { deleteLocationIsSuccessful,
+        deleteLocationIsLoading,
+        deleteLocationIsSubmitted,
+        deleteLocationResponseError,
         deleteLocation
     } = useDeleteLocation();
 
 
-    const isSuccessful = isCreateLocationSuccessful || isUpdateLocationSuccessful || isDeleteLocationSuccessful;
-    const isLoading = isCreateLocationLoading || isUpdateLocationLoading || isDeleteLocationLoading;
-    const isSubmitted = isCreateLocationSubmitted || isUpdateLocationSubmitted || isDeleteLocationSubmitted;
+    const isSuccessful = createLocationIsSuccessful || updateLocationIsSuccessful || deleteLocationIsSuccessful;
+    const isLoading = createLocationIsLoading || updateLocationIsLoading || deleteLocationIsLoading;
+    const isSubmitted = createLocationIsSubmitted || updateLocationIsSubmitted || deleteLocationIsSubmitted;
     const responseError = createLocationResponseError || updateLocationResponseError || deleteLocationResponseError;
 
     const toggleDelete = () => {

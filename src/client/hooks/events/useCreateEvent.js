@@ -3,21 +3,23 @@ import { useState, useContext } from 'react';
 import { GlobalContext } from '../../context/usercontext';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import commonResponseHandler from "../commonResponseHandler";
+
 const url = `api/events`;
 
 dayjs.extend(utc);
 
 const useCreateEvent = () => {
     const globalcontext = useContext(GlobalContext);
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [createEventIsSuccessful, setCreateEventIsSuccessful] = useState(false);
+    const [createEventIsLoading, setCreateEventIsLoading] = useState(false);
+    const [createEventIsSubmitted, setCreateEventIsSubmitted] = useState(false);
+    const [createEventResponseError, setCreateEventResponseError] = useState(false);
 
     const createEvent = async (event) => {
         event.preventDefault();
-        setIsSubmitted(true);
-        setIsLoading(true);
+        setCreateEventIsSubmitted(true);
+        setCreateEventIsLoading(true);
 
         const startDate = dayjs(new Date(event.target.start_date.value).toISOString());
         const startTime = dayjs(event.target.start_time.value, "hh:mm A");
@@ -60,29 +62,21 @@ const useCreateEvent = () => {
             },
             body: JSON.stringify(payload),
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error(`Error from backend: ${errorData}`);
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setisSuccessful(true);
+                setCreateEventIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setCreateEventIsSuccessful(false);
+                setCreateEventResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setCreateEventIsLoading(false);
             });
     };
 
-    return { isSuccessful, isLoading, isSubmitted, responseError, createEvent };
+    return { createEventIsSuccessful, createEventIsLoading, createEventIsSubmitted, createEventResponseError, createEvent };
 };
 
 export default useCreateEvent;
