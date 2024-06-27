@@ -79,32 +79,32 @@ export default function AnnouncementForm() {
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
-        isSuccessful: isCreateAnnouncementSuccessful,
-        isLoading: isCreateAnnouncementLoading,
-        isSubmitted: isCreateAnnouncementSubmitted,
-        responseError: createAnnouncementResponseError,
+        createAnnouncementIsSuccessful,
+        createAnnouncementIsLoading,
+        createAnnouncementIsSubmitted,
+        createAnnouncementResponseError,
         createAnnouncement
     } = useCreateAnnouncement();
 
     const {
-        isSuccessful: isUpdateAnnouncementSuccessful,
-        isLoading: isUpdateAnnouncementLoading,
-        isSubmitted: isUpdateAnnouncementSubmitted,
-        responseError: updateAnnouncementResponseError,
+        updateAnnouncementIsSuccessful,
+        updateAnnouncementIsLoading,
+        updateAnnouncementIsSubmitted,
+        updateAnnouncementResponseError,
         updateAnnouncement
     } = useUpdateAnnouncement();
 
-    const { isSuccessful: isDeleteAnnouncementSuccessful,
-        isLoading: isDeleteAnnouncementLoading,
-        isSubmitted: isDeleteAnnouncementSubmitted,
-        responseError: deleteAnnouncementResponseError,
+    const { deleteAnnouncementIsSuccessful,
+        deleteAnnouncementIsLoading,
+        deleteAnnouncementIsSubmitted,
+        deleteAnnouncementResponseError,
         deleteAnnouncement
     } = useDeleteAnnouncement();
 
 
-    const isSuccessful = isCreateAnnouncementSuccessful || isUpdateAnnouncementSuccessful || isDeleteAnnouncementSuccessful;
-    const isLoading = isCreateAnnouncementLoading || isUpdateAnnouncementLoading || isDeleteAnnouncementLoading;
-    const isSubmitted = isCreateAnnouncementSubmitted || isUpdateAnnouncementSubmitted || isDeleteAnnouncementSubmitted;
+    const isSuccessful = createAnnouncementIsSuccessful || updateAnnouncementIsSuccessful || deleteAnnouncementIsSuccessful;
+    const isLoading = createAnnouncementIsLoading || updateAnnouncementIsLoading || deleteAnnouncementIsLoading;
+    const isSubmitted = createAnnouncementIsSubmitted || updateAnnouncementIsSubmitted || deleteAnnouncementIsSubmitted;
     const responseError = createAnnouncementResponseError || updateAnnouncementResponseError || deleteAnnouncementResponseError;
 
     const toggleDelete = () => {

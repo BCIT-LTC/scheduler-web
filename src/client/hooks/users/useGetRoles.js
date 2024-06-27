@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = `api/roles`;
 
@@ -18,23 +19,15 @@ const useGetRoles = () => {
                 Authorization: `Bearer ${Cookies.get("jwt")}`,
             },
         })
-            .then((response) => {
-                // Checking if the response is successful  
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setGetRolesResponseError(errorData);
-                        throw new Error('Error from backend');
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
                 setGetRolesData(data);
                 setGetRolesIsSuccesful(true);
             })
             .catch((error) => {
                 setGetRolesIsSuccesful(false);
+                setGetRolesResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
                 setGetRolesIsLoading(false);

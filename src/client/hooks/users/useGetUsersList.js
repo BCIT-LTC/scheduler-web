@@ -1,16 +1,17 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = `api/users`;
 
 const useGetUsersList = () => {
-    const [data, setData] = useState([]); // This is the data that will be returned from the hook
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [getUsersListData, setGetUsersListData] = useState([]); // This is the data that will be returned from the hook
+    const [getUsersListIsSuccessful, setGetUsersListIsSuccessful] = useState(false);
+    const [getUsersListIsLoading, setGetUsersListIsLoading] = useState(false);
+    const [getUsersListResponseError, setGetUsersListResponseError] = useState(false);
 
-    const getUsers = async () => {
-        setIsLoading(true);
+    const getUsersList = async () => {
+        setGetUsersListIsLoading(true);
         await fetch(url, {
             method: 'GET',
             headers: {
@@ -18,35 +19,27 @@ const useGetUsersList = () => {
                 Authorization: `Bearer ${Cookies.get("jwt")}`,
             },
         })
-            .then((response) => {
-                // Checking if the response is successful  
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error('Error from backend');
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setData(data);
-                setisSuccessful(true);
+                setGetUsersListData(data);
+                setGetUsersListIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setGetUsersListIsSuccessful(false);
+                setGetUsersListResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setGetUsersListIsLoading(false);
             });
     }
 
     return {
-        data,
-        isSuccessful,
-        isLoading,
-        responseError,
-        getUsers
+        getUsersListData,
+        getUsersListIsSuccessful,
+        getUsersListIsLoading,
+        getUsersListResponseError,
+        getUsersList
     };
 }
 

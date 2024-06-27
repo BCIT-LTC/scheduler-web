@@ -1,19 +1,19 @@
 import Cookies from "js-cookie";
 import { useState } from 'react';
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = 'api/announcements';
 
 const useDeleteAnnouncement = () => {
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [responseError, setResponseError] = useState(false);
+  const [deleteAnnouncementIsSuccessful, setDeleteAnnouncementIsSuccessful] = useState(false);
+  const [deleteAnnouncementIsLoading, setDeleteAnnouncementIsLoading] = useState(false);
+  const [deleteAnnouncementIsSubmitted, setDeleteAnnouncementIsSubmitted] = useState(false);
+  const [deleteAnnouncementResponseError, setDeleteAnnouncementResponseError] = useState(false);
 
   const deleteAnnouncement = async (event, announcement_id) => {
     event.preventDefault();
-    setIsSubmitted(true);
-    setIsLoading(true);
-    
+    setDeleteAnnouncementIsSubmitted(true);
+    setDeleteAnnouncementIsLoading(true);
 
     await fetch(`${url}/${announcement_id}`, {
       method: 'DELETE',
@@ -22,29 +22,21 @@ const useDeleteAnnouncement = () => {
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
     })
-      .then((response) => {
-        // Checking if the response is successful
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        setisSuccessful(true);
+        setDeleteAnnouncementIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setDeleteAnnouncementIsSuccessful(false);
+        setDeleteAnnouncementResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setDeleteAnnouncementIsLoading(false);
       });
   };
 
-  return { isSuccessful, isLoading, isSubmitted, responseError, deleteAnnouncement };
+  return { deleteAnnouncementIsSuccessful, deleteAnnouncementIsLoading, deleteAnnouncementIsSubmitted, deleteAnnouncementResponseError, deleteAnnouncement };
 }
 
 export default useDeleteAnnouncement;

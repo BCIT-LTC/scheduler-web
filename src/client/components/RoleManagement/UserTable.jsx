@@ -19,14 +19,14 @@ const UserTable = () => {
     const navigate = useNavigate();
 
     const {
-        data,
-        isSuccessful,
-        isLoading,
-        responseError,
-        getUsers } = useGetUsersList();
+        getUsersListData,
+        getUsersListIsSuccessful,
+        getUsersListIsLoading,
+        getUsersListResponseError,
+        getUsersList } = useGetUsersList();
 
     useEffect(() => {
-        getUsers();
+        getUsersList();
     }, []);
 
     const searchTable = (event) => {
@@ -34,7 +34,7 @@ const UserTable = () => {
         setSearchText(value);
     };
 
-    const filteredRows = data.filter((row) => {
+    const filteredRows = getUsersListData.filter((row) => {
         return (
             row.first_name.toLowerCase().includes(searchText) ||
             row.last_name.toLowerCase().includes(searchText) ||

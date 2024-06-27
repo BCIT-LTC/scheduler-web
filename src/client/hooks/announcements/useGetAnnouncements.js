@@ -1,19 +1,19 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = 'api/announcements';
 
 const useGetAnnouncements = () => {
-  const [data, setData] = useState(null); // This is the data that will be returned from the hook
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [responseError, setResponseError] = useState(false);
+  const [getAnnouncementsData, setGetAnnouncementsData] = useState(null); // This is the data that will be returned from the hook
+  const [getAnnouncementsIsSuccessful, setGetAnnouncementIsSuccessful] = useState(false);
+  const [getAnnouncementsIsLoading, setGetAnnouncementsIsLoading] = useState(false);
+  const [getAnnouncementsResponseError, setGetAnnouncementsResponseError] = useState(false);
 
 
   const getAnnouncements = async () => {
-    let announcementsData = null;
-    setIsLoading(true);
-    
+    setGetAnnouncementsIsLoading(true);
+
     await fetch(url, {
       method: 'GET',
       headers: {
@@ -21,36 +21,26 @@ const useGetAnnouncements = () => {
         Authorization: `Bearer ${Cookies.get("default_jwt")}`,
       },
     })
-      .then((response) => {
-        // Checking if the response is successful  
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        announcementsData = data;
-        setData(data);
-        setisSuccessful(true);
+        setGetAnnouncementsData(data);
+        setGetAnnouncementIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setGetAnnouncementIsSuccessful(false);
+        setGetAnnouncementsResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setGetAnnouncementsIsLoading(false);
       });
-    return announcementsData;
   };
 
   return {
-    data,
-    isSuccessful,
-    isLoading,
-    responseError,
+    getAnnouncementsData,
+    getAnnouncementsIsSuccessful,
+    getAnnouncementsIsLoading,
+    getAnnouncementsResponseError,
     getAnnouncements
   };
 }

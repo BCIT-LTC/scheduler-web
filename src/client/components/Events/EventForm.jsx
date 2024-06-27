@@ -94,7 +94,7 @@ export default function EventForm() {
 
     const [mode, setMode] = useState(initialState.mode);
     const [isRecurring, setIsRecurring] = useState(initialState.is_recurring);
-    const { data: locationsData, getLocations } = useGetLocations();
+    const { getLocationsData, getLocations } = useGetLocations();
     const [summary, setSummary] = useState(initialState.summary);
     const [locationId, setLocationId] = useState(initialState.location_id);
     const [startDate, setStartDate] = useState(dayjs(initialState.start_date));
@@ -114,8 +114,8 @@ export default function EventForm() {
 
     let locationsArray = [];
     // convert locations data to an array of object like this: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }] where value is location_id and text is room_location
-    if (locationsData) {
-        locationsArray = locationsData.map((location) => {
+    if (getLocationsData) {
+        locationsArray = getLocationsData.map((location) => {
             return { value: location.location_id, text: location.room_location };
         });
     }
@@ -128,52 +128,52 @@ export default function EventForm() {
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
-        isSuccessful: isCreateEventSuccessful,
-        isLoading: isCreateEventLoading,
-        isSubmitted: isCreateEventSubmitted,
-        responseError: createEventResponseError,
+        createEventIsSuccessful,
+        createEventIsLoading,
+        createEventIsSubmitted,
+        createEventResponseError,
         createEvent
     } = useCreateEvent();
 
     const {
-        isSuccessful: isUpdateEventSuccessful,
-        isLoading: isUpdateEventLoading,
-        isSubmitted: isUpdateEventSubmitted,
-        responseError: updateEventResponseError,
+        updateEventIsSuccessful,
+        updateEventIsLoading,
+        updateEventIsSubmitted,
+        updateEventResponseError,
         updateEvent
     } = useUpdateEvent();
 
-    const { isSuccessful: isDeleteEventSuccessful,
-        isLoading: isDeleteEventLoading,
-        isSubmitted: isDeleteEventSubmitted,
-        responseError: deleteEventResponseError,
+    const { deleteEventIsSuccessful,
+        deleteEventIsLoading,
+        deleteEventIsSubmitted,
+        deleteEventResponseError,
         deleteEvent
     } = useDeleteEvent();
 
-    const { isSuccessful: isCreateSeriesSuccessful,
-        isLoading: isCreateSeriesLoading,
-        isSubmitted: isCreateSeriesSubmitted,
-        responseError: createSeriesResponseError,
+    const { createSeriesIsSuccessful,
+        createSeriesIsLoading,
+        createSeriesIsSubmitted,
+        createSeriesResponseError,
         createSeries
     } = useCreateSeries();
 
-    const { isSuccessful: isUpdateSeriesSuccessful,
-        isLoading: isUpdateSeriesLoading,
-        isSubmitted: isUpdateSeriesSubmitted,
-        responseError: updateSeriesResponseError,
+    const { updateSeriesIsSuccessful,
+        updateSeriesIsLoading,
+        updateSeriesIsSubmitted,
+        updateSeriesResponseError,
         updateSeries
     } = useUpdateSeries();
 
-    const { isSuccessful: isDeleteSeriesSuccessful,
-        isLoading: isDeleteSeriesLoading,
-        isSubmitted: isDeleteSeriesSubmitted,
-        responseError: deleteSeriesResponseError,
+    const { deleteSeriesIsSuccessful,
+        deleteSeriesIsLoading,
+        deleteSeriesIsSubmitted,
+        deleteSeriesResponseError,
         deleteSeries
     } = useDeleteSeries();
 
-    const isSuccessful = isCreateEventSuccessful || isUpdateEventSuccessful || isDeleteEventSuccessful || isCreateSeriesSuccessful || isUpdateSeriesSuccessful || isDeleteSeriesSuccessful;
-    const isLoading = isCreateEventLoading || isUpdateEventLoading || isDeleteEventLoading || isCreateSeriesLoading || isUpdateSeriesLoading || isDeleteSeriesLoading;
-    const isSubmitted = isCreateEventSubmitted || isUpdateEventSubmitted || isDeleteEventSubmitted || isCreateSeriesSubmitted || isUpdateSeriesSubmitted || isDeleteSeriesSubmitted;
+    const isSuccessful = createEventIsSuccessful || updateEventIsSuccessful || deleteEventIsSuccessful || createSeriesIsSuccessful || updateSeriesIsSuccessful || deleteSeriesIsSuccessful;
+    const isLoading = createEventIsLoading || updateEventIsLoading || deleteEventIsLoading || createSeriesIsLoading || updateSeriesIsLoading || deleteSeriesIsLoading;
+    const isSubmitted = createEventIsSubmitted || updateEventIsSubmitted || deleteEventIsSubmitted || createSeriesIsSubmitted || updateSeriesIsSubmitted || deleteSeriesIsSubmitted;
     const isResponseError = createEventResponseError || updateEventResponseError || deleteEventResponseError || createSeriesResponseError || updateSeriesResponseError || deleteSeriesResponseError;
 
     const handleDelete = () => {
@@ -243,7 +243,7 @@ export default function EventForm() {
                 </Typography>
 
                 {eventAnnouncement && <CustomDisplayData data={eventAnnouncement} />}
-                
+
                 <FormControl fullWidth>
                     <CustomTextField fieldLabel={mode === 'create-event' || mode === 'edit-event' ? 'Event Name' : 'Series Name'}
                         name="summary" required={true} defaultState={summary} updateState={setSummary} inputProps={{ maxLength: 200 }} />

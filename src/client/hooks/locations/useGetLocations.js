@@ -1,17 +1,17 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
+import commonResponseHandler from "../commonResponseHandler";
 
 const url = `api/locations`;
 
 const useGetLocations = () => {
-  const [data, setData] = useState([]); // This is the data that will be returned from the hook
-  const [isSuccessful, setisSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [responseError, setResponseError] = useState(false);
-
+  const [getLocationsData, setGetLocationsData] = useState([]); // This is the data that will be returned from the hook
+  const [getLocationsIsSuccessful, setGetLocationsIsSuccessful] = useState(false);
+  const [getLocationsIsLoading, setGetLocationsIsLoading] = useState(false);
+  const [getLocationsResponseError, setGetLocationsResponseError] = useState(false);
 
   const getLocations = async () => {
-    setIsLoading(true);
+    setGetLocationsIsLoading(true);
     await fetch(url, {
       method: 'GET',
       headers: {
@@ -19,34 +19,26 @@ const useGetLocations = () => {
         Authorization: `Bearer ${Cookies.get("jwt")}`,
       },
     })
-      .then((response) => {
-        // Checking if the response is successful  
-        if (!response.ok) {
-          // If response is not ok, throw an error with the response data
-          return response.json().then(errorData => {
-            setResponseError(errorData);
-            throw new Error('Error from backend');
-          });
-        }
-        return response.json();
-      })
+      .then(commonResponseHandler)
       .then((data) => {
-        setData(data);
-        setisSuccessful(true);
+        setGetLocationsData(data);
+        setGetLocationsIsSuccessful(true);
       })
       .catch((error) => {
-        setisSuccessful(false);
+        setGetLocationsIsSuccessful(false);
+        setGetLocationsResponseError(error.message);
+        console.error(error.message);
       })
       .finally(() => {
-        setIsLoading(false);
+        setGetLocationsIsLoading(false);
       });
   };
 
   return {
-    data,
-    isSuccessful,
-    isLoading,
-    responseError,
+    getLocationsData,
+    getLocationsIsSuccessful,
+    getLocationsIsLoading,
+    getLocationsResponseError,
     getLocations
   };
 }

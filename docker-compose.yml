@@ -15,6 +15,7 @@ services:
         npm install
         npm run dev
     environment:
+      - NODE_ENV=development # production || development
       # api-config
       - API_URL=http://host.docker.internal:8000/api/
 

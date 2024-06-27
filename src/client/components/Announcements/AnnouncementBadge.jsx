@@ -12,7 +12,7 @@ import useGetAnnouncements from "../../hooks/announcements/useGetAnnouncements";
 
 const AnnouncementBadge = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { data: announcementsData, isSuccessful, isLoading, responseError, getAnnouncements } = useGetAnnouncements();
+  const { getAnnouncementsData, getAnnouncementsIsSuccessful, getAnnouncementsIsLoading, getAnnouncementsResponseError, getAnnouncements } = useGetAnnouncements();
 
   const handleClick = async (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,14 +56,14 @@ const AnnouncementBadge = () => {
           <Typography variant="h6" gutterBottom>
             Announcements
           </Typography>
-          {isLoading ? (
+          {getAnnouncementsIsLoading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <CircularProgress  />
             </div>
           ) : (
             <List>
-              {announcementsData?.length > 0 ? (
-                announcementsData.map((announcement) => (
+              {getAnnouncementsData?.length > 0 ? (
+                getAnnouncementsData.map((announcement) => (
                   <ListItem key={announcement.announcement_id}>
                     <ListItemText
                       primary={announcement.title}

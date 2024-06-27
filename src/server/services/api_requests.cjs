@@ -28,8 +28,12 @@ module.exports = class ApiRequests {
       headers: headers,
       mode: "cors",
     };
-    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method) && body) {
-      this.fetchoptions.body = JSON.stringify(body);
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+      try {
+        this.fetchoptions.body = JSON.stringify(body);
+      } catch (error) {
+        logger.error("Error in ApiRequests constructor: ", error);
+      }
     }
   }
 
@@ -45,10 +49,11 @@ module.exports = class ApiRequests {
       const response = await fetch(this.url, this.fetchoptions);
       const data = await response.json();
       const statuscode = response.status;
-      return {statuscode, data};
+      return { statuscode, data };
     } catch (error) {
       logger.error("Error in ApiRequests call: ", error);
-      return error;
+      const statuscode = 500; // Internal Server Error
+      return { statuscode, data: "Error in ApiRequests call: " + error };
     }
   }
 };

@@ -14,7 +14,7 @@ const AnnouncementsPage = () => {
     const navigate = useNavigate();
     const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
 
-    const { data: announcementsData, isSuccessful, isLoading, responseError, getAnnouncements: getAnnouncementsFromHook } = useGetAnnouncements();
+    const { getAnnouncementsData, getAnnouncementsIsSuccessful, getAnnouncementsIsLoading, getAnnouncementsResponseError, getAnnouncements: getAnnouncementsFromHook } = useGetAnnouncements();
     const [searchText, setSearchText] = useState('');
     const [sortOption, setSortOption] = useState('newest');
 
@@ -24,7 +24,7 @@ const AnnouncementsPage = () => {
         getAnnouncements();
     }, [getAnnouncements]);
 
-    const filteredAnnouncements = announcementsData?.filter((announcement) =>
+    const filteredAnnouncements = getAnnouncementsData?.filter((announcement) =>
         announcement.title.toLowerCase().includes(searchText.toLowerCase()) ||
         announcement.description.toLowerCase().includes(searchText.toLowerCase())
     ).sort((a, b) => {
@@ -71,11 +71,11 @@ const AnnouncementsPage = () => {
                 setSortOption={setSortOption}
             />
 
-            {isLoading ? (
+            {getAnnouncementsIsLoading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <CircularProgress size={80} />
                 </Box>
-            ) : isSuccessful ? (
+            ) : getAnnouncementsIsSuccessful ? (
                 filteredAnnouncements.map((announcement, index) => (
                     <AnnouncementDetails key={index} announcement={announcement} isAdmin={isAdmin} />
                 ))

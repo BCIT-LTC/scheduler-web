@@ -40,13 +40,13 @@ export default function BaseLayout() {
     const [drawerOpen, setDrawerOpen] = useState(true); // Drawer is open by default
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
     const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
-    const { data: announcements, getAnnouncements } = useGetAnnouncements();
+    const { getAnnouncementsData, getAnnouncements } = useGetAnnouncements();
     const isHomePage = window.location.pathname === "/calendar";
     const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const isLargeScreen = useMediaQuery(theme => theme.breakpoints.up('lg'));
     const [drawerVariant, setDrawerVariant] = useState('persistent');
 
-    let announcementsData = isHomePage ? announcements : null; // Only show announcements on the home page
+    let announcementsData = isHomePage ? getAnnouncementsData : null; // Only show announcements on the home page
 
     const topBarStyles = {
         width: { lg: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%', xs: '100%' },

@@ -1,18 +1,19 @@
 import Cookies from "js-cookie";
 import { useState } from 'react';
+import commonResponseHandler from "../commonResponseHandler";
+
 const url = `api/events`;
 
-
 const useDeleteEvent = () => {
-    const [isSuccessful, setisSuccessful] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [deleteEventIsSuccessful, setDeleteEventIsSuccessful] = useState(false);
+    const [deleteEventIsLoading, setDeleteEventIsLoading] = useState(false);
+    const [deleteEventIsSubmitted, setDeleteEventIsSubmitted] = useState(false);
+    const [deleteEventResponseError, setDeleteEventResponseError] = useState(false);
 
     const deleteEvent = async (event, event_id) => {
         event.preventDefault();
-        setIsSubmitted(true);
-        setIsLoading(true);
+        setDeleteEventIsSubmitted(true);
+        setDeleteEventIsLoading(true);
 
         await fetch(`${url}/${event_id}`, {
             method: 'DELETE',
@@ -21,29 +22,21 @@ const useDeleteEvent = () => {
                 Authorization: `Bearer ${Cookies.get("jwt")}`,
             }
         })
-            .then((response) => {
-                // Checking if the response is successful
-                if (!response.ok) {
-                    // If response is not ok, throw an error with the response data
-                    return response.json().then(errorData => {
-                        setResponseError(errorData);
-                        throw new Error(`Error from backend: ${errorData}`);
-                    });
-                }
-                return response.json();
-            })
+            .then(commonResponseHandler)
             .then((data) => {
-                setisSuccessful(true);
+                setDeleteEventIsSuccessful(true);
             })
             .catch((error) => {
-                setisSuccessful(false);
+                setDeleteEventIsSuccessful(false);
+                setDeleteEventResponseError(error.message);
+                console.error(error.message);
             })
             .finally(() => {
-                setIsLoading(false);
+                setDeleteEventIsLoading(false);
             });
     };
 
-    return { isSuccessful, isLoading, isSubmitted, responseError, deleteEvent };
+    return { deleteEventIsSuccessful, deleteEventIsLoading, deleteEventIsSubmitted, deleteEventResponseError, deleteEvent };
 };
 
 export default useDeleteEvent;
