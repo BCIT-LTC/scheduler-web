@@ -37,6 +37,7 @@ const useCreateLocation = () => {
       .catch((error) => {
         setCreateLocationIsSuccessful(false);
         setCreateLocationResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

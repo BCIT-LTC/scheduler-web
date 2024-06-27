@@ -70,6 +70,7 @@ const useUpdateEvent = () => {
             .catch((error) => {
                 setUpdateEventIsSuccessful(false);
                 setUpdateEventResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {

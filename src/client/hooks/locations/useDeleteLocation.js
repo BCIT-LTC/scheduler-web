@@ -29,6 +29,7 @@ const useDeleteLocation = () => {
       .catch((error) => {
         setDeleteLocationIsSuccessful(false);
         setDeleteLocationResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

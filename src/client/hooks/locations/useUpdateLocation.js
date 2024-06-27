@@ -38,6 +38,7 @@ const useUpdateLocation = () => {
       .catch((error) => {
         setUpdateLocationIsSuccessful(false);
         setUpdateLocationResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

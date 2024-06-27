@@ -29,6 +29,7 @@ const useDeleteAnnouncement = () => {
       .catch((error) => {
         setDeleteAnnouncementIsSuccessful(false);
         setDeleteAnnouncementResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

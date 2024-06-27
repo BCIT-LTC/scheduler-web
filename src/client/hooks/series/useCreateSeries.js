@@ -80,6 +80,7 @@ const useCreateSeries = () => {
             .catch((error) => {
                 setCreateSeriesIsSuccessful(false);
                 setCreateSeriesResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {

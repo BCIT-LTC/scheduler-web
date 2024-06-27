@@ -125,7 +125,6 @@ export default function EventForm() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
         createEventIsSuccessful,
@@ -174,24 +173,31 @@ export default function EventForm() {
     const isSuccessful = createEventIsSuccessful || updateEventIsSuccessful || deleteEventIsSuccessful || createSeriesIsSuccessful || updateSeriesIsSuccessful || deleteSeriesIsSuccessful;
     const isLoading = createEventIsLoading || updateEventIsLoading || deleteEventIsLoading || createSeriesIsLoading || updateSeriesIsLoading || deleteSeriesIsLoading;
     const isSubmitted = createEventIsSubmitted || updateEventIsSubmitted || deleteEventIsSubmitted || createSeriesIsSubmitted || updateSeriesIsSubmitted || deleteSeriesIsSubmitted;
-    const isResponseError = createEventResponseError || updateEventResponseError || deleteEventResponseError || createSeriesResponseError || updateSeriesResponseError || deleteSeriesResponseError;
+    const responseError = createEventResponseError || updateEventResponseError || deleteEventResponseError || createSeriesResponseError || updateSeriesResponseError || deleteSeriesResponseError;
 
-    const handleDelete = () => {
-        if (mode === 'edit-event') {
-            setMode('delete-event');
-        } else if (mode === 'edit-series') {
-            setMode('delete-series');
+    const setModalMode = (modeString, modalBool) => {
+        if (modalBool === false) {
+            setIsModalOpen(modalBool);
+            // set delay to allow modal to close before changing mode
+            setTimeout(() => {
+                setMode(modeString);
+            }, 100);
+        } else {
+            setMode(modeString);
+            setIsModalOpen(modalBool);
         }
-        toggleModal();
     };
 
-    const handleCancelDelete = () => {
-        if (mode === 'delete-event') {
-            setMode('edit-event');
-        } else if (mode === 'delete-series') {
-            setMode('edit-series');
+    const handleDeleteButton = () => {
+        if (mode === 'edit-event') {
+            setModalMode('delete-event', true);
+        } else if (mode === 'edit-series') {
+            setModalMode('delete-series', true);
         }
-        toggleModal();
+    };
+
+    const closeModal = () => {
+        setModalMode(initialState.mode, false);
     };
 
     const handleSubmit = (e) => {
@@ -288,13 +294,13 @@ export default function EventForm() {
                         >
                             Cancel
                         </Button>
-                        {(mode === 'edit-event' || mode === 'edit-series' || mode === 'delete-event' || mode === 'delete-series') &&
+                        {(mode !== 'create-event' && mode !== 'create-series') &&
                             <Button
                                 fullWidth
                                 type="button"
                                 variant="contained"
                                 color="error"
-                                onClick={handleDelete}
+                                onClick={handleDeleteButton}
                             >
                                 Delete
                             </Button>
@@ -305,7 +311,7 @@ export default function EventForm() {
                             variant="contained"
                             disabled={!isFormValid()}
                             color="primary"
-                            onClick={toggleModal}
+                            onClick={() => { setIsModalOpen(true); }}
                         >
                             {mode === 'create-event' || mode === 'create-series' ? 'Create' : 'Update'}
                         </Button>
@@ -316,12 +322,12 @@ export default function EventForm() {
                     isSuccessful={isSuccessful}
                     isLoading={isLoading}
                     isSubmitted={isSubmitted}
-                    handleClose={toggleModal}
+                    handleClose={closeModal}
                     dialogConfig={{
                         title: `${mode === 'create-event' || mode === 'create-series' ? 'Create' : mode === 'delete-event' || mode === 'delete-series' ? 'Delete' : 'Update'} ${isRecurring ? 'Series' : 'Event'} Confirmation`,
                         content: `Are you sure you want to ${mode === 'create-event' || mode === 'create-series' ? 'create' : mode === 'delete-event' || mode === 'delete-series' ? 'delete' : 'update'} the ${isRecurring ? 'series' : 'event'} ${summary}?`,
                         buttons: [
-                            { label: 'Cancel', onClick: handleCancelDelete, color: 'secondary', variant: 'outlined' },
+                            { label: 'Cancel', onClick: closeModal, color: 'secondary', variant: 'outlined' },
                             { label: 'Confirm', type: 'submit', color: 'primary', variant: 'contained', form: 'event-form' }
                         ]
                     }}
@@ -335,10 +341,10 @@ export default function EventForm() {
                     }}
                     failureDialogConfig={{
                         title: `${isRecurring ? 'Series' : 'Event'} ${mode === 'create-event' || mode === 'create-series' ? 'Creation' : mode === 'delete-event' || mode === 'delete-series' ? 'Deletion' : 'Update'} Failed`,
-                        content: `Failed to ${mode === 'create-event' || mode === 'create-series' ? 'create' : mode === 'delete-event' || mode === 'delete-series' ? 'delete' : 'update'} the ${isRecurring ? 'series' : 'event'} ${summary}.`,
-                        onClose: () => { toggleModal(); },
+                        content: `Failed to ${mode === 'create-event' || mode === 'create-series' ? 'create' : mode === 'delete-event' || mode === 'delete-series' ? 'delete' : 'update'} the ${isRecurring ? 'series' : 'event'} ${summary}. ${responseError}`,
+                        onClose: closeModal,
                         buttons: [
-                            { label: 'Close', onClick: toggleModal, color: 'secondary', variant: 'contained' }
+                            { label: 'Close', onClick: closeModal, color: 'secondary', variant: 'contained' }
                         ]
                     }}
                 />

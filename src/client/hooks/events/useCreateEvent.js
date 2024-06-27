@@ -69,6 +69,7 @@ const useCreateEvent = () => {
             .catch((error) => {
                 setCreateEventIsSuccessful(false);
                 setCreateEventResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {

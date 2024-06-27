@@ -27,6 +27,7 @@ const useGetSeries = () => {
       .catch((error) => {
         setGetSeriesIsSuccessful(false);
         setGetSeriesResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {
