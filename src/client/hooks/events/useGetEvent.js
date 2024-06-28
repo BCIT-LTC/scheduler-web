@@ -117,6 +117,7 @@ const useGetEvents = () => {
                         })
                         .catch(error => {
                             failureCallback(error);
+                            alert(error.message);
                             console.error('There has been a problem with fetching Event:', error);
                         });
                 });

@@ -40,6 +40,7 @@ const useCreateAnnouncement = () => {
       .catch((error) => {
         setCreateAnnouncementIsSuccessful(false);
         setCreateAnnouncementResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

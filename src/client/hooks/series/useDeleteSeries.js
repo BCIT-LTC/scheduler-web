@@ -29,6 +29,7 @@ const useDeleteSeries = () => {
             .catch((error) => {
                 setDeleteSeriesIsSuccessful(false);
                 setDeleteSeriesResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {

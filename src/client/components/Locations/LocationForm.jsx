@@ -59,7 +59,6 @@ export default function LocationForm() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
         createLocationIsSuccessful,
@@ -90,13 +89,21 @@ export default function LocationForm() {
     const isSubmitted = createLocationIsSubmitted || updateLocationIsSubmitted || deleteLocationIsSubmitted;
     const responseError = createLocationResponseError || updateLocationResponseError || deleteLocationResponseError;
 
-    const toggleDelete = () => {
-        if (mode === 'edit-location') {
-            setMode('delete-location');
-        } else if (mode === 'delete-location') {
-            setMode('edit-location');
+    const setModalMode = (modeString, modalBool) => {
+        if (modalBool === false) {
+            setIsModalOpen(modalBool);
+            // set delay to allow modal to close before changing mode
+            setTimeout(() => {
+                setMode(modeString);
+            }, 100);
+        } else {
+            setMode(modeString);
+            setIsModalOpen(modalBool);
         }
-        toggleModal();
+    };
+
+    const closeModal = () => {
+        setModalMode(initialState.mode, false);
     };
 
 
@@ -142,13 +149,13 @@ export default function LocationForm() {
                         >
                             Cancel
                         </Button>
-                        {(mode === 'edit-location' || 'delete-location') &&
+                        {(mode != 'create-location') &&
                             <Button
                                 fullWidth
                                 type="button"
                                 variant="contained"
                                 color="error"
-                                onClick={toggleDelete}
+                                onClick={() => { setModalMode('delete-location', true); }}
                             >
                                 Delete
                             </Button>
@@ -159,7 +166,7 @@ export default function LocationForm() {
                             variant="contained"
                             disabled={!isFormValid()}
                             color="primary"
-                            onClick={toggleModal}
+                            onClick={() => { setIsModalOpen(true); }}
                         >
                             {mode === 'create-location' ? 'Create' : 'Update'}
                         </Button>
@@ -170,12 +177,12 @@ export default function LocationForm() {
                     isSuccessful={isSuccessful}
                     isLoading={isLoading}
                     isSubmitted={isSubmitted}
-                    handleClose={toggleModal}
+                    handleClose={closeModal}
                     dialogConfig={{
                         title: `${mode === 'create-location' ? 'Create' : mode === 'edit-location' ? 'Update' : 'Delete'} Location`,
                         content: `Are you sure you want to ${mode === 'create-location' ? 'create' : mode === 'edit-location' ? 'update' : 'delete'} the location ${roomLocation}?`,
                         buttons: [
-                            { label: 'Cancel', onClick: toggleDelete, color: 'secondary', variant: 'outlined' },
+                            { label: 'Cancel', onClick: closeModal, color: 'secondary', variant: 'outlined' },
                             { label: 'Confirm', type: 'submit', color: 'primary', variant: 'contained', form: 'location-form' }
                         ]
                     }}
@@ -190,9 +197,9 @@ export default function LocationForm() {
                     failureDialogConfig={{
                         title: `${mode === 'create-location' ? 'Create' : mode === 'edit-location' ? 'Update' : 'Delete'} Location Failed`,
                         content: `Failed to ${mode === 'create-location' ? 'create' : mode === 'edit-location' ? 'update' : 'delete'} the location ${roomLocation}. ${responseError}`,
-                        onClose: () => { toggleModal(); },
+                        onClose: closeModal,
                         buttons: [
-                            { label: 'Close', onClick: toggleModal, color: 'secondary', variant: 'contained' }
+                            { label: 'Close', onClick: closeModal, color: 'secondary', variant: 'contained' }
                         ]
                     }}
                 />

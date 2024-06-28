@@ -15,7 +15,6 @@ const useDeleteLocation = () => {
     setDeleteLocationIsSubmitted(true);
     setDeleteLocationIsLoading(true);
 
-
     await fetch(`${url}/${location_id}`, {
       method: 'DELETE',
       headers: {
@@ -30,6 +29,7 @@ const useDeleteLocation = () => {
       .catch((error) => {
         setDeleteLocationIsSuccessful(false);
         setDeleteLocationResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

@@ -29,6 +29,7 @@ const useDeleteEvent = () => {
             .catch((error) => {
                 setDeleteEventIsSuccessful(false);
                 setDeleteEventResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {

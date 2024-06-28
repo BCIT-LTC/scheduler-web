@@ -27,6 +27,7 @@ const useGetLocations = () => {
       .catch((error) => {
         setGetLocationsIsSuccessful(false);
         setGetLocationsResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

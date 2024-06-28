@@ -39,6 +39,7 @@ const useUpdateAnnouncement = () => {
       .catch((error) => {
         setUpdateAnnouncementIsSuccessful(false);
         setUpdateAnnouncementResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

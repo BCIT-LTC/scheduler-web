@@ -76,7 +76,6 @@ export default function AnnouncementForm() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const {
         createAnnouncementIsSuccessful,
@@ -107,13 +106,21 @@ export default function AnnouncementForm() {
     const isSubmitted = createAnnouncementIsSubmitted || updateAnnouncementIsSubmitted || deleteAnnouncementIsSubmitted;
     const responseError = createAnnouncementResponseError || updateAnnouncementResponseError || deleteAnnouncementResponseError;
 
-    const toggleDelete = () => {
-        if (mode === 'edit-announcement') {
-            setMode('delete-announcement');
-        } else if (mode === 'delete-announcement') {
-            setMode('edit-announcement');
+    const setModalMode = (modeString, modalBool) => {
+        if (modalBool === false) {
+            setIsModalOpen(modalBool);
+            // set delay to allow modal to close before changing mode
+            setTimeout(() => {
+                setMode(modeString);
+            }, 100);
+        } else {
+            setMode(modeString);
+            setIsModalOpen(modalBool);
         }
-        toggleModal();
+    };
+
+    const closeModal = () => {
+        setModalMode(initialState.mode, false);
     };
 
 
@@ -174,7 +181,7 @@ export default function AnnouncementForm() {
                                 type="button"
                                 variant="contained"
                                 color="error"
-                                onClick={toggleDelete}
+                                onClick={() => { setModalMode('delete-announcement', true); }}
                             >
                                 Delete
                             </Button>
@@ -185,7 +192,7 @@ export default function AnnouncementForm() {
                             variant="contained"
                             disabled={!isFormValid()}
                             color="primary"
-                            onClick={toggleModal}
+                            onClick={() => { setIsModalOpen(true); }}
                         >
                             {mode === 'create-announcement' ? 'Create' : 'Update'}
                         </Button>
@@ -196,12 +203,12 @@ export default function AnnouncementForm() {
                     isSuccessful={isSuccessful}
                     isLoading={isLoading}
                     isSubmitted={isSubmitted}
-                    handleClose={toggleModal}
+                    handleClose={closeModal}
                     dialogConfig={{
                         title: `${mode === 'create-announcement' ? 'Create' : mode === 'edit-announcement' ? 'Update' : 'Delete'} Announcement`,
                         content: `Are you sure you want to ${mode === 'create-announcement' ? 'create' : mode === 'edit-announcement' ? 'update' : 'delete'} the announcement ${title}?`,
                         buttons: [
-                            { label: 'Cancel', onClick: toggleDelete, color: 'secondary', variant: 'outlined' },
+                            { label: 'Cancel', onClick: closeModal, color: 'secondary', variant: 'outlined' },
                             { label: 'Confirm', type: 'submit', color: 'primary', variant: 'contained', form: 'announcement-form' }
                         ]
                     }}
@@ -216,9 +223,9 @@ export default function AnnouncementForm() {
                     failureDialogConfig={{
                         title: `${mode === 'create-announcement' ? 'Create' : mode === 'edit-announcement' ? 'Update' : 'Delete'} Announcement Failed`,
                         content: `Failed to ${mode === 'create-announcement' ? 'create' : mode === 'edit-announcement' ? 'update' : 'delete'} the announcement ${title}. ${responseError}`,
-                        onClose: () => { toggleModal(); },
+                        onClose: closeModal,
                         buttons: [
-                            { label: 'Close', onClick: toggleModal, color: 'secondary', variant: 'contained' }
+                            { label: 'Close', onClick: closeModal, color: 'secondary', variant: 'contained' }
                         ]
                     }}
                 />

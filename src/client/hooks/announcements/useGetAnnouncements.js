@@ -29,6 +29,7 @@ const useGetAnnouncements = () => {
       .catch((error) => {
         setGetAnnouncementIsSuccessful(false);
         setGetAnnouncementsResponseError(error.message);
+        alert(error.message);
         console.error(error.message);
       })
       .finally(() => {

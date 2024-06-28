@@ -79,6 +79,7 @@ const useUpdateSeries = () => {
             .catch((error) => {
                 setUpdateSeriesIsSuccessful(false);
                 setUpdateSeriesResponseError(error.message);
+                alert(error.message);
                 console.error(error.message);
             })
             .finally(() => {
