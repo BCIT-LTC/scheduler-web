@@ -1,23 +1,29 @@
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-compression: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      gzip on;
+      gzip_vary on;
+      gzip_types text/css text/javascript application/javascript;
+      gzip_min_length 1000;
+      gzip_proxied no-cache no-store private expired auth;
 spec:
   ingressClassName: nginx
   tls:
-    - hosts:
-        - scheduler-web.ltc.bcit.ca
-      secretName: star-ltc-bcit-ca
+  - hosts:
+    - scheduler-web.ltc.bcit.ca
+    secretName: star-ltc-bcit-ca
   rules:
-    - host: scheduler-web.ltc.bcit.ca
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: scheduler-web-service
-                port:
-                  number: 9000
-
+  - host: scheduler-web.ltc.bcit.ca
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: scheduler-web-service
+            port:
+              number: 9000
