@@ -76,7 +76,7 @@ export default function EventForm() {
             initialState = {
                 mode: 'edit-series',
                 series_id: previousState.series_id,
-                location_id: previousState.series_location_id,
+                location_id: previousState.location_id,
                 summary: previousState.series_title,
                 is_recurring: true,
                 recurrence_frequency: previousState.recurrence_frequency_weeks,
