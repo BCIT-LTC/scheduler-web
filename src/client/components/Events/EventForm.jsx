@@ -1,5 +1,5 @@
 // React and third-party libraries
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -13,13 +13,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
 // Custom hooks
-import useGetLocations from "../../hooks/locations/useGetLocations";
-import useCreateEvent from "../../hooks/events/useCreateEvent";
-import useUpdateEvent from "../../hooks/events/useUpdateEvent";
-import useDeleteEvent from "../../hooks/events/useDeleteEvent";
-import useCreateSeries from "../../hooks/series/useCreateSeries";
-import useUpdateSeries from "../../hooks/series/useUpdateSeries";
-import useDeleteSeries from "../../hooks/series/useDeleteSeries";
+import useCRUD from "../../hooks/useCRUD";
 
 // Custom components
 import SeriesDateTimeForm from "../Series/SeriesDateTimeForm";
@@ -29,6 +23,7 @@ import CustomTimePicker from "../Shared/CustomTimePicker";
 import CustomCheckbox from "../Shared/CustomCheckbox";
 import CustomConfirmationModal from "../Shared/CustomConfirmationModal";
 import CustomDisplayData from "../Shared/CustomDisplayData";
+import { GlobalContext } from "../../context/usercontext";
 
 
 dayjs.extend(utc);
@@ -39,6 +34,7 @@ dayjs.extend(utc);
  * @returns {JSX.Element} - Event Form Page
  */
 export default function EventForm() {
+    const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
     const previousState = useLocation().state;
 
@@ -94,7 +90,6 @@ export default function EventForm() {
 
     const [mode, setMode] = useState(initialState.mode);
     const [isRecurring, setIsRecurring] = useState(initialState.is_recurring);
-    const { getLocationsData, getLocations } = useGetLocations();
     const [summary, setSummary] = useState(initialState.summary);
     const [locationId, setLocationId] = useState(initialState.location_id);
     const [startDate, setStartDate] = useState(dayjs(initialState.start_date));
@@ -112,10 +107,14 @@ export default function EventForm() {
     //   const [isHoliday, setIsHoliday] = useState(false);
     const statusArray = [{ value: "CONFIRMED", text: "CONFIRMED" }, { value: "TENTATIVE", text: "TENTATIVE" }, { value: "CANCELLED", text: "CANCELLED" }];
 
+    const {
+        performAction: getLocations,
+        responseData: locationsData
+    } = useCRUD();
     let locationsArray = [];
     // convert locations data to an array of object like this: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }] where value is location_id and text is room_location
-    if (getLocationsData) {
-        locationsArray = getLocationsData.map((location) => {
+    if (locationsData) {
+        locationsArray = locationsData.map((location) => {
             return { value: location.location_id, text: location.room_location };
         });
     }
@@ -127,52 +126,56 @@ export default function EventForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {
-        createEventIsSuccessful,
-        createEventIsLoading,
-        createEventIsSubmitted,
-        createEventResponseError,
-        createEvent
-    } = useCreateEvent();
+        performAction: createEvent,
+        isSuccessful: isCreateEventSuccessful,
+        isLoading: isCreateEventLoading,
+        isSubmitted: isCreateEventSubmitted,
+        responseError: createEventResponseError,
+    } = useCRUD();
 
     const {
-        updateEventIsSuccessful,
-        updateEventIsLoading,
-        updateEventIsSubmitted,
-        updateEventResponseError,
-        updateEvent
-    } = useUpdateEvent();
+        performAction: updateEvent,
+        isSuccessful: isUpdateEventSuccessful,
+        isLoading: isUpdateEventLoading,
+        isSubmitted: isUpdateEventSubmitted,
+        responseError: updateEventResponseError,
+    } = useCRUD();
 
-    const { deleteEventIsSuccessful,
-        deleteEventIsLoading,
-        deleteEventIsSubmitted,
-        deleteEventResponseError,
-        deleteEvent
-    } = useDeleteEvent();
+    const {
+        performAction: deleteEvent,
+        isSuccessful: isDeleteEventSuccessful,
+        isLoading: isDeleteEventLoading,
+        isSubmitted: isDeleteEventSubmitted,
+        responseError: deleteEventResponseError,
+    } = useCRUD();
 
-    const { createSeriesIsSuccessful,
-        createSeriesIsLoading,
-        createSeriesIsSubmitted,
-        createSeriesResponseError,
-        createSeries
-    } = useCreateSeries();
+    const {
+        performAction: createSeries,
+        isSuccessful: isCreateSeriesSuccessful,
+        isLoading: isCreateSeriesLoading,
+        isSubmitted: isCreateSeriesSubmitted,
+        responseError: createSeriesResponseError,
+    } = useCRUD();
 
-    const { updateSeriesIsSuccessful,
-        updateSeriesIsLoading,
-        updateSeriesIsSubmitted,
-        updateSeriesResponseError,
-        updateSeries
-    } = useUpdateSeries();
+    const {
+        performAction: updateSeries,
+        isSuccessful: isUpdateSeriesSuccessful,
+        isLoading: isUpdateSeriesLoading,
+        isSubmitted: isUpdateSeriesSubmitted,
+        responseError: updateSeriesResponseError,
+    } = useCRUD();
 
-    const { deleteSeriesIsSuccessful,
-        deleteSeriesIsLoading,
-        deleteSeriesIsSubmitted,
-        deleteSeriesResponseError,
-        deleteSeries
-    } = useDeleteSeries();
+    const {
+        performAction: deleteSeries,
+        isSuccessful: isDeleteSeriesSuccessful,
+        isLoading: isDeleteSeriesLoading,
+        isSubmitted: isDeleteSeriesSubmitted,
+        responseError: deleteSeriesResponseError,
+    } = useCRUD();
 
-    const isSuccessful = createEventIsSuccessful || updateEventIsSuccessful || deleteEventIsSuccessful || createSeriesIsSuccessful || updateSeriesIsSuccessful || deleteSeriesIsSuccessful;
-    const isLoading = createEventIsLoading || updateEventIsLoading || deleteEventIsLoading || createSeriesIsLoading || updateSeriesIsLoading || deleteSeriesIsLoading;
-    const isSubmitted = createEventIsSubmitted || updateEventIsSubmitted || deleteEventIsSubmitted || createSeriesIsSubmitted || updateSeriesIsSubmitted || deleteSeriesIsSubmitted;
+    const isSuccessful = isCreateEventSuccessful || isUpdateEventSuccessful || isDeleteEventSuccessful || isCreateSeriesSuccessful || isUpdateSeriesSuccessful || isDeleteSeriesSuccessful;
+    const isLoading = isCreateEventLoading || isUpdateEventLoading || isDeleteEventLoading || isCreateSeriesLoading || isUpdateSeriesLoading || isDeleteSeriesLoading;
+    const isSubmitted = isCreateEventSubmitted || isUpdateEventSubmitted || isDeleteEventSubmitted || isCreateSeriesSubmitted || isUpdateSeriesSubmitted || isDeleteSeriesSubmitted;
     const responseError = createEventResponseError || updateEventResponseError || deleteEventResponseError || createSeriesResponseError || updateSeriesResponseError || deleteSeriesResponseError;
 
     const setModalMode = (modeString, modalBool) => {
@@ -200,25 +203,84 @@ export default function EventForm() {
         setModalMode(initialState.mode, false);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        const startDate = dayjs(new Date(event.target.start_date.value).toISOString());
+        const startTime = dayjs(event.target.start_time.value, "hh:mm A");
+
+        const start_time = dayjs()
+            .year(startDate.year())
+            .month(startDate.month())
+            .date(startDate.date())
+            .hour(startTime.hour())
+            .minute(startTime.minute())
+            .toISOString();
+
+        const endDate = dayjs(new Date(event.target.end_date.value).toISOString());
+        const endTime = dayjs(event.target.end_time.value, "hh:mm A");
+        const end_time = dayjs()
+            .year(endDate.year())
+            .month(endDate.month())
+            .date(endDate.date())
+            .hour(endTime.hour())
+            .minute(endTime.minute())
+            .toISOString();
+
+
+        let payload = {
+            location_id: parseInt(event.target.location_id.value),
+            facilitator: event.target.facilitator.value,
+            description: event.target.description.value,
+            status: event.target.status.value,
+            start_time: start_time,
+            end_time: end_time,
+        };
+
+        if (isRecurring) {
+            // recurrence_frequency_days would be an array of integers with value from checkboxes named day-0 to day-6
+            let recurrence_frequency_days = [];
+            for (let i = 0; i < 7; i++) {
+                if (event.target[`day-${i}`].checked) {
+                    recurrence_frequency_days.push(i);
+                }
+            }
+            payload = {
+                ...payload,
+                series_title: event.target.summary.value,
+                recurrence_frequency_weeks: parseInt(event.target.recurrence_frequency_weeks.value),
+                recurrence_frequency_days: recurrence_frequency_days,
+                start_date: start_time,
+                end_date: end_time,
+            };
+        } else {
+            payload = {
+                ...payload,
+                summary: event.target.summary.value,
+            };
+        }
+
         if (mode === 'create-event') {
-            createEvent(e);
+            payload.created_by = globalcontext.user.email;
+            createEvent('create', 'events', payload);
         } else if (mode === 'edit-event') {
-            updateEvent(e, initialState.event_id);
-        } else if (mode === 'create-series') {
-            createSeries(e);
-        } else if (mode === 'edit-series') {
-            updateSeries(e, initialState.series_id);
+            payload.modified_by = globalcontext.user.email;
+            updateEvent('update', 'events', payload, initialState.event_id);
         } else if (mode === 'delete-event') {
-            deleteEvent(e, initialState.event_id);
+            deleteEvent('delete', 'events', null, initialState.event_id);
+        } else if (mode === 'create-series') {
+            payload.created_by = globalcontext.user.email;
+            createSeries('create', 'series', payload);
+        } else if (mode === 'edit-series') {
+            payload.modified_by = globalcontext.user.email;
+            updateSeries('update', 'series', payload, initialState.series_id);
         } else if (mode === 'delete-series') {
-            deleteSeries(e, initialState.series_id);
+            deleteSeries('delete', 'series', null, initialState.series_id);
         }
     };
 
     useEffect(() => {
-        getLocations();
+        getLocations('get', 'locations');
     }, []);
 
     useEffect(() => {
@@ -244,7 +306,7 @@ export default function EventForm() {
                 <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                     {mode === 'create-event' ? 'Create Event' : mode === 'edit-event' ? 'Edit Event' : mode === 'create-series' ? 'Create Series' : 'Edit Series'}
                 </Typography>
-                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                <Typography variant="p" align="center" color="textSecondary" paragraph>
                     {mode === 'create-event' ? 'Create a new event' : mode === 'edit-event' ? 'Edit an existing event' : mode === 'create-series' ? 'Create a new series' : 'Edit an existing series'}
                 </Typography>
 
@@ -257,7 +319,7 @@ export default function EventForm() {
 
                     {/* Only show checkbox on create-event or create-series mode */}
                     {mode === 'create-event' || mode === 'create-series' ?
-                        <CustomCheckbox label="Recurring Event" name="is_recurring" defaultChecked={isRecurring} updateCheckbox={setIsRecurring} />
+                        <CustomCheckbox label="Recurring Event" name="is_recurring" value={isRecurring} defaultChecked={isRecurring} updateCheckbox={setIsRecurring} />
                         : null}
 
                     {/* if isRecurring is true, show SeriesDateTimeForm, else show CustomDatePicker and CustomTimePicker */}
@@ -282,7 +344,6 @@ export default function EventForm() {
                     <CustomTextField fieldLabel="Facilitator" name="facilitator" defaultState={facilitator} updateState={setFacilitator} inputProps={{ maxLength: 200 }} />
                     <CustomTextField fieldLabel="Description" name="description" multiline={true} defaultState={description} updateState={setDescription} inputProps={{ maxLength: 200 }} />
                     <CustomTextField fieldLabel="Status" name="status" defaultState={status} updateState={setStatus} selectContent={statusArray} />
-                    {/* <CustomCheckbox label="Holiday/Closed" name="is_holiday" defaultChecked={isHoliday} updateCheckbox={setIsHoliday} /> */}
 
                     <Stack direction="row" spacing={2} justifyContent="center">
                         <Button

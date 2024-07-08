@@ -21,8 +21,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import { GlobalContext } from '../context/usercontext';
-import useGetAnnouncements from '../hooks/announcements/useGetAnnouncements';
-import useCheckIfPermitted from '../hooks/users/useCheckIfPermitted';
+import useCRUD from "../hooks/useCRUD";
+import useCheckRoles from '../hooks/useCheckRoles';
 import AdminArea from './AdminArea';
 import LoginModal from './LoginModal';
 import StringAvatar from './StringAvatar';
@@ -39,14 +39,14 @@ export default function BaseLayout() {
     const globalcontext = useContext(GlobalContext);
     const [drawerOpen, setDrawerOpen] = useState(true); // Drawer is open by default
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
-    const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
-    const { getAnnouncementsData, getAnnouncements } = useGetAnnouncements();
+    const isAdmin = useCheckRoles({ rolesToCheck: ['admin'] });
+    const { performAction: getAnnouncements, responseData: announcementsDataFromHook } = useCRUD();
     const isHomePage = window.location.pathname === "/calendar";
     const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const isLargeScreen = useMediaQuery(theme => theme.breakpoints.up('lg'));
     const [drawerVariant, setDrawerVariant] = useState('persistent');
 
-    let announcementsData = isHomePage ? getAnnouncementsData : null; // Only show announcements on the home page
+    let announcementsData = isHomePage ? announcementsDataFromHook : null; // Only show announcements on the home page
 
     const topBarStyles = {
         width: { lg: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%', xs: '100%' },
@@ -90,7 +90,7 @@ export default function BaseLayout() {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                await getAnnouncements();
+                await getAnnouncements('get', 'announcements');
             } catch (error) {
                 console.error(error);
             }
@@ -234,6 +234,7 @@ export default function BaseLayout() {
                     flexGrow: 1,
                     width: `calc(100% - ${(drawerOpen && isLargeScreen) ? drawerWidth : 0}px)`,
                     ml: 'auto',
+                    mt: `${theme.mixins.toolbar.minHeight + (isSmallScreen ? 0 : 8)}px`,
                 }}
             >
                 <Outlet />

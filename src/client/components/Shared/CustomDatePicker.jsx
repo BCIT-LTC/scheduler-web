@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import Stack from '@mui/material/Stack';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -50,4 +50,4 @@ const CustomDatePicker = (props) => {
     );
 };
 
-export default React.memo(CustomDatePicker);
+export default memo(CustomDatePicker);

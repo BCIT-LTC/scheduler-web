@@ -9,12 +9,12 @@ import Modal from '@mui/material/Modal';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
-import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
+import useCheckRoles from '../../hooks/useCheckRoles';
 import CustomDisplayData from '../Shared/CustomDisplayData';
 
 function EventDetails({ event, handleClose, open }) {
     const navigate = useNavigate();
-    const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
+    const isAdmin = useCheckRoles({ rolesToCheck: ['admin'] });
 
     return (
         <Modal

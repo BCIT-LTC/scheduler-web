@@ -1,11 +1,11 @@
 import Container from '@mui/material/Container';
-import UserDetailEditing from "../components/RoleManagement/UserDetailEditing";
+import UserDetailsForm from "../components/RoleManagement/UserDetailsForm";
 
 export default function UserDetails() {
 
     return (
         <Container maxWidth="sm">
-            <UserDetailEditing />
+            <UserDetailsForm />
         </Container>
     );
 }

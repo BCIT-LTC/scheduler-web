@@ -1,22 +1,14 @@
-import {
-    useContext
-} from 'react';
-import {
-    GlobalContext
-} from '../../context/usercontext';
+import { useContext } from 'react';
+import { GlobalContext } from '../context/usercontext';
 
 /**
  * A hook to check if the user has any of the specifed roles.
- * @param {Array} params.roles_to_check - An array of roles to check.
+ * @param {Array} params.rolesToCheck - An array of roles to check.
  * @returns {boolean} - Returns true if the user has at least one of the roles.
  */
-const useCheckIfPermitted = ({
-    roles_to_check
-}) => {
+const useCheckRoles = ({ rolesToCheck }) => {
     // Get the user from the global context
-    const {
-        user
-    } = useContext(GlobalContext);
+    const { user } = useContext(GlobalContext);
 
     try {
         // Check if user is undefined
@@ -25,9 +17,9 @@ const useCheckIfPermitted = ({
             return false;
         }
 
-        //Check if roles_to_check is undefined
-        if (!roles_to_check) {
-            console.error("The roles_to_check is undefined");
+        //Check if rolesToCheck is undefined
+        if (!rolesToCheck) {
+            console.error("The rolesToCheck is undefined");
             return false;
         }
 
@@ -39,17 +31,17 @@ const useCheckIfPermitted = ({
                 return false;
             }
             return user.app_roles.includes(role);
-        }
+        };
 
         // Check if the user has any of the roles
-        const hasRole = roles_to_check.some(checkRole);
+        const hasRole = rolesToCheck.some(checkRole);
 
         return hasRole; //return true if the user has at least one of the roles, false otherwise
 
     } catch (error) {
-        console.error("Error in useCheckIfPermitted: ", error);
+        console.error("Error in useCheckRoles: ", error);
         return false;
     }
 };
 
-export default useCheckIfPermitted;
+export default useCheckRoles;

@@ -5,26 +5,33 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
-import useGetAnnouncements from '../../hooks/announcements/useGetAnnouncements';
-import useCheckIfPermitted from '../../hooks/users/useCheckIfPermitted';
+import useCRUD from '../../hooks/useCRUD';
+import useCheckRoles from '../../hooks/useCheckRoles';
 import AnnouncementFilters from './AnnouncementFilters';
 import AnnouncementDetails from './AnnouncementDetails';
 
 const AnnouncementsPage = () => {
     const navigate = useNavigate();
-    const isAdmin = useCheckIfPermitted({ roles_to_check: ['admin'] });
+    const isAdmin = useCheckRoles({ rolesToCheck: ['admin'] });
 
-    const { getAnnouncementsData, getAnnouncementsIsSuccessful, getAnnouncementsIsLoading, getAnnouncementsResponseError, getAnnouncements: getAnnouncementsFromHook } = useGetAnnouncements();
+    const {
+        performAction: getAnnouncementsFromHook,
+        isSuccessful: isGetAnnouncementsSuccessful,
+        isLoading: isGetAnnouncementsLoading,
+        responseData: AnnouncementsData
+    } = useCRUD();
+
     const [searchText, setSearchText] = useState('');
     const [sortOption, setSortOption] = useState('newest');
 
-    const getAnnouncements = useCallback(getAnnouncementsFromHook, []);
-
+    const getAnnouncements = useCallback(() => {
+        return getAnnouncementsFromHook('get', 'announcements');
+    }, []);
     useEffect(() => {
         getAnnouncements();
     }, [getAnnouncements]);
 
-    const filteredAnnouncements = getAnnouncementsData?.filter((announcement) =>
+    const filteredAnnouncements = AnnouncementsData?.filter((announcement) =>
         announcement.title.toLowerCase().includes(searchText.toLowerCase()) ||
         announcement.description.toLowerCase().includes(searchText.toLowerCase())
     ).sort((a, b) => {
@@ -58,8 +65,8 @@ const AnnouncementsPage = () => {
 
             {isAdmin && (
                 <Box sx={{ display: 'flex', justifyContent: 'left' }}>
-                    <Button startIcon={<Add />} variant="contained" color="primary" onClick={() => { navigate('/createannouncement') }}>
-                        Create New Announcement
+                    <Button startIcon={<Add />} variant="contained" color="primary" onClick={() => { navigate('/createannouncement'); }}>
+                        Create Announcement
                     </Button>
                 </Box>
             )}
@@ -71,11 +78,11 @@ const AnnouncementsPage = () => {
                 setSortOption={setSortOption}
             />
 
-            {getAnnouncementsIsLoading ? (
+            {isGetAnnouncementsLoading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <CircularProgress size={80} />
                 </Box>
-            ) : getAnnouncementsIsSuccessful ? (
+            ) : isGetAnnouncementsSuccessful ? (
                 filteredAnnouncements.map((announcement, index) => (
                     <AnnouncementDetails key={index} announcement={announcement} isAdmin={isAdmin} />
                 ))

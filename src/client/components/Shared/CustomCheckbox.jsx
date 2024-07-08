@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-function CustomCheckbox({ defaultChecked = false, updateCheckbox = () => { }, label, name }) {
+function CustomCheckbox({ defaultChecked = false, updateCheckbox = () => { }, label, name, value}) {
     const [checked, setChecked] = useState(defaultChecked);
 
     useEffect(() => {
@@ -21,6 +21,7 @@ function CustomCheckbox({ defaultChecked = false, updateCheckbox = () => { }, la
                 <Checkbox
                     checked={checked}
                     name={name}
+                    value={value}
                     onChange={handleChange}
                     color="primary"
                 />
@@ -30,4 +31,4 @@ function CustomCheckbox({ defaultChecked = false, updateCheckbox = () => { }, la
     );
 }
 
-export default React.memo(CustomCheckbox);
+export default memo(CustomCheckbox);

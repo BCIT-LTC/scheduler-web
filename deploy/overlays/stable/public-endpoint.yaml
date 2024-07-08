@@ -2,6 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: public-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-compression: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      gzip on;
+      gzip_vary on;
+      gzip_types text/css text/javascript application/javascript;
+      gzip_min_length 1000;
+      gzip_proxied no-cache no-store private expired auth;
 spec:
   tls:
     - hosts:
