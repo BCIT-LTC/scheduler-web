@@ -64,7 +64,10 @@ export default function SeriesDateTimeForm({ initialStartTime, initialEndTime, i
 
                 {DaysOfWeek.map((day, index) => {
                     return (
-                        <CustomCheckbox key={`day-${index}`} label={day} name={`day-${index}`}
+                        <CustomCheckbox key={`day-${index}`}
+                            label={day}
+                            name={`day-${index}`}
+                            value={index}
                             defaultChecked={recurrenceDays.includes(index)}
                             checked={recurrenceDays.includes(index)} />
                     );

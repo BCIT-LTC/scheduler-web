@@ -18,13 +18,14 @@ RUN apk --update add \
     ;
 
 COPY package.json ./
+RUN npm install
+
 COPY ./saml ./saml/
 COPY ./public ./public/
 COPY ./src ./src/
 COPY ./index.html ./index.html
 COPY ./vite.config.js ./vite.config.js
 
-RUN npm install
 RUN npm run build
 
 # COPY --from=frontend-builder /app/build ./client/build/

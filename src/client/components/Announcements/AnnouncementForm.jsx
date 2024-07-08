@@ -1,5 +1,5 @@
 // React and third-party libraries
-import { useState, useEffect, useCallback } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -11,18 +11,15 @@ import FormControl from "@mui/material/FormControl";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 
 // Custom hooks
-import useCreateAnnouncement from "../../hooks/announcements/useCreateAnnouncement";
-import useUpdateAnnouncement from "../../hooks/announcements/useUpdateAnnouncement";
-import useDeleteAnnouncement from "../../hooks/announcements/useDeleteAnnouncement";
+import useCRUD from "../../hooks/useCRUD";
 
 // Custom components
 import CustomTextField from "../Shared/CustomTextField";
 import CustomConfirmationModal from "../Shared/CustomConfirmationModal";
 import CustomDisplayData from "../Shared/CustomDisplayData";
+import { GlobalContext } from "../../context/usercontext";
 
 
 dayjs.extend(utc);
@@ -33,6 +30,7 @@ dayjs.extend(utc);
  * @returns {JSX.Element} - Announcement Form Page
  */
 export default function AnnouncementForm() {
+    const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
     const previousState = useLocation().state;
 
@@ -78,32 +76,32 @@ export default function AnnouncementForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {
-        createAnnouncementIsSuccessful,
-        createAnnouncementIsLoading,
-        createAnnouncementIsSubmitted,
-        createAnnouncementResponseError,
-        createAnnouncement
-    } = useCreateAnnouncement();
+        performAction: createAnnouncement,
+        isSuccessful: isCreateAnnouncementSuccessful,
+        isLoading: isCreateAnnouncementLoading,
+        isSubmitted: isCreateAnnouncementSubmitted,
+        responseError: createAnnouncementResponseError,
+    } = useCRUD();
 
     const {
-        updateAnnouncementIsSuccessful,
-        updateAnnouncementIsLoading,
-        updateAnnouncementIsSubmitted,
-        updateAnnouncementResponseError,
-        updateAnnouncement
-    } = useUpdateAnnouncement();
+        performAction: updateAnnouncement,
+        isSuccessful: isUpdateAnnouncementSuccessful,
+        isLoading: isUpdateAnnouncementLoading,
+        isSubmitted: isUpdateAnnouncementSubmitted,
+        responseError: updateAnnouncementResponseError,
+    } = useCRUD();
 
-    const { deleteAnnouncementIsSuccessful,
-        deleteAnnouncementIsLoading,
-        deleteAnnouncementIsSubmitted,
-        deleteAnnouncementResponseError,
-        deleteAnnouncement
-    } = useDeleteAnnouncement();
+    const {
+        performAction: deleteAnnouncement,
+        isSuccessful: isDeleteAnnouncementSuccessful,
+        isLoading: isDeleteAnnouncementLoading,
+        isSubmitted: isDeleteAnnouncementSubmitted,
+        responseError: deleteAnnouncementResponseError,
+    } = useCRUD();
 
-
-    const isSuccessful = createAnnouncementIsSuccessful || updateAnnouncementIsSuccessful || deleteAnnouncementIsSuccessful;
-    const isLoading = createAnnouncementIsLoading || updateAnnouncementIsLoading || deleteAnnouncementIsLoading;
-    const isSubmitted = createAnnouncementIsSubmitted || updateAnnouncementIsSubmitted || deleteAnnouncementIsSubmitted;
+    const isSuccessful = isCreateAnnouncementSuccessful || isUpdateAnnouncementSuccessful || isDeleteAnnouncementSuccessful;
+    const isLoading = isCreateAnnouncementLoading || isUpdateAnnouncementLoading || isDeleteAnnouncementLoading;
+    const isSubmitted = isCreateAnnouncementSubmitted || isUpdateAnnouncementSubmitted || isDeleteAnnouncementSubmitted;
     const responseError = createAnnouncementResponseError || updateAnnouncementResponseError || deleteAnnouncementResponseError;
 
     const setModalMode = (modeString, modalBool) => {
@@ -124,14 +122,22 @@ export default function AnnouncementForm() {
     };
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        let payload = {
+            title: event.target.title.value,
+            description: event.target.description.value,
+            event_id: event.target.event_id?.value ? event.target.event_id.value : null,
+        };
+
         if (mode === 'create-announcement') {
-            createAnnouncement(e);
+            payload.created_by = globalcontext.user.email;
+            createAnnouncement('create', 'announcements', payload);
         } else if (mode === 'edit-announcement') {
-            updateAnnouncement(e, initialState.announcement_id);
+            payload.modified_by = globalcontext.user.email;
+            updateAnnouncement('update', 'announcements', payload, initialState.announcement_id);
         } else if (mode === 'delete-announcement') {
-            deleteAnnouncement(e, initialState.announcement_id);
+            deleteAnnouncement('delete', 'announcements', null, initialState.announcement_id);
         }
     };
 
@@ -148,7 +154,7 @@ export default function AnnouncementForm() {
                 <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                     {mode === 'create-announcement' ? 'Create Announcement' : 'Edit Announcement'}
                 </Typography>
-                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                <Typography variant="p" align="center" color="textSecondary" paragraph>
                     {mode === 'create-announcement' ? 'Create a new announcement' : 'Edit an existing announcement'}
                 </Typography>
                 {

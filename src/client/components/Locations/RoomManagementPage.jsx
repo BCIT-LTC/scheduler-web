@@ -9,26 +9,26 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
+import Add from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 
 import EditIcon from '@mui/icons-material/Edit';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import useGetLocations from '../../hooks/locations/useGetLocations';
+import useCRUD from '../../hooks/useCRUD';
 
 
 const RoomManagementPage = () => {
     const navigate = useNavigate();
 
     const {
-        getLocationsData,
-        getLocationsIsSuccessful,
-        getLocationsIsLoading,
-        getLocationsResponseError,
-        getLocations } = useGetLocations();
+        performAction: getLocations,
+        isSuccessful: isGetLocationsSuccessful,
+        isLoading: isGetLocationsLoading,
+        responseData: LocationsData
+    } = useCRUD();
 
     useEffect(() => {
-        getLocations();
+        getLocations('get', 'locations');
     }, []);
 
     const ListOfRooms = ({ data }) => {
@@ -40,7 +40,7 @@ const RoomManagementPage = () => {
                 secondaryAction={
                     <IconButton edge="end" aria-label="edit"
                         onClick={() => {
-                            navigate(`/editlocation`, { state: { mode: 'edit-location' , ...item } })
+                            navigate(`/editlocation`, { state: { mode: 'edit-location', ...item } });
                         }}
                     >
                         <EditIcon />
@@ -56,11 +56,11 @@ const RoomManagementPage = () => {
                     }
                 />
             </ListItem>
-        ))
+        ));
         return <List dense={false}>
             {items}
-        </List>
-    }
+        </List>;
+    };
 
     return (
         <Box component="div"
@@ -73,32 +73,23 @@ const RoomManagementPage = () => {
             <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                 Room Management
             </Typography>
-            <Typography variant="h7" align="center" color="textSecondary" paragraph>
+            <Typography variant="p" align="center" color="textSecondary" paragraph>
                 Add, Edit or delete rooms
             </Typography>
 
-            <Stack direction="row" spacing={2} justifyContent="center">
+            <Stack direction="row" justifyContent="center">
                 <Button
-                    fullWidth
-                    type="button"
-                    variant="outlined"
-                    disabled={false}
-                    color="primary"
-                    onClick={() => { navigate("/calendar") }}
-                >
-                    <ArrowBackIcon />
-                </Button>
-                <Button
-                    fullWidth
+                    startIcon={<Add />}
                     variant="contained"
                     color="primary"
                     size="normal"
-                    onClick={() => { navigate("/createlocation") }}
+                    onClick={() => { navigate("/createlocation"); }}
                 >
                     Create Room
                 </Button>
+
             </Stack>
-            {getLocationsIsLoading ?
+            {isGetLocationsLoading ?
                 <>
                     <Stack spacing={1}>
                         <Skeleton variant="text" sx={{ fontSize: '3rem' }} />
@@ -106,10 +97,10 @@ const RoomManagementPage = () => {
                     </Stack>
                 </>
                 :
-                getLocationsIsSuccessful ?
-                    <ListOfRooms data={getLocationsData} />
+                isGetLocationsSuccessful ?
+                    <ListOfRooms data={LocationsData} />
                     :
-                    <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                    <Typography variant="p" align="center" color="textSecondary" paragraph>
                         Error fetching data
                     </Typography>
             }

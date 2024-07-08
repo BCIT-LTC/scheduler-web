@@ -1,5 +1,5 @@
 // React imports
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // FullCalendar imports
 import FullCalendar from '@fullcalendar/react';
@@ -11,7 +11,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 // Material-UI imports
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import useTheme from '@mui/material/styles/useTheme';
 

@@ -8,15 +8,20 @@ import ListItemText from "@mui/material/ListItemText";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import useGetAnnouncements from "../../hooks/announcements/useGetAnnouncements";
+import useCRUD from '../../hooks/useCRUD';
 
 const AnnouncementBadge = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { getAnnouncementsData, getAnnouncementsIsSuccessful, getAnnouncementsIsLoading, getAnnouncementsResponseError, getAnnouncements } = useGetAnnouncements();
+
+  const {
+    performAction: getAnnouncements,
+    isLoading: isGetAnnouncementsLoading,
+    responseData: AnnouncementsData
+  } = useCRUD();
 
   const handleClick = async (event) => {
     setAnchorEl(event.currentTarget);
-    await getAnnouncements();
+    await getAnnouncements('get', 'announcements');
   };
 
   const handleClose = () => {
@@ -56,14 +61,14 @@ const AnnouncementBadge = () => {
           <Typography variant="h6" gutterBottom>
             Announcements
           </Typography>
-          {getAnnouncementsIsLoading ? (
+          {isGetAnnouncementsLoading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress  />
+              <CircularProgress />
             </div>
           ) : (
             <List>
-              {getAnnouncementsData?.length > 0 ? (
-                getAnnouncementsData.map((announcement) => (
+              {AnnouncementsData?.length > 0 ? (
+                AnnouncementsData.map((announcement) => (
                   <ListItem key={announcement.announcement_id}>
                     <ListItemText
                       primary={announcement.title}

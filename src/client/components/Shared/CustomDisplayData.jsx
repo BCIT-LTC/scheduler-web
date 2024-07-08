@@ -13,7 +13,7 @@ const CustomDisplayData = ({ data }) => {
     if (isAnnouncement) {
         return (
             <Paper elevation={3} style={{ border: '1px solid red' }}>
-                <Typography variant="h7" align="center" color="textPrimary" paragraph style={{ fontWeight: 'bold' }}>Related Announcement</Typography>
+                <Typography variant="p" align="center" color="textPrimary" paragraph style={{ fontWeight: 'bold' }}>Related Announcement</Typography>
                 <Grid container spacing={1} style={{ padding: '0 0.7em' }}>
                     <Grid item xs={12} sm={4}><Typography variant="body1"><b>Title:</b></Typography></Grid>
                     <Grid item xs={12} sm={8} className="xs-to-left-padding"><Typography variant="body1">{data.title}</Typography></Grid>
@@ -26,7 +26,7 @@ const CustomDisplayData = ({ data }) => {
     } else {
         return (
             <Paper elevation={3} style={{ border: '1px solid red' }}>
-                <Typography variant="h7" align="center" color="textPrimary" paragraph style={{ fontWeight: 'bold' }}>Related Event</Typography>
+                <Typography variant="p" align="center" color="textPrimary" paragraph style={{ fontWeight: 'bold' }}>Related Event</Typography>
                 <Grid container spacing={1} style={{ padding: '0 0.7em' }}>
                     <Grid item xs={12} sm={4}><Typography variant="body1"><b>Event Name:</b></Typography></Grid>
                     <Grid item xs={12} sm={8} className="xs-to-left-padding"><Typography variant="body1">{data.summary}</Typography></Grid>

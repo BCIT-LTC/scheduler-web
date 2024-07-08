@@ -1,8 +1,6 @@
 // React and third-party libraries
-import { useState, useEffect, useCallback } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 
 // Material UI components
 import Box from "@mui/material/Box";
@@ -13,17 +11,13 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
 // Custom hooks
-import useCreateLocation from "../../hooks/locations/useCreateLocation";
-import useUpdateLocation from "../../hooks/locations/useUpdateLocation";
-import useDeleteLocation from "../../hooks/locations/useDeleteLocation";
+import useCRUD from "../../hooks/useCRUD";
 
 // Custom components
 import CustomTextField from "../Shared/CustomTextField";
 import CustomConfirmationModal from "../Shared/CustomConfirmationModal";
+import { GlobalContext } from "../../context/usercontext";
 
-
-
-dayjs.extend(utc);
 
 /**
  * Location Form Page
@@ -31,6 +25,7 @@ dayjs.extend(utc);
  * @returns {JSX.Element} - Location Form Page
  */
 export default function LocationForm() {
+    const globalcontext = useContext(GlobalContext);
     const navigate = useNavigate();
     const previousState = useLocation().state;
 
@@ -61,32 +56,32 @@ export default function LocationForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {
-        createLocationIsSuccessful,
-        createLocationIsLoading,
-        createLocationIsSubmitted,
-        createLocationResponseError,
-        createLocation
-    } = useCreateLocation();
+        performAction: createLocation,
+        isSuccessful: isCreateLocationSuccessful,
+        isLoading: isCreateLocationLoading,
+        isSubmitted: isCreateLocationSubmitted,
+        responseError: createLocationResponseError,
+    } = useCRUD();
 
     const {
-        updateLocationIsSuccessful,
-        updateLocationIsLoading,
-        updateLocationIsSubmitted,
-        updateLocationResponseError,
-        updateLocation
-    } = useUpdateLocation();
+        performAction: updateLocation,
+        isSuccessful: isUpdateLocationSuccessful,
+        isLoading: isUpdateLocationLoading,
+        isSubmitted: isUpdateLocationSubmitted,
+        responseError: updateLocationResponseError,
+    } = useCRUD();
 
-    const { deleteLocationIsSuccessful,
-        deleteLocationIsLoading,
-        deleteLocationIsSubmitted,
-        deleteLocationResponseError,
-        deleteLocation
-    } = useDeleteLocation();
+    const {
+        performAction: deleteLocation,
+        isSuccessful: isDeleteLocationSuccessful,
+        isLoading: isDeleteLocationLoading,
+        isSubmitted: isDeleteLocationSubmitted,
+        responseError: deleteLocationResponseError,
+    } = useCRUD();
 
-
-    const isSuccessful = createLocationIsSuccessful || updateLocationIsSuccessful || deleteLocationIsSuccessful;
-    const isLoading = createLocationIsLoading || updateLocationIsLoading || deleteLocationIsLoading;
-    const isSubmitted = createLocationIsSubmitted || updateLocationIsSubmitted || deleteLocationIsSubmitted;
+    const isSuccessful = isCreateLocationSuccessful || isUpdateLocationSuccessful || isDeleteLocationSuccessful;
+    const isLoading = isCreateLocationLoading || isUpdateLocationLoading || isDeleteLocationLoading;
+    const isSubmitted = isCreateLocationSubmitted || isUpdateLocationSubmitted || isDeleteLocationSubmitted;
     const responseError = createLocationResponseError || updateLocationResponseError || deleteLocationResponseError;
 
     const setModalMode = (modeString, modalBool) => {
@@ -107,14 +102,20 @@ export default function LocationForm() {
     };
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        let payload = {
+            room_location: event.target.room_location.value
+        };
+
         if (mode === 'create-location') {
-            createLocation(e);
+            payload.created_by = globalcontext.user.email;
+            createLocation('create', 'locations', payload);
         } else if (mode === 'edit-location') {
-            updateLocation(e, initialState.location_id);
+            payload.modified_by = globalcontext.user.email;
+            updateLocation('update', 'locations', payload, initialState.location_id);
         } else if (mode === 'delete-location') {
-            deleteLocation(e, initialState.location_id);
+            deleteLocation('delete', 'locations', null, initialState.location_id);
         }
     };
 
@@ -132,7 +133,7 @@ export default function LocationForm() {
                 <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
                     {mode === 'create-location' ? 'Create Location' : 'Edit Location'}
                 </Typography>
-                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                <Typography variant="p" align="center" color="textSecondary" paragraph>
                     {mode === 'create-location' ? 'Create a new location' : 'Edit an existing location'}
                 </Typography>
 

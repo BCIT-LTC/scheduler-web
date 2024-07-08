@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery, useTheme, Grid } from '@mui/material';
 
 const MonthViewTable = ({ events }) => {
