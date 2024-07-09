@@ -1,5 +1,5 @@
 import { Fragment, useState, useContext, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -41,12 +41,11 @@ export default function BaseLayout() {
     const [announcementsNum, setAnnouncementsNum] = useState(-1);
     const isAdmin = useCheckRoles({ rolesToCheck: ['admin'] });
     const { performAction: getAnnouncements, responseData: announcementsDataFromHook } = useCRUD();
-    const isHomePage = window.location.pathname === "/calendar";
+    const pageLocation = useLocation();
+    const isHomePage = pageLocation.pathname === "/calendar";
     const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const isLargeScreen = useMediaQuery(theme => theme.breakpoints.up('lg'));
     const [drawerVariant, setDrawerVariant] = useState('persistent');
-
-    let announcementsData = isHomePage ? announcementsDataFromHook : null; // Only show announcements on the home page
 
     const topBarStyles = {
         width: { lg: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%', xs: '100%' },
@@ -64,9 +63,10 @@ export default function BaseLayout() {
 
     // Function to select the announcement to display and checks for undismissed notifications and displays one as alert
     const selectAnnouncementToDisplay = () => {
-        if (!announcementsData) return null;
+        if (!isHomePage) return null;
 
-        const undismissed = announcementsData.filter((announcement) => {
+        if (!announcementsDataFromHook) return null;
+        const undismissed = announcementsDataFromHook.filter((announcement) => {
             const cacheKey = `Openlab-${announcement.announcement_id}-${announcement.created_at}`;
             return !localStorage.getItem(cacheKey);
         }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -95,9 +95,11 @@ export default function BaseLayout() {
                 console.error(error);
             }
         };
+        if (isHomePage) {
+            fetchAnnouncements();
+        }
 
-        fetchAnnouncements();
-    }, []);
+    }, [pageLocation]);
 
 
     useEffect(() => {
