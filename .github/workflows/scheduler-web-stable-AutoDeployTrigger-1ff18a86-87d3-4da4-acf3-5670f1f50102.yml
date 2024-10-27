@@ -1,0 +1,48 @@
+name: Trigger auto deployment for scheduler-web-stable
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/scheduler-web-stable-AutoDeployTrigger-1ff18a86-87d3-4da4-acf3-5670f1f50102.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.SCHEDULERWEBSTABLE_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.SCHEDULERWEBSTABLE_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.SCHEDULERWEBSTABLE_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: bcitltc.azurecr.io
+          registryUsername: ${{ secrets.SCHEDULERWEBSTABLE_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.SCHEDULERWEBSTABLE_REGISTRY_PASSWORD }}
+          containerAppName: scheduler-web-stable
+          resourceGroup: LTC-ResourceGroup-CA
+          imageToBuild: bcitltc.azurecr.io/scheduler-web-stable:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
